@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Platformer
 {
-    class Player : Actor
+    class World
     {
-        
     }
 }
