@@ -4,7 +4,7 @@ namespace Platformer
 {
     class Entity
     {
-        protected HitBox hitbox;
+        public HitBox hitbox;
 
         protected World context;
 
@@ -16,5 +16,11 @@ namespace Platformer
 
         public bool Intersects(Entity other)
             => hitbox.Intersects(other.hitbox);
+
+        public bool Intersects(HitBox other)
+            => hitbox.Intersects(other);
+
+        public void Move(Vector velocity)
+            => hitbox.Move(velocity);
     }
 }

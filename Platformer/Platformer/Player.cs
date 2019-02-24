@@ -8,6 +8,6 @@ namespace Platformer
 {
     class Player : Actor
     {
-        
+        public Player(World context, HitBox hitbox) : base(context, hitbox) { }
     }
 }

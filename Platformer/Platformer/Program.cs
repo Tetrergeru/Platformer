@@ -7,8 +7,12 @@ namespace Platformer
     {
         static void Main(string[] args)
         {
-            var gameWindow = new Window();
+            var game = new Game();
+            var gameWindow = new Window(game);
             new System.Threading.Thread(() => Application.Run(gameWindow)).Start();
+
+            game.window = gameWindow;
+            game.Start();
         }
     }
 }
