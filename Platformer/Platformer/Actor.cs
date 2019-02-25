@@ -6,32 +6,82 @@ using System.Threading.Tasks;
 
 namespace Platformer
 {
+    /// <summary>
+    /// "Актёр", "Действующее лицо", живая сущность, населяющая миры игры
+    /// </summary>
     class Actor : Entity
     {
+        /// <summary>
+        /// Направления перемещения
+        /// </summary>
         public enum Direction { Right, Left };
 
+        /// <summary>
+        /// Верхняя граница скорости перемещения по горизонтали
+        /// </summary>
         private const double MaxHorizontalVelocity = 20;
 
-        private const double MaxVerticalVelocity = 100;
+        /// <summary>
+        /// Верхняя граница скорости перемещения по вертикали
+        /// </summary>
+        private const double MaxVerticalVelocity = 500;
 
-        protected Vector acceleration = new Vector { x = 0, y = 98 };
+        /// <summary>
+        /// Ускорение (в нормальном случае — ускорение свободного падения)
+        /// </summary>
+        protected Vector acceleration = new Vector { x = 0, y = 1.2 };
 
-        public Vector velocity;
+        /// <summary>
+        /// Скорость перемещения
+        /// (по умолчанию — нулевая)
+        /// </summary>
+        public Vector velocity = Vector.Zero();
 
+        /// <summary>
+        /// Создаёт экземпляр актора по контексту и занимаемой области
+        /// </summary>
+        /// <param name="context">Контекст (мир, где находится актор)</param>
+        /// <param name="hitbox">Занимаемая область</param>
         public Actor(World context, HitBox hitbox) : base(context, hitbox)
         {
 
         }
 
+        /// <summary>
+        /// Конструктор, создающий экземпляр актора по его размеру
+        /// (нужен для того, чтобы можно было заготорвить актора до его непосредственного размещения в том или ином мире)
+        /// </summary>
+        /// <param name="size">Размер актора</param>
+        public Actor(Vector size) : base(size) { }
+
+        /// <summary>
+        /// Конструктор актора по умолчанию
+        /// </summary>
+        public Actor() : base() { }
+
+        /// <summary>
+        /// Прибавляет к скорости актора указанное значение. "Тянет" актора по вектору.
+        /// </summary>
+        /// <param name="force"></param>
         public void Pull(Vector force)
         {
             velocity += force;
         }
 
-        const double RunningSpeed = 5;
+        /// <summary>
+        /// Скорость, с которой актор двигается
+        /// </summary>
+        const double RunningSpeed = 7;
 
-        private const double JumpHeight = 17;
+        /// <summary>
+        /// Сила, с которой актор отталкивается от земли при прыжке
+        /// </summary>
+        private const double JumpHeight = 18;
 
+        /// <summary>
+        /// Побуждает актора бежать в указанном направлении
+        /// </summary>
+        /// <param name="direction"></param>
         public void Run(Direction direction)
         {
             if (direction == Direction.Right)
@@ -40,6 +90,9 @@ namespace Platformer
                 Pull(new Vector { x = -RunningSpeed, y = 0, });
         }
 
+        /// <summary>
+        /// Ограничивает скорость перемещения заданными константами
+        /// </summary>
         private void CutVelocity()
         {
             if (velocity.x > MaxHorizontalVelocity)
@@ -53,11 +106,16 @@ namespace Platformer
                 velocity.y = -MaxVerticalVelocity;
         }
 
+        /// <summary>
+        /// Проверяет, возможно ли переместиться в указанном направлении
+        /// </summary>
+        /// <param name="velocity"></param>
+        /// <returns></returns>
         private bool MovementIsPossble(Vector velocity)
         {
-            var tempHitbox = new HitBox(hitbox.X + velocity.x, hitbox.Y + velocity.y, hitbox.Width, hitbox.Height);
+            var tempHitbox = new HitBox(Hitbox.X + velocity.x, Hitbox.Y + velocity.y, Hitbox.Width, Hitbox.Height);
 
-            foreach (var e in context.Entities)
+            foreach (var e in Context.Entities)
                 if (e != this && e.Intersects(tempHitbox))
                 {
                     return false;
@@ -65,37 +123,53 @@ namespace Platformer
             return true;
         }
 
+        /// <summary>
+        /// Проверяет, стоит ли актор на замле
+        /// </summary>
+        /// <returns></returns>
         private bool FreeFromDown()
             => MovementIsPossble(new Vector { x = 0, y = 3});
 
+        /// <summary>
+        /// Побуждает актора к прыжку
+        /// </summary>
         public void Jump()
         {
             if (!FreeFromDown())
                 velocity += new Vector { x = 0, y = -JumpHeight };
         }
 
+        /// <summary>
+        /// Если актор стоит на земле — прекращает его горизонтальное движение
+        /// </summary>
         public void TryToStop()
         {
             if (!FreeFromDown())
                 velocity.x = 0;
         }
 
+        /// <summary>
+        /// По возможности смещает актора с текущей свкоростью
+        /// </summary>
+        /// <param name="deltaTime">Время, прошедшее с предыдущего тика</param>
         public void Move(double deltaTime)
         {
             CutVelocity();
 
-            if (MovementIsPossble(velocity.ZeroY()))
-                Move(velocity.ZeroY());
+            var direction = velocity * deltaTime * 100;
+
+            if (MovementIsPossble(direction.ZeroY()))
+                Move(direction.ZeroY());
             else
                 velocity = velocity.ZeroX();
 
-            if (MovementIsPossble(velocity.ZeroX()))
-                Move(velocity.ZeroX());
+            if (MovementIsPossble(direction.ZeroX()))
+                Move(direction.ZeroX());
             else
                 velocity = velocity.ZeroY();
 
-            velocity += acceleration * deltaTime;
-            velocity.x *= Math.Pow(0.01, deltaTime);
+            velocity += acceleration;
+            velocity.x *= Math.Pow(0.005, deltaTime);
         }
     }
 }
