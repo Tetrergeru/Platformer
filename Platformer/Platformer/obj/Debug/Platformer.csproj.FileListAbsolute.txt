@@ -1,7 +1,0 @@
-D:\Coding\C#\Platformer\Platformer\bin\Debug\Platformer.exe.config
-D:\Coding\C#\Platformer\Platformer\bin\Debug\Platformer.exe
-D:\Coding\C#\Platformer\Platformer\bin\Debug\Platformer.pdb
-D:\Coding\C#\Platformer\Platformer\obj\Debug\Platformer.csprojAssemblyReference.cache
-D:\Coding\C#\Platformer\Platformer\obj\Debug\Platformer.csproj.CoreCompileInputs.cache
-D:\Coding\C#\Platformer\Platformer\obj\Debug\Platformer.exe
-D:\Coding\C#\Platformer\Platformer\obj\Debug\Platformer.pdb
