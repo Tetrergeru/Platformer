@@ -30,6 +30,8 @@ namespace Platformer
                 new Entity(this, new HitBox(0, 400, 1000, 40)),
                 new Entity(this, new HitBox(0, 40, 10, 400)),
                 new Entity(this, new HitBox(800, 40, 10, 400)),
+                new Entity(this, new HitBox(600, 250, 50, 10)),
+                new Entity(this, new HitBox(500, 300, 50, 10)),
             };
         }
     }

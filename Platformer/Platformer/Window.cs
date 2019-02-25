@@ -26,22 +26,30 @@ namespace Platformer
             KeyDown += OnKeyDown;
         }
 
-        const double MovingSpeed = 7;
-
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.D)
+            switch (e.KeyCode)
             {
-                game.Player.Pull(new Vector { x = MovingSpeed, y = 0 });
-                Console.WriteLine("D");
-            }
-            if (e.KeyCode == Keys.A)
-            {
-                game.Player.Pull(new Vector { x = -MovingSpeed, y = 0 });
-            }
-            if (e.KeyCode == Keys.W)
-            {
-                game.Player.Jump();
+                case Keys.D:
+                    {
+                        game.Player.Run(Actor.Direction.Right);
+                        break;
+                    }
+                case Keys.A:
+                    {
+                        game.Player.Run(Actor.Direction.Left);
+                        break;
+                    }
+                case Keys.W:
+                    {
+                        game.Player.Jump();
+                        break;
+                    }
+                case Keys.S:
+                    {
+                        game.Player.TryToStop();
+                        break;
+                    }
             }
         }
         

@@ -4,7 +4,12 @@ namespace Platformer
 {
     class Entity
     {
-        public HitBox hitbox;
+        protected HitBox hitbox;
+
+        public HitBox Hitbox
+        {
+            get { return hitbox; }
+        }
 
         protected World context;
 

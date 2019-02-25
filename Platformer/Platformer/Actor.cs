@@ -8,7 +8,9 @@ namespace Platformer
 {
     class Actor : Entity
     {
-        private const double MaxHorizontalVelocity = 30;
+        public enum Direction { Right, Left };
+
+        private const double MaxHorizontalVelocity = 20;
 
         private const double MaxVerticalVelocity = 100;
 
@@ -24,6 +26,18 @@ namespace Platformer
         public void Pull(Vector force)
         {
             velocity += force;
+        }
+
+        const double RunningSpeed = 5;
+
+        private const double JumpHeight = 17;
+
+        public void Run(Direction direction)
+        {
+            if (direction == Direction.Right)
+                Pull(new Vector { x = RunningSpeed, y = 0, });
+            else
+                Pull(new Vector { x = -RunningSpeed, y = 0, });
         }
 
         private void CutVelocity()
@@ -57,7 +71,13 @@ namespace Platformer
         public void Jump()
         {
             if (!FreeFromDown())
-                velocity += new Vector { x = 0, y = -15 };
+                velocity += new Vector { x = 0, y = -JumpHeight };
+        }
+
+        public void TryToStop()
+        {
+            if (!FreeFromDown())
+                velocity.x = 0;
         }
 
         public void Move(double deltaTime)
@@ -75,7 +95,7 @@ namespace Platformer
                 velocity = velocity.ZeroY();
 
             velocity += acceleration * deltaTime;
-            velocity.x *= Math.Pow(0.001, deltaTime);
+            velocity.x *= Math.Pow(0.01, deltaTime);
         }
     }
 }

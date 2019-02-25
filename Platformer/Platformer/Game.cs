@@ -29,9 +29,11 @@ namespace Platformer
         {
             world.player.Move(TickTime/1000.0);
             window.Clear();
-            window.Draw(Color.Red, world.player.hitbox.ToDrawing());
+
+            window.Draw(Color.Red, world.player.Hitbox.ToDrawing());
             foreach(var x in world.block)
-                window.Draw(Color.Blue, x.hitbox.ToDrawing());
+                window.Draw(Color.Blue, x.Hitbox.ToDrawing());
+
             window.Flush();
         }
 
