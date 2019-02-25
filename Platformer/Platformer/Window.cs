@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Windows;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Platformer
@@ -10,7 +10,8 @@ namespace Platformer
     /// </summary>
     class Window : Form
     {
-        public Vector Coordinates = Vector.Zero();
+
+        private CoordinateSheet coordSheet;
 
         /// <summary>
         /// Картинка, куда мы будем рисовать все необходимые изображения, перед тем, как отобразить всё на экране
@@ -37,6 +38,8 @@ namespace Platformer
 
             Width = 1000;
             Height = 500;
+            
+            coordSheet = new CoordinateSheet(Width, Height);
 
             pict = new Bitmap(Width, Height);
             drawer = Graphics.FromImage(pict);
@@ -104,9 +107,9 @@ namespace Platformer
         /// </summary>
         /// <param name="image"></param>
         /// <param name="rect"></param>
-        public void Draw(Bitmap image, Rectangle rect)
+        public void Draw(Bitmap image, HitBox hitbox)
         {
-            drawer.DrawImage(image, rect);
+            drawer.DrawImage(image, coordSheet.Transform(hitbox));
         }
 
         /// <summary>
@@ -114,36 +117,11 @@ namespace Platformer
         /// </summary>
         /// <param name="color"></param>
         /// <param name="rect"></param>
-        public void Draw(Color color, Rectangle rect)
+        public void Draw(Color color, HitBox hitbox)
         {
-            rect.X -= (int)Coordinates.x;
-            rect.Y -= (int)Coordinates.y;
-            drawer.DrawRectangle(new Pen(color), rect);
+            drawer.DrawRectangle(new Pen(color, 2), coordSheet.Transform(hitbox));
         }
-
-        private const double HorizontalAdjustPersent = 0.4;
-
-        private const double VerticalalAdjustPersent = 0.4;
-
-        private void AdjustCoordinate(ref double coord, double playerCoord, double left, double right)
-        {
-            if (playerCoord < left || playerCoord > right)
-                coord += playerCoord - (playerCoord < left ? left : right);
-        }
-
-        public void AdjustByPlayer(Rectangle rect)
-        {
-            var playerCoords = Coordinates * (-1) + new Vector { x = rect.X, y = rect.Y};
-
-            var leftBorder = pict.Width * HorizontalAdjustPersent;
-            var rightBorder = pict.Width - leftBorder;
-            AdjustCoordinate(ref Coordinates.x, playerCoords.x, leftBorder, rightBorder);
-
-            var topBorder = pict.Height * VerticalalAdjustPersent;
-            var bottomBorder = pict.Height - topBorder;
-            AdjustCoordinate(ref Coordinates.y, playerCoords.y, topBorder, bottomBorder);
-        }
-
+        
         /// <summary>
         /// Переносит содержимое картинки на экран
         /// </summary>
@@ -152,5 +130,8 @@ namespace Platformer
             var screen = CreateGraphics();
             screen.DrawImage(pict, 0, 0);
         }
+
+        public void AdjustBy(HitBox hitbox)
+            => coordSheet.AdjustBy(hitbox);
     }
 }

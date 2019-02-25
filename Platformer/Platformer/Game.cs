@@ -68,11 +68,11 @@ namespace Platformer
             world.player.Move(TickTime / 1000.0);
             window.Clear();
 
-            window.AdjustByPlayer(Player.Hitbox.ToDrawing());
+            window.AdjustBy(Player.Hitbox);
 
-            window.Draw(Color.Red, world.player.Hitbox.ToDrawing());
             foreach (var x in world.block)
-                window.Draw(Color.Blue, x.Hitbox.ToDrawing());
+                window.Draw(Color.Blue, x.Hitbox);
+            window.Draw(Color.Red, world.player.Hitbox);
 
             window.Flush();
         }
