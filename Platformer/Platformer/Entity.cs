@@ -65,5 +65,11 @@ namespace Platformer
         /// <param name="velocity">Вектор скорости</param>
         public void Move(Vector velocity)
             => Hitbox.Move(velocity);
+
+        public Vector Coorinates()
+            => new Vector { x = Hitbox.X, y = Hitbox.Y };
+
+        public Vector Centre()
+            => new Vector { x = Hitbox.X + Hitbox.Width / 2, y = Hitbox.Y + Hitbox.Height / 2};
     }
 }

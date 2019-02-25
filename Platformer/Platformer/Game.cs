@@ -43,7 +43,7 @@ namespace Platformer
             Player = new Player(new Vector { x = 20, y = 30});
 
             world = new World();
-            world.SetPlayer(Player, new Vector { x = 40, y = 40 });
+            world.SetPlayer(Player, new Vector { x = 200, y = 40 });
         }
 
         //============    Работа с игровым временем    =============
@@ -68,12 +68,15 @@ namespace Platformer
             world.player.Move(TickTime / 1000.0);
             window.Clear();
 
+            window.AdjustByPlayer(Player.Hitbox.ToDrawing());
+
             window.Draw(Color.Red, world.player.Hitbox.ToDrawing());
             foreach (var x in world.block)
                 window.Draw(Color.Blue, x.Hitbox.ToDrawing());
 
             window.Flush();
         }
+        
 
         /// <summary>
         /// Начинает основной цикл игры
