@@ -54,44 +54,7 @@ namespace Platformer
         /// <param name="e"></param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.D:
-                    {
-                        game.Player.Run(Actor.Direction.Right);
-                        break;
-                    }
-                case Keys.A:
-                    {
-                        game.Player.Run(Actor.Direction.Left);
-                        break;
-                    }
-                case Keys.W:
-                    {
-                        game.Player.Jump();
-                        break;
-                    }
-                case Keys.S:
-                    {
-                        game.Player.TryToStop();
-                        break;
-                    }
-                case Keys.Z:
-                    {
-                        game.Stop();
-                        break;
-                    }
-                case Keys.X:
-                    {
-                        game.Start();
-                        break;
-                    }
-                case Keys.P:
-                    {
-                        game.Player.Hitbox.MoveTo(new Vector { x = 40, y = 40});
-                        break;
-                    }
-            }
+            game.OnControlTrigger(Platformer.Controls.KeyToControl[e.KeyCode]);
         }
         
         /// <summary>

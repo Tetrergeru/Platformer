@@ -46,7 +46,7 @@ namespace Platformer
             world.SetPlayer(Player, new Vector { x = 200, y = 40 });
         }
 
-        //============    Работа с игровым временем    =============
+        //============    Работа с игровым временем    ============
 
         /// <summary>
         /// Интервал таймера, вызывающего тики игры
@@ -66,9 +66,10 @@ namespace Platformer
         private void Tick(object sender, ElapsedEventArgs e)
         {
             world.player.Move(TickTime / 1000.0);
-            window.Clear();
 
             window.AdjustBy(Player.Hitbox);
+
+            window.Clear();
 
             foreach (var x in world.block)
                 window.Draw(Color.Blue, x.Hitbox);
@@ -76,7 +77,6 @@ namespace Platformer
 
             window.Flush();
         }
-        
 
         /// <summary>
         /// Начинает основной цикл игры
@@ -92,6 +92,51 @@ namespace Platformer
         public void Stop()
         {
             gameLoop.Stop();
+        }
+
+        //==========================<o@o>==========================
+
+
+        public void OnControlTrigger(Controls.Control action)
+        {
+            switch (action)
+            {
+                case Controls.Control.Right:
+                    {
+                        Player.Run(Actor.Direction.Right);
+                        break;
+                    }
+                case Controls.Control.Left:
+                    {
+                        Player.Run(Actor.Direction.Left);
+                        break;
+                    }
+                case Controls.Control.Jump:
+                    {
+                        Player.Jump();
+                        break;
+                    }
+                case Controls.Control.Stop:
+                    {
+                        Player.TryToStop();
+                        break;
+                    }
+                case Controls.Control.StopTime:
+                    {
+                        Stop();
+                        break;
+                    }
+                case Controls.Control.RunTime:
+                    {
+                        Start();
+                        break;
+                    }
+                case Controls.Control.Debug:
+                    {
+                        Player.Hitbox.MoveTo(new Vector { x = 40, y = 40 });
+                        break;
+                    }
+            }
         }
     }
 }
