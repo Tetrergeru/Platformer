@@ -1,6 +1,0 @@
-D:\Coding\C#\Platformer\Platformer\bin\Release\Platformer.exe.config
-D:\Coding\C#\Platformer\Platformer\bin\Release\Platformer.exe
-D:\Coding\C#\Platformer\Platformer\bin\Release\Platformer.pdb
-D:\Coding\C#\Platformer\Platformer\obj\Release\Platformer.csproj.CoreCompileInputs.cache
-D:\Coding\C#\Platformer\Platformer\obj\Release\Platformer.exe
-D:\Coding\C#\Platformer\Platformer\obj\Release\Platformer.pdb
