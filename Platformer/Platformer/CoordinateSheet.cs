@@ -13,9 +13,9 @@ namespace Platformer
 
         public Vector Coordinates = Vector.Zero();
 
-        private const double HorizontalAdjustPersent = 0.4;
+        private const double HorizontalAdjustPersent = 0.1;
 
-        private const double VerticalalAdjustPersent = 0.4;
+        private const double VerticalalAdjustPersent = 0.1;
 
         public CoordinateSheet(double w, double h)
         {

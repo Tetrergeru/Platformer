@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.Drawing.Drawing2D;
 
 namespace Platformer
 {
@@ -12,6 +13,9 @@ namespace Platformer
     /// </summary>
     class Game
     {
+        private static bool DrawDubeg = true;
+
+        private Bitmap playerImg, grassImg;
         /// <summary>
         /// Графическое окно, в котором отрисовывается игра
         /// </summary>
@@ -40,10 +44,13 @@ namespace Platformer
             gameLoop = new Timer(TickTime);
             gameLoop.Elapsed += Tick;
 
-            Player = new Player(new Vector { x = 20, y = 30});
-
+            Player = new Player(new Vector { x = 30, y = 60});
+            
             world = new World();
             world.SetPlayer(Player, new Vector { x = 200, y = 40 });
+
+            playerImg = new Bitmap("Resources/Textures/Player_1.png");
+            grassImg = new Bitmap("Resources/Textures/Grass_1.png");
         }
 
         //============    Работа с игровым временем    ============
@@ -72,8 +79,14 @@ namespace Platformer
             window.Clear();
 
             foreach (var x in world.block)
-                window.Draw(Color.Blue, x.Hitbox);
-            window.Draw(Color.Red, world.player.Hitbox);
+            {
+                window.Draw(grassImg, x.Hitbox);
+                if (DrawDubeg)
+                    window.Draw(Color.Blue, x.Hitbox);
+            }
+            window.Draw(playerImg, world.player.Hitbox);
+            if (DrawDubeg)
+                window.Draw(Color.Red, world.player.Hitbox);
 
             window.Flush();
         }

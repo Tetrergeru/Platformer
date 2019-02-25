@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Platformer
@@ -43,7 +44,8 @@ namespace Platformer
 
             pict = new Bitmap(Width, Height);
             drawer = Graphics.FromImage(pict);
-            
+            drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
+
             KeyDown += OnKeyDown;
         }
         
@@ -54,7 +56,7 @@ namespace Platformer
         /// <param name="e"></param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            game.OnControlTrigger(Platformer.Controls.KeyToControl[e.KeyCode]);
+            game.OnControlTrigger(Platformer.Controls.ControlFromKey(e.KeyCode));
         }
         
         /// <summary>
