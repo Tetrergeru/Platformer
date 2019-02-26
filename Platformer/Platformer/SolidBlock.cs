@@ -25,7 +25,7 @@ namespace Platformer
         /// </summary>
         public SolidBlock() { }
 
-        public static SolidBlock Make(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)
+        public new static SolidBlock Make(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)
         {
             var result = new SolidBlock(context, hitbox);
             result.Texture.AddTexture(texture, ft, scale);

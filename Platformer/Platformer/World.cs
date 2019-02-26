@@ -58,13 +58,26 @@ namespace Platformer
             Background = new[]
             {
                 Entity.Make(this, new HitBox(350, 50, 300, 300),
-                    new Bitmap("Resources/Textures/Tree_1.png"), FillType.Stretch)
+                    new List<Bitmap>
+                    {
+                        new Bitmap("Resources/Textures/Tree_0.png"),
+                        new Bitmap("Resources/Textures/Tree_1.png")
+                    },
+                    FillType.Stretch, 0.3, 0.5)
             };
 
-            Frontground = new[]
+            TextureAnimated texture = new TextureAnimated(120, 40, 0.2, 0.2);
+            foreach (var x in new[]
             {
-                Entity.Make(this, new HitBox(350, 50, 300, 300),
-                    new Bitmap("Resources/Textures/Tree_1.png"), FillType.Stretch)
+                new Bitmap("Resources/Textures/HighGrass_0.png"),
+                new Bitmap("Resources/Textures/HighGrass_1.png")
+            })
+                texture.AddTexture(x, FillType.Stretch);
+
+            Frontground = new Entity[]
+            {
+                Entity.Make(this, new HitBox(0, 360, 120, 40), texture),
+                Entity.Make(this, new HitBox(115, 360, 120, 40), texture),
             };
         }
 
@@ -78,6 +91,17 @@ namespace Platformer
             this.player = player;
             player.Context = this;
             player.Hitbox.MoveTo(coords);
+        }
+
+        public void Tick(double deltaTime)
+        {
+            player.Tick(deltaTime);
+
+            foreach (var x in Background)
+                x.Tick(deltaTime);
+
+            foreach (var x in Frontground)
+                x.Tick(deltaTime);
         }
     }
 }

@@ -148,6 +148,12 @@ namespace Platformer
                 velocity.x = 0;
         }
 
+        public override void Tick(double deltaTime)
+        {
+            base.Tick(deltaTime);
+            Move(deltaTime);
+        }
+
         /// <summary>
         /// По возможности смещает актора с текущей свкоростью
         /// </summary>

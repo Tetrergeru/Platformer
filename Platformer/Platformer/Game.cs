@@ -72,7 +72,7 @@ namespace Platformer
         /// <param name="e"></param>
         private void Tick(object sender, ElapsedEventArgs e)
         {
-            world.player.Move(TickTime / 1000.0);
+            world.Tick(TickTime / 1000.0);
 
             window.AdjustBy(Player.Hitbox);
 
@@ -81,6 +81,7 @@ namespace Platformer
             window.Draw(world.block);
             window.Draw(world.Background);
             window.Draw(Player);
+            window.Draw(world.Frontground);
             
             if (DrawDebug)
             {
@@ -89,6 +90,8 @@ namespace Platformer
                 foreach (var x in world.Background)
                     window.Draw(Color.DarkGreen, x.Hitbox);
                 window.Draw(Color.Red, world.player.Hitbox);
+                foreach (var x in world.Frontground)
+                    window.Draw(Color.Yellow, x.Hitbox);
             }
 
             window.Flush();
