@@ -29,9 +29,7 @@ namespace Platformer
 
         public static Control ControlFromKey(Keys key)
         {
-            if (KeyToControl.ContainsKey(key))
-                return KeyToControl[key];
-            else return Control.None;
+            return KeyToControl.ContainsKey(key) ? KeyToControl[key] : Control.None;
         }
     }
 }

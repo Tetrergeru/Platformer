@@ -5,6 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Drawing.Drawing2D;
+// ReSharper disable All
 
 namespace Platformer
 {
@@ -13,7 +14,7 @@ namespace Platformer
     /// </summary>
     class Game
     {
-        private static bool DrawDebug = false;
+        private bool DrawDebug = false;
         
         /// <summary>
         /// Графическое окно, в котором отрисовывается игра
@@ -44,7 +45,7 @@ namespace Platformer
             gameLoop.Elapsed += Tick;
 
             Player = new Player(new Vector { x = 30, y = 60});
-            Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), Texture.FillType.Stretch);
+            Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
             
             world = new World();
             world.SetPlayer(Player, new Vector { x = 200, y = 40 });
@@ -75,15 +76,18 @@ namespace Platformer
 
             window.AdjustBy(Player.Hitbox);
 
-            window.Clear();
+            window.Clear(Color.SkyBlue);
 
             window.Draw(world.block);
+            window.Draw(world.Background);
             window.Draw(Player);
             
             if (DrawDebug)
             {
                 foreach (var x in world.block)
                     window.Draw(Color.Blue, x.Hitbox);
+                foreach (var x in world.Background)
+                    window.Draw(Color.DarkGreen, x.Hitbox);
                 window.Draw(Color.Red, world.player.Hitbox);
             }
 
@@ -146,6 +150,7 @@ namespace Platformer
                 case Controls.Control.Debug:
                     {
                         Player.Hitbox.MoveTo(new Vector { x = 40, y = 40 });
+                        DrawDebug = !DrawDebug;
                         break;
                     }
             }

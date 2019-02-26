@@ -19,7 +19,11 @@ namespace Platformer
         /// <summary>
         /// Твёрдые объекты, структура мира...
         /// </summary>
-        public Entity[] block; 
+        public SolidBlock[] block;
+
+        public Entity[] Background;
+
+        public Entity[] Frontground;
 
         /// <summary>
         /// Возвращает все объекты, с которыми можно взаимойдействовать
@@ -39,17 +43,29 @@ namespace Platformer
         /// </summary>
         public World()
         {
-            block = new Entity[]
+            block = new []
             {
-                new Entity(this, new HitBox(0, 400, 1000, 40)),
-                new Entity(this, new HitBox(0, 40, 10, 400)),
-                new Entity(this, new HitBox(800, 40, 10, 400)),
-                new Entity(this, new HitBox(600, 250, 50, 10)),
-                new Entity(this, new HitBox(500, 300, 50, 10)),
-                new Entity(this, new HitBox(0, -10, 1000, 20)),
+                SolidBlock.Make(this, new HitBox(0, 400, 300, 100),
+                    new Bitmap("Resources/Textures/Grass_1.png"),FillType.StretchDown),
+                SolidBlock.Make(this, new HitBox(700, 400, 300, 100),
+                    new Bitmap("Resources/Textures/Grass_1.png"),FillType.StretchDown),
+                SolidBlock.Make(this, new HitBox(300, 400, 400, 100),
+                    new Bitmap("Resources/Textures/Stone_1.png"),FillType.StretchDown),
+                SolidBlock.Make(this, new HitBox(280, 350, 440, 50),
+                    new Bitmap("Resources/Textures/Grass_1.png"),FillType.Repeat, 10),
             };
-            foreach (var e in block)
-                e.Drawer.AddTexture(new Bitmap("Resources/Textures/Grass_1.png"), Drawer.FillType.StretchDown);
+
+            Background = new[]
+            {
+                Entity.Make(this, new HitBox(350, 50, 300, 300),
+                    new Bitmap("Resources/Textures/Tree_1.png"), FillType.Stretch)
+            };
+
+            Frontground = new[]
+            {
+                Entity.Make(this, new HitBox(350, 50, 300, 300),
+                    new Bitmap("Resources/Textures/Tree_1.png"), FillType.Stretch)
+            };
         }
 
         /// <summary>

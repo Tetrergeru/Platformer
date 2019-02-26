@@ -12,7 +12,6 @@ namespace Platformer
     /// </summary>
     class Window : Form
     {
-
         private CoordinateSheet coordSheet;
 
         /// <summary>
@@ -63,16 +62,16 @@ namespace Platformer
         /// <summary>
         /// Очищает картинку
         /// </summary>
-        public void Clear()
+        public void Clear(Color color)
         {
-            drawer.Clear(Color.White);
+            drawer.Clear(color);
         }
 
         /// <summary>
         /// Рисует на картинке данное изображение в данном прямоугольнике
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="rect"></param>
+        /// <param name="hitbox"></param>
         public void Draw(Bitmap image, HitBox hitbox)
         {
             drawer.DrawImage(image, coordSheet.Transform(hitbox));
@@ -90,7 +89,7 @@ namespace Platformer
 
         public void Draw(Entity entity)
         {
-            Draw(entity.Drawer.Image, entity.Hitbox);
+            Draw(entity.Texture.Image, entity.Hitbox);
         }
 
         public void Draw(IEnumerable<Entity> entities)

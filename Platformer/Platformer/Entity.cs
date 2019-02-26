@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Platformer
 {
     /// <summary>
     /// Класс, представляющий сущность игрового мира
     /// </summary>
-    class Entity
+    internal class Entity
     {
         /// <summary>
         /// Область занимаемая сущностью
@@ -75,5 +76,12 @@ namespace Platformer
 
         public Vector Centre()
             => new Vector { x = Hitbox.X + Hitbox.Width / 2, y = Hitbox.Y + Hitbox.Height / 2};
+        
+        public static Entity Make(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)
+        {
+            var result = new Entity(context, hitbox);
+            result.Texture.AddTexture(texture, ft, scale);
+            return result;
+        }
     }
 }
