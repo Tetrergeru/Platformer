@@ -13,7 +13,7 @@ namespace Platformer
     /// </summary>
     class Game
     {
-        private static bool DrawDubeg = false;
+        private static bool DrawDebug = false;
         
         /// <summary>
         /// Графическое окно, в котором отрисовывается игра
@@ -44,7 +44,7 @@ namespace Platformer
             gameLoop.Elapsed += Tick;
 
             Player = new Player(new Vector { x = 30, y = 60});
-            Player.Drawer.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), Drawer.FillType.Stretch);
+            Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), Texture.FillType.Stretch);
             
             world = new World();
             world.SetPlayer(Player, new Vector { x = 200, y = 40 });
@@ -79,10 +79,8 @@ namespace Platformer
 
             window.Draw(world.block);
             window.Draw(Player);
-
-            //Some legasy code
-
-            if (DrawDubeg)
+            
+            if (DrawDebug)
             {
                 foreach (var x in world.block)
                     window.Draw(Color.Blue, x.Hitbox);

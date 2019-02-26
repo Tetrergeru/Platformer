@@ -17,7 +17,7 @@ namespace Platformer
         /// </summary>
         public World Context { get; set; }
 
-        public Drawer Drawer { get; set; }
+        public Texture Texture { get; set; }
 
         /// <summary>
         /// Конструктор, создающий экземпляр сущности по её миру и расположению
@@ -28,7 +28,7 @@ namespace Platformer
         {
             Context = context;
             Hitbox = hitbox;
-            Drawer = new Drawer((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
+            Texture = new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Platformer
         public Entity(Vector size)
         {
             Hitbox = new HitBox(0, 0, size.x, size.y);
-            Drawer = new Drawer((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
+            Texture = new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
         }
 
         /// <summary>

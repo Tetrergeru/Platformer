@@ -90,7 +90,7 @@ namespace Platformer
 
         public void Draw(Entity entity)
         {
-            Draw(entity.Drawer.Texture, entity.Hitbox);
+            Draw(entity.Drawer.Image, entity.Hitbox);
         }
 
         public void Draw(IEnumerable<Entity> entities)
