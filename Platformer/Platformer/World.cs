@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +48,8 @@ namespace Platformer
                 new Entity(this, new HitBox(500, 300, 50, 10)),
                 new Entity(this, new HitBox(0, -10, 1000, 20)),
             };
+            foreach (var e in block)
+                e.Drawer.AddTexture(new Bitmap("Resources/Textures/Grass_1.png"), Drawer.FillType.StretchDown);
         }
 
         /// <summary>

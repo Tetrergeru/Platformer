@@ -50,6 +50,7 @@
     <Compile Include="Actor.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="CoordinateSheet.cs" />
+    <Compile Include="Drawer.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="HitBox.cs" />

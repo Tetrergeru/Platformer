@@ -13,9 +13,8 @@ namespace Platformer
     /// </summary>
     class Game
     {
-        private static bool DrawDubeg = true;
-
-        private Bitmap playerImg, grassImg;
+        private static bool DrawDubeg = false;
+        
         /// <summary>
         /// Графическое окно, в котором отрисовывается игра
         /// </summary>
@@ -45,12 +44,12 @@ namespace Platformer
             gameLoop.Elapsed += Tick;
 
             Player = new Player(new Vector { x = 30, y = 60});
+            Player.Drawer.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), Drawer.FillType.Stretch);
             
             world = new World();
             world.SetPlayer(Player, new Vector { x = 200, y = 40 });
-
-            playerImg = new Bitmap("Resources/Textures/Player_1.png");
-            grassImg = new Bitmap("Resources/Textures/Grass_1.png");
+            
+            //grassImg = ;
         }
 
         //============    Работа с игровым временем    ============
@@ -78,15 +77,17 @@ namespace Platformer
 
             window.Clear();
 
-            foreach (var x in world.block)
-            {
-                window.Draw(grassImg, x.Hitbox);
-                if (DrawDubeg)
-                    window.Draw(Color.Blue, x.Hitbox);
-            }
-            window.Draw(playerImg, world.player.Hitbox);
+            window.Draw(world.block);
+            window.Draw(Player);
+
+            //Some legasy code
+
             if (DrawDubeg)
+            {
+                foreach (var x in world.block)
+                    window.Draw(Color.Blue, x.Hitbox);
                 window.Draw(Color.Red, world.player.Hitbox);
+            }
 
             window.Flush();
         }

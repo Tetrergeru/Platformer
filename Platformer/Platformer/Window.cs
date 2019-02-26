@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -86,7 +87,20 @@ namespace Platformer
         {
             drawer.DrawRectangle(new Pen(color, 2), coordSheet.Transform(hitbox));
         }
-        
+
+        public void Draw(Entity entity)
+        {
+            Draw(entity.Drawer.Texture, entity.Hitbox);
+        }
+
+        public void Draw(IEnumerable<Entity> entities)
+        {
+            foreach (var e in entities)
+            {
+                Draw(e);
+            }
+        }
+
         /// <summary>
         /// Переносит содержимое картинки на экран
         /// </summary>
