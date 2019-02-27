@@ -28,10 +28,10 @@ namespace Platformer
         {
             return new Rectangle
             {
-                X = (int)Math.Round((hitbox.X - Coordinates.x) * Scale),
-                Y = (int)Math.Round((hitbox.Y - Coordinates.y) * Scale),
-                Width = (int)Math.Round(hitbox.Width * Scale),
-                Height = (int)Math.Round(hitbox.Height * Scale),
+                X = (int)Math.Floor((hitbox.X - Coordinates.x) * Scale),
+                Y = (int)Math.Floor((hitbox.Y - Coordinates.y) * Scale),
+                Width = (int)Math.Ceiling(hitbox.Width * Scale),
+                Height = (int)Math.Ceiling(hitbox.Height * Scale),
             };
         }
 

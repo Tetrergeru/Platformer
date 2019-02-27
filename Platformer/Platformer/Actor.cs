@@ -25,7 +25,7 @@ namespace Platformer
         /// <summary>
         /// Верхняя граница скорости перемещения по вертикали
         /// </summary>
-        private const double MaxVerticalVelocity = 500;
+        private const double MaxVerticalVelocity = 50;
 
         /// <summary>
         /// Ускорение (в нормальном случае — ускорение свободного падения)
@@ -72,12 +72,12 @@ namespace Platformer
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        const double RunningSpeed = 7;
+        const double RunningSpeed = 1;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        private const double JumpHeight = 18;
+        private const double JumpHeight = 16;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -176,7 +176,7 @@ namespace Platformer
                 velocity = velocity.ZeroY();
 
             velocity += acceleration;
-            velocity.x *= Math.Pow(0.005, deltaTime);
+            velocity.x *= Math.Pow(0.0005, deltaTime);
         }
     }
 }

@@ -5,6 +5,9 @@ using System.Linq;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using Timer = System.Timers.Timer;
+
 // ReSharper disable All
 
 namespace Platformer
@@ -14,6 +17,8 @@ namespace Platformer
     /// </summary>
     class Game
     {
+        public HashSet<Controls.Control> KeysPressed = new HashSet<Controls.Control>();
+
         private bool DrawDebug = false;
         
         /// <summary>
@@ -72,6 +77,9 @@ namespace Platformer
         /// <param name="e"></param>
         private void Tick(object sender, ElapsedEventArgs e)
         {
+            foreach (var x in KeysPressed)
+                OnControlTrigger(x);
+
             world.Tick(TickTime / 1000.0);
 
             window.AdjustBy(Player.Hitbox);

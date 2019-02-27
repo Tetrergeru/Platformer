@@ -53,6 +53,7 @@ namespace Platformer
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
 
             KeyDown += OnKeyDown;
+            KeyUp += OnKeyUp;
             SizeChanged += OnSizeChanged;
         }
         
@@ -63,7 +64,11 @@ namespace Platformer
         /// <param name="e"></param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            game.OnControlTrigger(Platformer.Controls.ControlFromKey(e.KeyCode));
+            game.KeysPressed.Add(Platformer.Controls.ControlFromKey(e.KeyCode));
+        }
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            game.KeysPressed.Remove(Platformer.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnSizeChanged(object sender, EventArgs e)
