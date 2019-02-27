@@ -7,11 +7,21 @@ using System.Windows.Forms;
 
 namespace Platformer
 {
+    public enum State
+    {
+        Running,
+        Pause,
+    }
+
     /// <summary>
     /// Форма, на кторой происходит отрисовка игрового мира
     /// </summary>
     class Window : Form
     {
+        private State gameState = State.Running;
+        
+        private PauseWindow pause;
+
         private CoordinateSheet coordSheet;
 
         public void ChangeScale(double delta)
@@ -47,6 +57,8 @@ namespace Platformer
             
             coordSheet = new CoordinateSheet(Width, Height);
 
+            pause = new PauseWindow();
+
             pict = new Bitmap(Width, Height);
             drawer = Graphics.FromImage(pict);
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
@@ -56,7 +68,20 @@ namespace Platformer
             KeyUp += OnKeyUp;
             SizeChanged += OnSizeChanged;
         }
-        
+
+        public void Pause()
+        {
+            game.Stop();
+            gameState = State.Pause;
+            pause.Show();
+        }
+
+        public void Continue()
+        {
+            gameState = State.Running;
+            game.Start();
+        }
+
         /// <summary>
         /// Обрабатывает нажатие клавиши на клавиатуре
         /// </summary>
@@ -64,11 +89,22 @@ namespace Platformer
         /// <param name="e"></param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            game.KeysPressed.Add(Platformer.Controls.ControlFromKey(e.KeyCode));
+            if (gameState == State.Running)
+            {
+                Console.WriteLine("***");
+                if (Platformer.Controls.Control.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
+                {
+                    Pause();
+                }
+                else
+                    game.KeysPressed.Add(Platformer.Controls.ControlFromKey(e.KeyCode));
+            }
         }
+
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            game.KeysPressed.Remove(Platformer.Controls.ControlFromKey(e.KeyCode));
+            if (gameState == State.Running)
+                game.KeysPressed.Remove(Platformer.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnSizeChanged(object sender, EventArgs e)
@@ -96,7 +132,8 @@ namespace Platformer
         /// <param name="hitbox"></param>
         public void Draw(Bitmap image, HitBox hitbox)
         {
-            drawer.DrawImage(image, coordSheet.Transform(hitbox));
+            if (gameState == State.Running)
+                drawer.DrawImage(image, coordSheet.Transform(hitbox));
         }
 
         /// <summary>

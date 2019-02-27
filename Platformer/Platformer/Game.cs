@@ -151,6 +151,7 @@ namespace Platformer
                 case Controls.Control.StopTime:
                 {
                     Stop();
+                    window.Pause();
                     break;
                 }
                 case Controls.Control.RunTime:
