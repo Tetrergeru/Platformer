@@ -78,20 +78,20 @@ namespace Platformer
 
             window.Clear(Color.SkyBlue);
 
-            window.Draw(world.block);
             window.Draw(world.Background);
             window.Draw(Player);
             window.Draw(world.Frontground);
-            
+            window.Draw(world.block);
+
             if (DrawDebug)
             {
-                foreach (var x in world.block)
-                    window.Draw(Color.Blue, x.Hitbox);
                 foreach (var x in world.Background)
                     window.Draw(Color.DarkGreen, x.Hitbox);
                 window.Draw(Color.Red, world.player.Hitbox);
                 foreach (var x in world.Frontground)
                     window.Draw(Color.Yellow, x.Hitbox);
+                foreach (var x in world.block)
+                    window.Draw(Color.Blue, x.Hitbox);
             }
 
             window.Flush();
@@ -121,41 +121,56 @@ namespace Platformer
             switch (action)
             {
                 case Controls.Control.Right:
-                    {
-                        Player.Run(Actor.Direction.Right);
-                        break;
-                    }
+                {
+                    Player.Run(Actor.Direction.Right);
+                    break;
+                }
                 case Controls.Control.Left:
-                    {
-                        Player.Run(Actor.Direction.Left);
-                        break;
-                    }
+                {
+                    Player.Run(Actor.Direction.Left);
+                    break;
+                }
                 case Controls.Control.Jump:
-                    {
-                        Player.Jump();
-                        break;
-                    }
+                {
+                    Player.Jump();
+                    break;
+                }
                 case Controls.Control.Stop:
-                    {
-                        Player.TryToStop();
-                        break;
-                    }
+                {
+                    Player.TryToStop();
+                    break;
+                }
                 case Controls.Control.StopTime:
-                    {
-                        Stop();
-                        break;
-                    }
+                {
+                    Stop();
+                    break;
+                }
                 case Controls.Control.RunTime:
-                    {
-                        Start();
-                        break;
-                    }
+                {
+                    Start();
+                    break;
+                }
                 case Controls.Control.Debug:
-                    {
-                        Player.Hitbox.MoveTo(new Vector { x = 40, y = 40 });
-                        DrawDebug = !DrawDebug;
-                        break;
-                    }
+                {
+                    Player.Hitbox.MoveTo(new Vector {x = 40, y = 40});
+                    DrawDebug = !DrawDebug;
+                    break;
+                }
+                case Controls.Control.Fly:
+                {
+                    Player.Flight = !Player.Flight;
+                    break;
+                }
+                case Controls.Control.ScaleMinus:
+                {
+                    window.ChangeScale(0.5);
+                    break;
+                }
+                case Controls.Control.ScalePlus:
+                {
+                    window.ChangeScale(2);
+                    break;
+                }
             }
         }
     }

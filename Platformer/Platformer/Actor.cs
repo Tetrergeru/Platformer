@@ -11,6 +11,7 @@ namespace Platformer
     /// </summary>
     class Actor : Entity
     {
+        public bool Flight;
         /// <summary>
         /// Направления перемещения
         /// </summary>
@@ -135,7 +136,7 @@ namespace Platformer
         /// </summary>
         public void Jump()
         {
-            if (!FreeFromDown())
+            if (Flight || !FreeFromDown())
                 velocity += new Vector { x = 0, y = -JumpHeight };
         }
 

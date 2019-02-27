@@ -17,22 +17,25 @@ namespace Platformer
         /// <summary>
         /// Координата X хитбокса
         /// </summary>
-        public double X { get { return rectangle.X; } }
+        public double X => rectangle.X;
 
         /// <summary>
         /// Координата Y хитбокса
         /// </summary>
-        public double Y { get { return rectangle.Y; } }
+        public double Y => rectangle.Y;
 
         /// <summary>
         /// Ширина хитбокса
         /// </summary>
-        public double Width { get { return rectangle.Width; } }
+        public double Width => rectangle.Width;
 
         /// <summary>
         /// Высота хитбокса
         /// </summary>
-        public double Height { get { return rectangle.Height; } }
+        public double Height => rectangle.Height;
+
+        public Vector Coordinates => new Vector { x = X, y = Y };
+        public Vector Centre => new Vector {x = X + Width / 2, y = Y + Height / 2};
 
         /// <summary>
         /// Конструктор, создающий хитбокс по коррдинатам и размеру

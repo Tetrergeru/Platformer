@@ -6,7 +6,7 @@ namespace Platformer
 {
     static class Controls
     {
-        public enum Control { None, Jump, Right, Left, Stop, StopTime, RunTime, Debug };
+        public enum Control { None, Jump, Right, Left, Stop, StopTime, RunTime, Debug, Fly, ScalePlus, ScaleMinus};
 
         public static readonly Dictionary<Keys, Control> KeyToControl = new Dictionary<Keys, Control>
         {
@@ -24,7 +24,10 @@ namespace Platformer
 
             { Keys.Z, Control.StopTime },
             { Keys.X, Control.RunTime },
-            { Keys.P, Control.Debug }
+            { Keys.P, Control.Debug },
+            { Keys.F, Control.Fly },
+            { Keys.I, Control.ScalePlus },
+            { Keys.K, Control.ScaleMinus },
         };
 
         public static Control ControlFromKey(Keys key)

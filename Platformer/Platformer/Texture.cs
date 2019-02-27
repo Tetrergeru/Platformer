@@ -53,7 +53,7 @@ namespace Platformer
                 {
                     var newWidth = (int)Math.Ceiling(picture.Width * (image.Height / (double)picture.Height));
                     for (int i = 0; i <= image.Width / newWidth; i++)
-                        graphics.DrawImage(picture, i * newWidth, 0, newWidth + 1, image.Height + 1);
+                        graphics.DrawImage(picture, i * newWidth, 0, newWidth, image.Height);
                     break;
                 }
             }

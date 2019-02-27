@@ -19,12 +19,12 @@ namespace Platformer
             get
             {
                 if (Images.Count * timerDelay > timer)
-                    return Images[(int) Math.Ceiling(timer / timerDelay) % Images.Count];
+                    return Images[(int)Math.Ceiling(timer / timerDelay) % Images.Count];
 
                 if (Images.Count * timerDelay + afterAnimationDelay < timer)
                     timer = 0;
 
-                return Images.First();
+                return Images[0];
             }
         }
 

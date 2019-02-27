@@ -14,6 +14,11 @@ namespace Platformer
     {
         private CoordinateSheet coordSheet;
 
+        public void ChangeScale(double delta)
+        {
+            coordSheet.ChangeScale(coordSheet.Scale * delta, game.Player.Hitbox);
+        }
+
         /// <summary>
         /// Картинка, куда мы будем рисовать все необходимые изображения, перед тем, как отобразить всё на экране
         /// </summary>
@@ -45,8 +50,10 @@ namespace Platformer
             pict = new Bitmap(Width, Height);
             drawer = Graphics.FromImage(pict);
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
+            drawer.PixelOffsetMode = PixelOffsetMode.Half;
 
             KeyDown += OnKeyDown;
+            SizeChanged += OnSizeChanged;
         }
         
         /// <summary>
@@ -58,7 +65,17 @@ namespace Platformer
         {
             game.OnControlTrigger(Platformer.Controls.ControlFromKey(e.KeyCode));
         }
-        
+
+        private void OnSizeChanged(object sender, EventArgs e)
+        {
+            pict = new Bitmap(Width, Height);
+            drawer = Graphics.FromImage(pict);
+            drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
+            drawer.PixelOffsetMode = PixelOffsetMode.Half;
+            coordSheet.SetSize(Width, Height);
+            coordSheet.ChangeScale(Width / game.Player.Hitbox.Width / 50, game.Player.Hitbox);
+        }
+
         /// <summary>
         /// Очищает картинку
         /// </summary>

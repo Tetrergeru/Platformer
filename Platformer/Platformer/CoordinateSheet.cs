@@ -9,13 +9,13 @@ namespace Platformer
 
         public double Height { get; set; }
 
-        public double Scale { get; set; }
+        public double Scale { get; private set; }
 
         public Vector Coordinates = Vector.Zero();
 
-        private const double HorizontalAdjustPersent = 0.3;
+        private const double HorizontalAdjustPersent = 0.1;
 
-        private const double VerticalalAdjustPersent = 0.3;
+        private const double VerticalalAdjustPersent = 0.1;
 
         public CoordinateSheet(double w, double h)
         {
@@ -28,31 +28,44 @@ namespace Platformer
         {
             return new Rectangle
             {
-                X = (int)Math.Round(hitbox.X - Coordinates.x),
-                Y = (int)Math.Round(hitbox.Y - Coordinates.y),
-                Width = (int)Math.Round(hitbox.Width),
-                Height = (int)Math.Round(hitbox.Height),
+                X = (int)Math.Round((hitbox.X - Coordinates.x) * Scale),
+                Y = (int)Math.Round((hitbox.Y - Coordinates.y) * Scale),
+                Width = (int)Math.Round(hitbox.Width * Scale),
+                Height = (int)Math.Round(hitbox.Height * Scale),
             };
         }
 
-        private void AdjustCoordinate(ref double coord, double playerCoord, double lesserBorder, double biggerBorder)
+        public void ChangeScale(double newScale, HitBox playerLocation)
         {
-            if (playerCoord < lesserBorder || playerCoord > biggerBorder)
-                coord += playerCoord - (playerCoord < lesserBorder ? lesserBorder : biggerBorder);
+            var playerCoords = Coordinates * (-1) + playerLocation.Coordinates;
+            Coordinates = Coordinates + playerCoords * (newScale < Scale ? (1 - Scale / newScale) : Scale / newScale);
+            Scale = newScale;
         }
 
-        private void CounstBordersAndAdjustCoordinate(ref double coord, double playerCoord, double dimension, double dimensionAdjustPersent)
+        public void SetSize(double w, double h)
+        {
+            Width = w;
+            Height = h;
+        }
+
+        private void AdjustCoordinate(ref double coord, double playerCoord, double playerSize, double lesserBorder, double biggerBorder)
+        {
+            if (playerCoord < lesserBorder || playerCoord + playerSize > biggerBorder)
+                coord += playerCoord - (playerCoord < lesserBorder ? lesserBorder : (biggerBorder - playerSize));
+        }
+
+        private void CounstBordersAndAdjustCoordinate(ref double coord, double playerCoord, double playerSize, double dimension, double dimensionAdjustPersent)
         {
             var lesserBorder = dimension * dimensionAdjustPersent;
             var biggerBorder = dimension - lesserBorder;
-            AdjustCoordinate(ref coord, playerCoord, lesserBorder, biggerBorder);
+            AdjustCoordinate(ref coord, playerCoord, playerSize, lesserBorder, biggerBorder);
         }
 
         public void AdjustBy(HitBox hitbox)
         {
-            var playerCoords = Coordinates * (-1) + new Vector { x = hitbox.X, y = hitbox.Y };
-            CounstBordersAndAdjustCoordinate(ref Coordinates.x, playerCoords.x, Width, HorizontalAdjustPersent);
-            CounstBordersAndAdjustCoordinate(ref Coordinates.y, playerCoords.y, Height, VerticalalAdjustPersent);
+            var playerCoords = (Coordinates * (-1) + hitbox.Coordinates) * Scale;
+            CounstBordersAndAdjustCoordinate(ref Coordinates.x, playerCoords.x, hitbox.Width * Scale, Width, HorizontalAdjustPersent);
+            CounstBordersAndAdjustCoordinate(ref Coordinates.y, playerCoords.y, hitbox.Height * Scale,Height, VerticalalAdjustPersent);
         }
     }
 }
