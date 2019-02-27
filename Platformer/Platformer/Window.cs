@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Platformer
@@ -18,9 +19,11 @@ namespace Platformer
     /// </summary>
     class Window : Form
     {
+        public PictureBox screen;
+
         private State gameState = State.Running;
-        
-        private PauseWindow pause;
+
+        private MenuPause pause;
 
         private CoordinateSheet coordSheet;
 
@@ -57,23 +60,33 @@ namespace Platformer
             
             coordSheet = new CoordinateSheet(Width, Height);
 
-            pause = new PauseWindow();
-
             pict = new Bitmap(Width, Height);
             drawer = Graphics.FromImage(pict);
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
 
+            screen = new PictureBox()
+            {
+                Width = Width,
+                Height = Height,
+                Left = 0,
+                Top = 0,
+            };
+            Controls.Add(screen);
+
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
             SizeChanged += OnSizeChanged;
+
+            pause = new MenuPause(this);
         }
 
         public void Pause()
         {
             game.Stop();
+            Thread.Sleep(10);
             gameState = State.Pause;
-            pause.Show();
+            pause.ReceiveControl();
         }
 
         public void Continue()
@@ -164,8 +177,8 @@ namespace Platformer
         /// </summary>
         public void Flush()
         {
-            var screen = CreateGraphics();
-            screen.DrawImage(pict, 0, 0);
+            //var screen = CreateGraphics();
+            screen.Image = pict;//(pict, 0, 0);
         }
 
         public void AdjustBy(HitBox hitbox)

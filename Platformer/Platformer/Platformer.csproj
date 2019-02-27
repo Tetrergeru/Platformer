@@ -51,9 +51,8 @@
     <Compile Include="Controls.cs" />
     <Compile Include="CoordinateSheet.cs" />
     <Compile Include="ITexture.cs" />
-    <Compile Include="PauseWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Menu.cs" />
+    <Compile Include="MenuPause.cs" />
     <Compile Include="SolidBlock.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Entity.cs" />
