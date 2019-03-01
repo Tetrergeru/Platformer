@@ -78,12 +78,19 @@ namespace Platformer
                 case Axis.Vertical:
                     y = value;
                     return;
+
                 case Axis.Horizontal:
                     x = value;
                     return;
+
                 default:
                     return;
             }
+        }
+
+        public bool IsZero()
+        {
+            return Math.Abs(x) < 1e-10 && Math.Abs(y) < 1e-10;
         }
 
         /// <summary>

@@ -11,12 +11,13 @@ namespace Platformer
     {
         protected Window owner;
 
-        protected List<Control> Controls;
+        protected List<Control> Controls { get; }
 
         public Menu(Window owner)
         {
             this.owner = owner;
             Controls = new List<Control>();
+            owner.SizeChanged += OnSizeChanged;
         }
 
         public void ReceiveControl()
@@ -49,5 +50,7 @@ namespace Platformer
         protected virtual void OnMouseMove(object o, MouseEventArgs e) { }
 
         protected virtual void OnMouseClick(object o, MouseEventArgs e) { }
+
+        protected virtual void OnSizeChanged(object o, EventArgs e) { }
     }
 }

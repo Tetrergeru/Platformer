@@ -67,5 +67,10 @@ namespace Platformer
             CounstBordersAndAdjustCoordinate(ref Coordinates.x, playerCoords.x, hitbox.Width * Scale, Width, HorizontalAdjustPersent);
             CounstBordersAndAdjustCoordinate(ref Coordinates.y, playerCoords.y, hitbox.Height * Scale,Height, VerticalalAdjustPersent);
         }
+
+        public void Move(Vector delta)
+        {
+            Coordinates += delta * (1 / Scale);
+        }
     }
 }

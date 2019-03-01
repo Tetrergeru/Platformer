@@ -63,7 +63,7 @@ namespace Platformer
         /// <summary>
         /// Интервал таймера, вызывающего тики игры
         /// </summary>
-        private const int TickTime = 10;
+        private const int TickTime = 20;
 
         /// <summary>
         /// Основной цикл игры

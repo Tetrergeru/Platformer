@@ -11,6 +11,8 @@ namespace Platformer
     /// </summary>
     class World
     {
+        public Vector Gravity { get; }
+
         /// <summary>
         /// Ссылка на игрока
         /// </summary>
@@ -43,6 +45,7 @@ namespace Platformer
         /// </summary>
         public World()
         {
+            Gravity = new Vector {x = 0, y = 1000 * 9.8};
             block = new List<SolidBlock>()
             {
                 SolidBlock.Make(this, new HitBox(0, 400, 300, 100),

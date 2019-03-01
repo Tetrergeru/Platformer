@@ -36,12 +36,7 @@ namespace Platformer
         /// <summary>
         /// Верхняя граница скорости перемещения по вертикали
         /// </summary>
-        private const double MaxVerticalVelocity = 50 * 100;
-
-        /// <summary>
-        /// Ускорение (в нормальном случае — ускорение свободного падения)
-        /// </summary>
-        protected Vector acceleration = new Vector {x = 0, y = 1000 * 9.8};
+        private const double MaxVerticalVelocity = 20 * 100;
 
         /// <summary>
         /// Скорость перемещения
@@ -140,12 +135,16 @@ namespace Platformer
             {
                 case Axis.Horizontal:
                     Move(new Vector
-                        { x = target.X - Hitbox.X + (distance >= 0 ? -Hitbox.Width - 0.1 : target.Width + 0.1), y = 0 });
+                        { x = target.X - Hitbox.X + (distance > 0 ? -Hitbox.Width - 0.1 : target.Width + 0.1), y = 0 });
                     return;
+
                 case Axis.Vertical:
                     Move(new Vector
                         { x = 0, y = target.Y - Hitbox.Y + (distance >= 0 ? -Hitbox.Height - 0.1 : target.Height + 0.1) });
                     return;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
             }
         }
 
@@ -214,13 +213,13 @@ namespace Platformer
         public void Move(double deltaTime)
         {
             CutVelocity();
-            Console.WriteLine(velocity);
+
             var direction = velocity * deltaTime;
 
             MoveHorizontal(direction.x);
             MoveVertical(direction.y);
 
-            velocity += acceleration * deltaTime;
+            velocity += Context.Gravity * deltaTime;
             velocity.x *= Math.Pow(1e-4, deltaTime);
         }
     }

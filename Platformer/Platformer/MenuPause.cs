@@ -7,27 +7,33 @@ namespace Platformer
 {
     internal class MenuPause : Menu
     {
+        private PictureBox PauseButton { get; }
+
         public MenuPause(Window owner) : base(owner)
         {
-            var button = new PictureBox()
+            PauseButton = new PictureBox()
             {
-                Left = 100,
-                Top = 100,
+                Left = (owner.Width - 200) / 2,
+                Top = (owner.Height - 50) / 2,
                 Width = 200,
                 Height = 50,
                 Image = new Bitmap("Resources/Textures/Continue_Button_0.png"),
                 BackColor = Color.Transparent,
-                ForeColor = Color.Transparent,
-                
             };
-            button.Click += Continue;
-            Controls.Add(button);
+            PauseButton.Click += Continue;
+            Controls.Add(PauseButton);
         }
 
         private void Continue(object o, EventArgs e)
         {
             ReturnControl();
             owner.Continue();
+        }
+
+        protected override void OnSizeChanged(object o, EventArgs e)
+        {
+            PauseButton.Left = (owner.Width - 200) / 2;
+            PauseButton.Top = (owner.Height - 50) / 2;
         }
     }
 }

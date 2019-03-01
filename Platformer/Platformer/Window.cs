@@ -25,11 +25,11 @@ namespace Platformer
 
         private MenuPause pause;
 
-        private CoordinateSheet coordSheet;
+        private CoordinateSheet CoordSheet { get; }
 
         public void ChangeScale(double delta)
         {
-            coordSheet.ChangeScale(coordSheet.Scale * delta, game.Player.Hitbox);
+            CoordSheet.ChangeScale(CoordSheet.Scale * delta, game.Player.Hitbox);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Platformer
             Width = 1000;
             Height = 500;
             
-            coordSheet = new CoordinateSheet(Width, Height);
+            CoordSheet = new CoordinateSheet(Width, Height);
 
             pict = new Bitmap(Width, Height);
             drawer = Graphics.FromImage(pict);
@@ -77,6 +77,7 @@ namespace Platformer
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
             SizeChanged += OnSizeChanged;
+            screen.MouseMove += OnMouseMove;
 
             pause = new MenuPause(this);
         }
@@ -125,8 +126,33 @@ namespace Platformer
             drawer = Graphics.FromImage(pict);
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
-            coordSheet.SetSize(Width, Height);
-            coordSheet.ChangeScale(Width / game.Player.Hitbox.Width / 50, game.Player.Hitbox);
+            CoordSheet.SetSize(Width, Height);
+            CoordSheet.ChangeScale(Width / game.Player.Hitbox.Width / 50, game.Player.Hitbox);
+        }
+
+        private Vector lastMouseCoords = Vector.Zero();
+
+        private void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (gameState == State.Pause)
+                return;
+
+            if (e.Button == MouseButtons.Left && lastMouseCoords.IsZero())
+            {
+                lastMouseCoords.x = e.X;
+                lastMouseCoords.y = e.Y;
+            }
+            else if (e.Button == MouseButtons.Left)
+            {
+                CoordSheet.Move(lastMouseCoords + new Vector{x = e.X, y = e.Y} * (-1));
+                lastMouseCoords.x = e.X;
+                lastMouseCoords.y = e.Y;
+            }
+            else
+            {
+                lastMouseCoords.x = 0;
+                lastMouseCoords.y = 0;
+            }
         }
 
         /// <summary>
@@ -145,17 +171,17 @@ namespace Platformer
         public void Draw(Bitmap image, HitBox hitbox)
         {
             if (gameState == State.Running)
-                drawer.DrawImage(image, coordSheet.Transform(hitbox));
+                drawer.DrawImage(image, CoordSheet.Transform(hitbox));
         }
 
         /// <summary>
         /// рисует на кртинке прямоугольник данного цвета
         /// </summary>
         /// <param name="color"></param>
-        /// <param name="rect"></param>
+        /// <param name="hitbox"></param>
         public void Draw(Color color, HitBox hitbox)
         {
-            drawer.DrawRectangle(new Pen(color, 2), coordSheet.Transform(hitbox));
+            drawer.DrawRectangle(new Pen(color, 2), CoordSheet.Transform(hitbox));
         }
 
         public void Draw(Entity entity)
@@ -181,6 +207,6 @@ namespace Platformer
         }
 
         public void AdjustBy(HitBox hitbox)
-            => coordSheet.AdjustBy(hitbox);
+            => CoordSheet.AdjustBy(hitbox);
     }
 }
