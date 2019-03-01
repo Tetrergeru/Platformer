@@ -151,8 +151,7 @@ namespace Platformer
         private void MoveInAxis(double distance, Axis axis)
         {
             if (Math.Abs(distance) < 1e-10) return;
-
-            var tempHitbox = new HitBox(Hitbox, Vector.InAxis(distance, axis));
+            var tempHitbox = new HitBox(Hitbox,  axis, distance);
 
             foreach (var e in Context.Entities)
                 if (e != this && e.Intersects(tempHitbox))
