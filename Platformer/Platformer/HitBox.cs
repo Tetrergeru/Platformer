@@ -55,10 +55,20 @@ namespace Platformer
             rectangle = new Rect(hitbox.X, hitbox.Y, hitbox.Width, hitbox.Height);
         }
 
-        public HitBox(HitBox hitbox, Vector widening) : this(hitbox)
+        public HitBox(HitBox hitbox, Axis axis, double distance) : this(hitbox)
         {
-            rectangle.Width += widening.x;
-            rectangle.Height += widening.y;
+            if (axis == Axis.Horizontal)
+            {
+                rectangle.Width += Math.Abs(distance);
+                if (distance < 0)
+                    rectangle.X += distance;
+            }
+            else if (axis == Axis.Vertical)
+            {
+                rectangle.Height += Math.Abs(distance);
+                if (distance < 0)
+                    rectangle.Y += distance;
+            }
         }
 
         /// <summary>
