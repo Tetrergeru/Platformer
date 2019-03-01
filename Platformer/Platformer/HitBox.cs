@@ -35,6 +35,7 @@ namespace Platformer
         public double Height => rectangle.Height;
 
         public Vector Coordinates => new Vector { x = X, y = Y };
+
         public Vector Centre => new Vector {x = X + Width / 2, y = Y + Height / 2};
 
         /// <summary>
@@ -47,6 +48,17 @@ namespace Platformer
         public HitBox(double x, double y, double w, double h)
         {
             rectangle = new Rect(x, y, w, h);
+        }
+
+        public HitBox(HitBox hitbox)
+        {
+            rectangle = new Rect(hitbox.X, hitbox.Y, hitbox.Width, hitbox.Height);
+        }
+
+        public HitBox(HitBox hitbox, Vector widening) : this(hitbox)
+        {
+            rectangle.Width += widening.x;
+            rectangle.Height += widening.y;
         }
 
         /// <summary>

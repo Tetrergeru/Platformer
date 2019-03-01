@@ -102,16 +102,14 @@ namespace Platformer
         /// <param name="e"></param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (gameState == State.Running)
+            if (gameState != State.Running) return;
+
+            if (Platformer.Controls.Control.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
             {
-                Console.WriteLine("***");
-                if (Platformer.Controls.Control.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
-                {
-                    Pause();
-                }
-                else
-                    game.KeysPressed.Add(Platformer.Controls.ControlFromKey(e.KeyCode));
+                Pause();
             }
+            else
+                game.KeysPressed.Add(Platformer.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
@@ -123,6 +121,7 @@ namespace Platformer
         private void OnSizeChanged(object sender, EventArgs e)
         {
             pict = new Bitmap(Width, Height);
+            screen.Size = new Size(Width, Height);
             drawer = Graphics.FromImage(pict);
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
