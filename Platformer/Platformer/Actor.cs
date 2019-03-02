@@ -3,33 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Platformer
 {
+    enum Axis
+    {
+        Horizontal, Vertical
+    }
+
     /// <summary>
     /// "Актёр", "Действующее лицо", живая сущность, населяющая миры игры
     /// </summary>
     class Actor : Entity
     {
+        public bool Flight;
+
         /// <summary>
         /// Направления перемещения
         /// </summary>
-        public enum Direction { Right, Left };
+        public enum Direction
+        {
+            Right,
+            Left
+        };
 
         /// <summary>
         /// Верхняя граница скорости перемещения по горизонтали
         /// </summary>
-        private const double MaxHorizontalVelocity = 20;
+        private const double MaxHorizontalVelocity = 20 * 100;
 
         /// <summary>
         /// Верхняя граница скорости перемещения по вертикали
         /// </summary>
-        private const double MaxVerticalVelocity = 500;
-
-        /// <summary>
-        /// Ускорение (в нормальном случае — ускорение свободного падения)
-        /// </summary>
-        protected Vector acceleration = new Vector { x = 0, y = 1.2 };
+        private const double MaxVerticalVelocity = 20 * 100;
 
         /// <summary>
         /// Скорость перемещения
@@ -52,12 +59,16 @@ namespace Platformer
         /// (нужен для того, чтобы можно было заготорвить актора до его непосредственного размещения в том или ином мире)
         /// </summary>
         /// <param name="size">Размер актора</param>
-        public Actor(Vector size) : base(size) { }
+        public Actor(Vector size) : base(size)
+        {
+        }
 
         /// <summary>
         /// Конструктор актора по умолчанию
         /// </summary>
-        public Actor() : base() { }
+        public Actor()
+        {
+        }
 
         /// <summary>
         /// Прибавляет к скорости актора указанное значение. "Тянет" актора по вектору.
@@ -71,12 +82,12 @@ namespace Platformer
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        const double RunningSpeed = 7;
+        const double RunningSpeed = 200;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        private const double JumpHeight = 18;
+        private const double JumpHeight = 200 * 9.8;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -85,9 +96,9 @@ namespace Platformer
         public void Run(Direction direction)
         {
             if (direction == Direction.Right)
-                Pull(new Vector { x = RunningSpeed, y = 0, });
+                Pull(new Vector {x = RunningSpeed, y = 0,});
             else
-                Pull(new Vector { x = -RunningSpeed, y = 0, });
+                Pull(new Vector {x = -RunningSpeed, y = 0,});
         }
 
         /// <summary>
@@ -115,12 +126,52 @@ namespace Platformer
         {
             var tempHitbox = new HitBox(Hitbox.X + velocity.x, Hitbox.Y + velocity.y, Hitbox.Width, Hitbox.Height);
 
+            return Context.Entities.All(e => e == this || !e.Intersects(tempHitbox));
+        }
+
+        private void MoveTillIntersect(double distance, Axis axis, HitBox target)
+        {
+            switch (axis)
+            {
+                case Axis.Horizontal:
+                    Move(new Vector
+                        { x = target.X - Hitbox.X + (distance > 0 ? -Hitbox.Width - 0.1 : target.Width + 0.1), y = 0 });
+                    return;
+
+                case Axis.Vertical:
+                    Move(new Vector
+                        { x = 0, y = target.Y - Hitbox.Y + (distance >= 0 ? -Hitbox.Height - 0.1 : target.Height + 0.1) });
+                    return;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+            }
+        }
+
+        private void MoveInAxis(double distance, Axis axis)
+        {
+            if (Math.Abs(distance) < 1e-10) return;
+            var tempHitbox = new HitBox(Hitbox,  axis, distance);
+
             foreach (var e in Context.Entities)
                 if (e != this && e.Intersects(tempHitbox))
                 {
-                    return false;
+                    MoveTillIntersect(distance, axis, e.Hitbox);
+                    velocity.SetAxis(axis, 0);
+                    return;
                 }
-            return true;
+
+            Move(Vector.InAxis(distance, axis));
+        }
+
+        private void MoveHorizontal(double x)
+        {
+            MoveInAxis(x, Axis.Horizontal);
+        }
+
+        private void MoveVertical(double y)
+        {
+            MoveInAxis(y, Axis.Vertical);
         }
 
         /// <summary>
@@ -135,7 +186,7 @@ namespace Platformer
         /// </summary>
         public void Jump()
         {
-            if (!FreeFromDown())
+            if (Flight || !FreeFromDown())
                 velocity += new Vector { x = 0, y = -JumpHeight };
         }
 
@@ -148,6 +199,12 @@ namespace Platformer
                 velocity.x = 0;
         }
 
+        public override void Tick(double deltaTime)
+        {
+            base.Tick(deltaTime);
+            Move(deltaTime);
+        }
+
         /// <summary>
         /// По возможности смещает актора с текущей свкоростью
         /// </summary>
@@ -156,20 +213,13 @@ namespace Platformer
         {
             CutVelocity();
 
-            var direction = velocity * deltaTime * 100;
+            var direction = velocity * deltaTime;
 
-            if (MovementIsPossble(direction.ZeroY()))
-                Move(direction.ZeroY());
-            else
-                velocity = velocity.ZeroX();
+            MoveHorizontal(direction.x);
+            MoveVertical(direction.y);
 
-            if (MovementIsPossble(direction.ZeroX()))
-                Move(direction.ZeroX());
-            else
-                velocity = velocity.ZeroY();
-
-            velocity += acceleration;
-            velocity.x *= Math.Pow(0.005, deltaTime);
+            velocity += Context.Gravity * deltaTime;
+            velocity.x *= Math.Pow(1e-4, deltaTime);
         }
     }
 }

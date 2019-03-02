@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using Timer = System.Timers.Timer;
+
+// ReSharper disable All
 
 namespace Platformer
 {
@@ -12,6 +17,10 @@ namespace Platformer
     /// </summary>
     class Game
     {
+        public HashSet<Controls.Control> KeysPressed = new HashSet<Controls.Control>();
+
+        private bool DrawDebug = false;
+        
         /// <summary>
         /// Графическое окно, в котором отрисовывается игра
         /// </summary>
@@ -40,18 +49,21 @@ namespace Platformer
             gameLoop = new Timer(TickTime);
             gameLoop.Elapsed += Tick;
 
-            Player = new Player(new Vector { x = 20, y = 30});
-
+            Player = new Player(new Vector { x = 30, y = 60});
+            Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
+            
             world = new World();
-            world.SetPlayer(Player, new Vector { x = 40, y = 40 });
+            world.SetPlayer(Player, new Vector { x = 200, y = 40 });
+            
+            //grassImg = ;
         }
 
-        //============    Работа с игровым временем    =============
+        //============    Работа с игровым временем    ============
 
         /// <summary>
         /// Интервал таймера, вызывающего тики игры
         /// </summary>
-        private const int TickTime = 10;
+        private const int TickTime = 20;
 
         /// <summary>
         /// Основной цикл игры
@@ -65,12 +77,30 @@ namespace Platformer
         /// <param name="e"></param>
         private void Tick(object sender, ElapsedEventArgs e)
         {
-            world.player.Move(TickTime / 1000.0);
-            window.Clear();
+            foreach (var x in KeysPressed)
+                OnControlTrigger(x);
 
-            window.Draw(Color.Red, world.player.Hitbox.ToDrawing());
-            foreach (var x in world.block)
-                window.Draw(Color.Blue, x.Hitbox.ToDrawing());
+            world.Tick(TickTime / 1000.0);
+
+            window.AdjustBy(Player.Hitbox);
+
+            window.Clear(Color.SkyBlue);
+
+            window.Draw(world.Background);
+            window.Draw(Player);
+            window.Draw(world.Frontground);
+            window.Draw(world.block);
+
+            if (DrawDebug)
+            {
+                foreach (var x in world.Background)
+                    window.Draw(Color.DarkGreen, x.Hitbox);
+                window.Draw(Color.Red, world.player.Hitbox);
+                foreach (var x in world.Frontground)
+                    window.Draw(Color.Yellow, x.Hitbox);
+                foreach (var x in world.block)
+                    window.Draw(Color.Blue, x.Hitbox);
+            }
 
             window.Flush();
         }
@@ -89,6 +119,68 @@ namespace Platformer
         public void Stop()
         {
             gameLoop.Stop();
+        }
+
+        //==========================<o@o>==========================
+
+
+        public void OnControlTrigger(Controls.Control action)
+        {
+            switch (action)
+            {
+                case Controls.Control.Right:
+                {
+                    Player.Run(Actor.Direction.Right);
+                    break;
+                }
+                case Controls.Control.Left:
+                {
+                    Player.Run(Actor.Direction.Left);
+                    break;
+                }
+                case Controls.Control.Jump:
+                {
+                    Player.Jump();
+                    break;
+                }
+                case Controls.Control.Stop:
+                {
+                    Player.TryToStop();
+                    break;
+                }
+                case Controls.Control.StopTime:
+                {
+                    Stop();
+                    window.Pause();
+                    break;
+                }
+                case Controls.Control.RunTime:
+                {
+                    Start();
+                    break;
+                }
+                case Controls.Control.Debug:
+                {
+                    Player.Hitbox.MoveTo(new Vector {x = 40, y = 40});
+                    DrawDebug = !DrawDebug;
+                    break;
+                }
+                case Controls.Control.Fly:
+                {
+                    Player.Flight = !Player.Flight;
+                    break;
+                }
+                case Controls.Control.ScaleMinus:
+                {
+                    window.ChangeScale(0.5);
+                    break;
+                }
+                case Controls.Control.ScalePlus:
+                {
+                    window.ChangeScale(2);
+                    break;
+                }
+            }
         }
     }
 }
