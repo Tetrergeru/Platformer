@@ -28,7 +28,7 @@ namespace Platformer
             panel = new Panel
             {
                 Location = new Point((owner.Width-320) / 2, 100),
-                Size = new Size(320, 350),
+                Size = new Size(320, owner.Height - 160),
                 AutoScroll = true,
                 BackColor = Color.Transparent,
             };
@@ -49,7 +49,6 @@ namespace Platformer
 
                 count++;
             }
-
             Controls.Add(panel);
         }
 
@@ -67,10 +66,19 @@ namespace Platformer
         protected override void OnKeyDown(object o, KeyEventArgs e)
         {
             if (Choosing == ControlActions.None) return;
-
-            button[Choosing].SetText(e.KeyCode.ToString());
+            
             Platformer.Controls.SetControl(Choosing, e.KeyCode);
+            foreach (var b in button)
+                button[b.Key].SetText(Platformer.Controls.KeyFromControl(b.Key).ToString());
+
             Choosing = ControlActions.None;
+        }
+
+        protected override void OnSizeChanged(object o, EventArgs e)
+        {
+            ExitButton.Location = new Point((owner.Width - 200) / 2, 20);
+            panel.Location = new Point((owner.Width - 320) / 2, 100);
+            panel.Size = new Size(320, owner.Height - 160);
         }
     }
 }
