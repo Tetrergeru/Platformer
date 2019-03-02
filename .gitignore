@@ -1,3 +1,5 @@
-/Platformer/Platformer/bin/
-/Platformer/Platformer/obj/
-/Platformer/.vs/
+bin
+obj
+\.vs
+\.idea
+*.DotSettings.*
