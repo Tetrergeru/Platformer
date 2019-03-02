@@ -20,7 +20,7 @@ namespace Platformer
             owner.SizeChanged += OnSizeChanged;
         }
 
-        public void ReceiveControl()
+        public void Connect()
         {
             owner.KeyDown += OnKeyDown;
             owner.KeyUp += OnKeyUp;
@@ -33,7 +33,16 @@ namespace Platformer
             }
         }
 
-        public void ReturnControl()
+        public void ReceiveControl()
+        {
+            if (owner.MenuStack.Count != 0)
+                owner.MenuStack.Peek().Disconnect();
+            owner.MenuStack.Push(this);
+
+            Connect();
+        }
+
+        public void Disconnect()
         {
             owner.KeyDown -= OnKeyDown;
             owner.KeyUp -= OnKeyUp;
@@ -41,6 +50,15 @@ namespace Platformer
             owner.MouseClick -= OnMouseClick;
             foreach (var ctrl in Controls)
                 owner.screen.Controls.Remove(ctrl);
+        }
+
+        public void ReturnControl()
+        {
+            Disconnect();
+
+            owner.MenuStack.Pop();
+            if (owner.MenuStack.Count != 0)
+                owner.MenuStack.Peek().Connect();
         }
 
         protected virtual void OnKeyDown(object o, KeyEventArgs e) { }

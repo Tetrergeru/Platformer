@@ -9,19 +9,39 @@ namespace Platformer
     {
         private PictureBox PauseButton { get; }
 
+        private PictureBox ChangeControlsButton { get; }
+
+
         public MenuPause(Window owner) : base(owner)
         {
+            var panel = new Panel()
+            {
+                Size = new Size(200,300),
+                Left = (owner.Width - 200) / 2,
+                Top = (owner.Height - 150) / 2,
+                BackColor = Color.Transparent,
+            };
+
             PauseButton = new PictureBox()
             {
-                Left = (owner.Width - 200) / 2,
-                Top = (owner.Height - 50) / 2,
-                Width = 200,
-                Height = 50,
+                Size = new Size(200,50),
                 Image = new Bitmap("Resources/Textures/Continue_Button_0.png"),
                 BackColor = Color.Transparent,
             };
             PauseButton.Click += Continue;
-            Controls.Add(PauseButton);
+            panel.Controls.Add(PauseButton);
+
+            ChangeControlsButton = new PictureBox()
+            {
+                Location = new Point(0, 100),
+                Size = new Size(200, 50),
+                Image = new Bitmap("Resources/Textures/Continue_Button_0.png"),
+                BackColor = Color.Transparent,
+            };
+            ChangeControlsButton.Click += ChangeControls;
+            panel.Controls.Add(ChangeControlsButton);
+
+            Controls.Add(panel);
         }
 
         private void Continue(object o, EventArgs e)
@@ -35,5 +55,11 @@ namespace Platformer
             PauseButton.Left = (owner.Width - 200) / 2;
             PauseButton.Top = (owner.Height - 50) / 2;
         }
+
+        private void ChangeControls(object sender, EventArgs e)
+        {
+            owner.ChangeControls.ReceiveControl();
+        }
+
     }
 }

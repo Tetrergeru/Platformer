@@ -17,7 +17,7 @@ namespace Platformer
     /// </summary>
     class Game
     {
-        public HashSet<Controls.Control> KeysPressed = new HashSet<Controls.Control>();
+        public HashSet<ControlActions> KeysPressed = new HashSet<ControlActions>();
 
         private bool DrawDebug = false;
         
@@ -124,58 +124,58 @@ namespace Platformer
         //==========================<o@o>==========================
 
 
-        public void OnControlTrigger(Controls.Control action)
+        public void OnControlTrigger(ControlActions action)
         {
             switch (action)
             {
-                case Controls.Control.Right:
+                case ControlActions.Right:
                 {
                     Player.Run(Actor.Direction.Right);
                     break;
                 }
-                case Controls.Control.Left:
+                case ControlActions.Left:
                 {
                     Player.Run(Actor.Direction.Left);
                     break;
                 }
-                case Controls.Control.Jump:
+                case ControlActions.Jump:
                 {
                     Player.Jump();
                     break;
                 }
-                case Controls.Control.Stop:
+                case ControlActions.Stop:
                 {
                     Player.TryToStop();
                     break;
                 }
-                case Controls.Control.StopTime:
+                case ControlActions.StopTime:
                 {
                     Stop();
                     window.Pause();
                     break;
                 }
-                case Controls.Control.RunTime:
+                case ControlActions.RunTime:
                 {
                     Start();
                     break;
                 }
-                case Controls.Control.Debug:
+                case ControlActions.Debug:
                 {
                     Player.Hitbox.MoveTo(new Vector {x = 40, y = 40});
                     DrawDebug = !DrawDebug;
                     break;
                 }
-                case Controls.Control.Fly:
+                case ControlActions.Fly:
                 {
                     Player.Flight = !Player.Flight;
                     break;
                 }
-                case Controls.Control.ScaleMinus:
+                case ControlActions.ScaleMinus:
                 {
                     window.ChangeScale(0.5);
                     break;
                 }
-                case Controls.Control.ScalePlus:
+                case ControlActions.ScalePlus:
                 {
                     window.ChangeScale(2);
                     break;

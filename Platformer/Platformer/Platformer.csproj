@@ -48,10 +48,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actor.cs" />
+    <Compile Include="Button.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls.cs" />
     <Compile Include="CoordinateSheet.cs" />
     <Compile Include="ITexture.cs" />
     <Compile Include="Menu.cs" />
+    <Compile Include="MenuChangeControls.cs" />
     <Compile Include="MenuPause.cs" />
     <Compile Include="SolidBlock.cs" />
     <Compile Include="Texture.cs" />

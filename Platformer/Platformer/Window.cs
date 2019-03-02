@@ -23,7 +23,11 @@ namespace Platformer
 
         private State gameState = State.Running;
 
-        private MenuPause pause;
+        public Stack<Menu> MenuStack { get; } = new Stack<Menu>();
+
+        public MenuPause pause { get; }
+
+        public MenuChangeControls ChangeControls { get; }
 
         private CoordinateSheet CoordSheet { get; }
 
@@ -80,6 +84,7 @@ namespace Platformer
             screen.MouseMove += OnMouseMove;
 
             pause = new MenuPause(this);
+            ChangeControls = new MenuChangeControls(this);
         }
 
         public void Pause()
@@ -105,7 +110,7 @@ namespace Platformer
         {
             if (gameState != State.Running) return;
 
-            if (Platformer.Controls.Control.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
+            if (Platformer.ControlActions.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
             {
                 Pause();
             }
@@ -170,7 +175,7 @@ namespace Platformer
         /// <param name="hitbox"></param>
         public void Draw(Bitmap image, HitBox hitbox)
         {
-            if (gameState == State.Running)
+            //if (gameState == State.Running)
                 drawer.DrawImage(image, CoordSheet.Transform(hitbox));
         }
 
