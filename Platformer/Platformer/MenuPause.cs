@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace Platformer
 {
     internal class MenuPause : Menu
     {
+        private Panel ButtonPanel { get; }
+
         private PictureBox PauseButton { get; }
 
         private PictureBox ChangeControlsButton { get; }
 
-
         public MenuPause(Window owner) : base(owner)
         {
-            var panel = new Panel()
+            ButtonPanel = new Panel()
             {
                 Size = new Size(200,300),
                 Left = (owner.Width - 200) / 2,
@@ -29,7 +29,7 @@ namespace Platformer
                 BackColor = Color.Transparent,
             };
             PauseButton.Click += Continue;
-            panel.Controls.Add(PauseButton);
+            ButtonPanel.Controls.Add(PauseButton);
 
             ChangeControlsButton = new PictureBox()
             {
@@ -39,9 +39,9 @@ namespace Platformer
                 BackColor = Color.Transparent,
             };
             ChangeControlsButton.Click += ChangeControls;
-            panel.Controls.Add(ChangeControlsButton);
+            ButtonPanel.Controls.Add(ChangeControlsButton);
 
-            Controls.Add(panel);
+            Controls.Add(ButtonPanel);
         }
 
         private void Continue(object o, EventArgs e)
@@ -52,8 +52,8 @@ namespace Platformer
 
         protected override void OnSizeChanged(object o, EventArgs e)
         {
-            PauseButton.Left = (owner.Width - 200) / 2;
-            PauseButton.Top = (owner.Height - 50) / 2;
+            ButtonPanel.Left = (owner.Width - 200) / 2;
+            ButtonPanel.Top = (owner.Height - 150) / 2;
         }
 
         private void ChangeControls(object sender, EventArgs e)

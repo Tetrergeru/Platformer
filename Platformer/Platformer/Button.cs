@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace Platformer
@@ -19,7 +17,7 @@ namespace Platformer
                 LineAlignment = StringAlignment.Center
             };
 
-            var font = new Font("Times New Roman", 20);
+            var font = new Font("Times New Roman", 15);
 
             g.DrawString(value, font, Brushes.Black, new Rectangle(0,0,Width, Height), stringFormat);
             Image = Image;
