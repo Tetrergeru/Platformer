@@ -4,14 +4,32 @@ using System.Windows.Forms;
 
 namespace Platformer
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Меню игровой паузы
+    /// </summary>
     internal class MenuPause : Menu
     {
+        /// <summary>
+        /// Панель, содержащая все кнопки меню паузы
+        /// </summary>
         private Panel ButtonPanel { get; }
 
-        private PictureBox PauseButton { get; }
+        /// <summary>
+        /// Кнопка выхода из меню
+        /// </summary>
+        private PictureBox ContinueButton { get; }
 
+        /// <summary>
+        /// Кнопка смены управления, открывает меню смены управления
+        /// </summary>
         private PictureBox ChangeControlsButton { get; }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Конструктор, создающий экземпляр класса MenuPause
+        /// </summary>
+        /// <param name="owner">Окно-владелец этого меню</param>
         public MenuPause(Window owner) : base(owner)
         {
             ButtonPanel = new Panel()
@@ -22,14 +40,14 @@ namespace Platformer
                 BackColor = Color.Transparent,
             };
 
-            PauseButton = new PictureBox()
+            ContinueButton = new PictureBox()
             {
                 Size = new Size(200,50),
                 Image = new Bitmap("Resources/Textures/Continue_Button_0.png"),
                 BackColor = Color.Transparent,
             };
-            PauseButton.Click += Continue;
-            ButtonPanel.Controls.Add(PauseButton);
+            ContinueButton.Click += Exit;
+            ButtonPanel.Controls.Add(ContinueButton);
 
             ChangeControlsButton = new PictureBox()
             {
@@ -44,22 +62,36 @@ namespace Platformer
             Controls.Add(ButtonPanel);
         }
 
-        private void Continue(object o, EventArgs e)
-        {
-            ReturnControl();
-            owner.Continue();
-        }
-
-        protected override void OnSizeChanged(object o, EventArgs e)
+        /// <inheritdoc />
+        /// <summary>
+        /// При изменении размера окна выравнивает элементы управления по центру
+        /// </summary>
+        /// <param name="sender">Объект, вызвавший событие</param>
+        /// <param name="e">Параметры события</param>
+        protected override void OnSizeChanged(object sender, EventArgs e)
         {
             ButtonPanel.Left = (owner.Width - 200) / 2;
             ButtonPanel.Top = (owner.Height - 150) / 2;
         }
 
+        /// <summary>
+        /// Открывает меню смены управления
+        /// </summary>
+        /// <param name="sender">Объект, вызвавший событие</param>
+        /// <param name="e">Параметры события</param>
         private void ChangeControls(object sender, EventArgs e)
         {
             owner.ChangeControls.ReceiveControl();
         }
 
+        /// <summary>
+        /// Выход из меню
+        /// </summary>
+        /// <param name="sender">Объект, вызвавший событие</param>
+        /// <param name="e">Параметры события</param>
+        private void Exit(object sender, EventArgs e)
+        {
+            ReturnControl();
+        }
     }
 }

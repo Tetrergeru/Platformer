@@ -175,7 +175,7 @@ namespace Platformer
         /// <param name="hitbox"></param>
         public void Draw(Bitmap image, HitBox hitbox)
         {
-            //if (gameState == State.Running)
+            if (gameState == State.Running)
                 drawer.DrawImage(image, CoordSheet.Transform(hitbox));
         }
 

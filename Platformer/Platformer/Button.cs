@@ -3,8 +3,16 @@ using System.Windows.Forms;
 
 namespace Platformer
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс кнопки, который используется в этом проекте
+    /// </summary>
     public class Button : PictureBox
     {
+        /// <summary>
+        /// Выводит текст на кнопку
+        /// </summary>
+        /// <param name="value">Текст, который будет выведен</param>
         public void SetText(string value)
         {
             var g = Graphics.FromImage(Image);
@@ -23,9 +31,14 @@ namespace Platformer
             Image = Image;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Создаёт кнопку данной ширины и высоты
+        /// </summary>
+        /// <param name="width">Ширина кнопки</param>
+        /// <param name="height">Высота кнопки</param>
         public Button(int width, int height)
         {
-            BackColor = Color.Transparent;
             Width = width;
             Height = height;
             Image = new Bitmap(width, height);
