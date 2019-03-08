@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platformer", "Platformer\Platformer.csproj", "{64C1D8FD-17A8-4F7E-AAFB-C60203EFD8A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "viper-script", "viper-script\viper-script.csproj", "{BEC64089-A5D8-4B8C-938D-F9AEAF3B0F58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{64C1D8FD-17A8-4F7E-AAFB-C60203EFD8A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64C1D8FD-17A8-4F7E-AAFB-C60203EFD8A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64C1D8FD-17A8-4F7E-AAFB-C60203EFD8A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC64089-A5D8-4B8C-938D-F9AEAF3B0F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC64089-A5D8-4B8C-938D-F9AEAF3B0F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC64089-A5D8-4B8C-938D-F9AEAF3B0F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC64089-A5D8-4B8C-938D-F9AEAF3B0F58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
