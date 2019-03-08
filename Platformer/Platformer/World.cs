@@ -21,7 +21,7 @@ namespace Platformer
         /// <summary>
         /// Твёрдые объекты, структура мира...
         /// </summary>
-        public List<SolidBlock> block;
+        public List<Entity> block;
 
         public List<Entity> Background;
 
@@ -46,21 +46,21 @@ namespace Platformer
         public World()
         {
             Gravity = new Vector {x = 0, y = 1000 * 9.8};
-            block = new List<SolidBlock>()
+            block = new List<Entity>()
             {
-                SolidBlock.Make(this, new HitBox(0, 400, 300, 100),
+                Entity.MakeEntity(this, new HitBox(0, 400, 300, 100),
                     new Bitmap("Resources/Textures/Grass_1.png"),FillType.StretchDown),
-                SolidBlock.Make(this, new HitBox(700, 400, 300, 100),
+                Entity.MakeEntity(this, new HitBox(700, 400, 300, 100),
                     new Bitmap("Resources/Textures/Grass_1.png"),FillType.StretchDown),
-                SolidBlock.Make(this, new HitBox(300, 400, 400, 100),
+                Entity.MakeEntity(this, new HitBox(300, 400, 400, 100),
                     new Bitmap("Resources/Textures/Stone_1.png"),FillType.StretchDown),
-                SolidBlock.Make(this, new HitBox(280, 350, 440, 50),
+                Entity.MakeEntity(this, new HitBox(280, 350, 440, 50),
                     new Bitmap("Resources/Textures/Grass_1.png"),FillType.Repeat, 10),
             };
 
             Background = new List<Entity>()
             {
-                Entity.Make(this, new HitBox(350, 50, 300, 300),
+                Entity.MakeEntity(this, new HitBox(350, 50, 300, 300),
                     new List<Bitmap>
                     {
                         new Bitmap("Resources/Textures/Tree_0.png"),
@@ -75,10 +75,10 @@ namespace Platformer
 
             Frontground = new List<Entity>()
             {
-                Entity.Make(this, new HitBox(280, 310, 120, 40), texture),
-                Entity.Make(this, new HitBox(395, 310, 120, 40), texture),
-                Entity.Make(this, new HitBox(510, 310, 120, 40), texture),
-                Entity.Make(this, new HitBox(605, 310, 120, 40), texture),
+                Entity.MakeEntity(this, new HitBox(280, 310, 120, 40), texture),
+                Entity.MakeEntity(this, new HitBox(395, 310, 120, 40), texture),
+                Entity.MakeEntity(this, new HitBox(510, 310, 120, 40), texture),
+                Entity.MakeEntity(this, new HitBox(605, 310, 120, 40), texture),
             };
         }
 

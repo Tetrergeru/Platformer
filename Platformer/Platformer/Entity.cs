@@ -73,34 +73,31 @@ namespace Platformer
         public void Move(Vector velocity)
             => Hitbox.Move(velocity);
 
-        public Vector Coorinates()
-            => new Vector { x = Hitbox.X, y = Hitbox.Y };
-
-        public Vector Centre()
-            => new Vector { x = Hitbox.X + Hitbox.Width / 2, y = Hitbox.Y + Hitbox.Height / 2};
-
         public virtual void Tick(double deltaTime)
         {
             Texture.Tick(deltaTime);
         }
 
-        public static Entity Make(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)
+        public static Entity MakeEntity(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)
         {
             var result = new Entity(context, hitbox);
             result.Texture.AddTexture(texture, ft, scale);
             return result;
         }
-        public static Entity Make(World context, HitBox hitbox, List<Bitmap> texture, FillType ft, double delay, double afterDelay, double scale = 1)
+
+        public static Entity MakeEntity(World context, HitBox hitbox, List<Bitmap> texture, FillType ft, double delay,
+            double afterDelay, double scale = 1)
         {
             var result = new Entity(context, hitbox)
             {
-                Texture = new TextureAnimated((int)hitbox.Width, (int)hitbox.Height, delay, afterDelay)
+                Texture = new TextureAnimated((int) hitbox.Width, (int) hitbox.Height, delay, afterDelay)
             };
             foreach (var t in texture)
                 result.Texture.AddTexture(t, ft, scale);
             return result;
         }
-        public static Entity Make(World context, HitBox hitbox, TextureAnimated texture)
+
+        public static Entity MakeEntity(World context, HitBox hitbox, TextureAnimated texture)
         {
             var result = new Entity(context, hitbox)
             {

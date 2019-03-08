@@ -50,10 +50,13 @@
     <Compile Include="Actor.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="CoordinateSheet.cs" />
+    <Compile Include="Files\EntityFile.cs" />
+    <Compile Include="Files\Parser.cs" />
+    <Compile Include="Files\TextureFile.cs" />
+    <Compile Include="Files\WorldFile.cs" />
     <Compile Include="ITexture.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuPause.cs" />
-    <Compile Include="SolidBlock.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game.cs" />
@@ -97,5 +100,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
