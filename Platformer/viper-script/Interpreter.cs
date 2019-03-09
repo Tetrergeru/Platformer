@@ -7,7 +7,7 @@ namespace viper_script
 {
     public class Interpreter
     {
-        private static LineParser parser = new LineParser();
+        private static readonly LineParser Parser = new LineParser();
 
         /// <summary>
         /// Проверяет строку на пустоту
@@ -24,6 +24,12 @@ namespace viper_script
         /// Если является -- записывает условие в группу condition
         /// </summary>
         private static Regex Condition { get; } = new Regex(@"^ *if (?<condition>.*): *$");
+
+        /// <summary>
+        /// Проверяет, является ли строка веткой "иначе если".
+        /// Если является -- записывает условие в группу condition
+        /// </summary>
+        private static Regex ElifBranch { get; } = new Regex(@"^ *elif (?<condition>.*): *$");
 
         /// <summary>
         /// Проверяет, является ли строка веткой "иначе" условного оператора
@@ -45,42 +51,30 @@ namespace viper_script
 
             var startPlainBlock = start;
 
-            for (var i = start; i < finish;)
+            for (var i = start; i < finish; i++)
             {
                 if (Empty.IsMatch(code[i]) || Comment.IsMatch(code[i]))
-                {
-                    i++;
                     continue;
-                }
 
                 var match = Condition.Match(code[i]);
                 if (match.Success)
                 {
-                    if (startPlainBlock < finish)
-                    {
-                        var tp = TranslatePlain(code, result, startPlainBlock, i);
-                        if (tp != null)
-                            interpreted.Add(tp);
-                    }
+                    CheckForPlain(code, result, startPlainBlock, i, interpreted);
 
                     interpreted.Add(TranslateCondition(code, result, match.Groups["condition"].ToString(), i, out i));
 
                     startPlainBlock = i;
                     continue;
                 }
-
-                i++;
             }
 
-            if (startPlainBlock < finish)
-            {
-                var tp = TranslatePlain(code, result, startPlainBlock, finish);
-                if (tp != null)
-                    interpreted.Add(tp);
-            }
+            CheckForPlain(code, result, startPlainBlock, finish, interpreted);
 
             if (interpreted.Count == 1)
+            {
                 result = interpreted[0];
+                result.ParentBlock = parent;
+            }
             else if (result is ComplexBlock complexBlock)
                 complexBlock.Code = interpreted;
             else
@@ -89,14 +83,24 @@ namespace viper_script
             return result;
         }
 
-        private static PlainBlock TranslatePlain(List<string> code, ICodeBlock parent, int start, int finish)
+        private static void CheckForPlain
+            (IReadOnlyList<string> code, ICodeBlock parent, int start, int finish, ICollection<ICodeBlock> destList)
+        {
+            if (start >= finish) return;
+
+            var tp = TranslatePlain(code, parent, start, finish);
+            if (tp != null)
+                destList.Add(tp);
+        }
+
+        private static PlainBlock TranslatePlain(IReadOnlyList<string> code, ICodeBlock parent, int start, int finish)
         {
             var translated = new List<MultiTreeNode<string>>();
             for (var i = start; i < finish; i++)
             {
                 if (Empty.IsMatch(code[i]) || Comment.IsMatch(code[i]))
                     continue;
-                translated.Add(parser.ParseLine(code[i]));
+                translated.Add(Parser.ParseLine(code[i]));
             }
 
             return translated.Count == 0 ? null : new PlainBlock(parent, translated);
@@ -105,12 +109,18 @@ namespace viper_script
         private static ConditionBlock TranslateCondition
             (List<string> code, ICodeBlock parent, string condition, int startPos, out int endPos)
         {
-            var result = new ConditionBlock(parent, parser.ParseLine(condition), null);
+            var result = new ConditionBlock(parent, Parser.ParseLine(condition), null);
             endPos = FindBlockEnd(code, startPos + 1);
 
             result.IfCode = Translate(code, result, startPos + 1, endPos);
-            
-            if (ElseBranch.IsMatch(code[endPos]))
+
+            var match = ElifBranch.Match(code[endPos]);
+            if (match.Success)
+            {
+                result.ElseCode = TranslateCondition(code, parent, match.Groups["condition"].ToString(),
+                    endPos, out endPos);
+            }
+            else if (ElseBranch.IsMatch(code[endPos]))
             {
                 var endElse = FindBlockEnd(code, endPos + 1);
                 result.ElseCode = Translate(code, result, endPos + 1, endElse);

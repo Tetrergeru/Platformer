@@ -5,7 +5,7 @@ namespace viper_script.CodeBlocks
 {
     public class PlainBlock : ICodeBlock
     {
-        public ICodeBlock ParentBlock { get; }
+        public ICodeBlock ParentBlock { get; set; }
 
         public List<MultiTreeNode<string>> Code { get; set; }
 

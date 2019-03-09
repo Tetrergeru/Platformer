@@ -148,11 +148,18 @@ namespace viper_script
         {
             var code = new List<string>
             {
-                "print(v)",
+                "print(1)",
+                "print(2)",
+                "print(3)",
+                "print(4)",
+                "print(5)",
+                "print(6)",
                 "if (a = b):",
                 "   print(a)",
                 "   print(123)",
-                "else:",
+                "   ",
+                "   ",
+                "elif (a + b):",
                 "   print(b)",
                 "   if (x):",
                 "       a = b",

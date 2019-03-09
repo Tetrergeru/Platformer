@@ -5,7 +5,7 @@ namespace viper_script.CodeBlocks
 {
     public class ComplexBlock : ICodeBlock
     {
-        public ICodeBlock ParentBlock { get; }
+        public ICodeBlock ParentBlock { get; set; }
 
         public List<ICodeBlock> Code { get; set; }
 

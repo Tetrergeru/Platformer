@@ -56,6 +56,7 @@
     <Compile Include="Container.cs" />
     <Compile Include="CodeBlocks\ICodeBlock.cs" />
     <Compile Include="Interpreter.cs" />
+    <Compile Include="Library.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Tests\TokenLineTest.cs" />
     <Compile Include="Tests\MultiTreeNodeTest.cs" />

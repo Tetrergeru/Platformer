@@ -4,7 +4,7 @@ namespace viper_script.CodeBlocks
 {
     public class ConditionBlock : ICodeBlock
     {
-        public ICodeBlock ParentBlock { get; }
+        public ICodeBlock ParentBlock { get; set; }
 
         public MultiTreeNode<string> Condition { get; set; }
 

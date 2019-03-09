@@ -7,7 +7,7 @@ namespace viper_script.CodeBlocks
     {
         private Dictionary<string, Container> Variables { get; } = new Dictionary<string, Container>();
 
-        public ICodeBlock ParentBlock { get; }
+        public ICodeBlock ParentBlock { get; set; }
 
         public List<ICodeBlock> Code { get; set; }
 
@@ -44,7 +44,7 @@ namespace viper_script.CodeBlocks
 
         public void Print(int offset = 0)
         {
-            for (int i = 0; i < offset; i++) Console.Write("   ");
+            for (var i = 0; i < offset; i++) Console.Write("   ");
             Console.WriteLine("NamespaceBlock: ");
             foreach (var block in Code)
                 block.Print(offset + 1);

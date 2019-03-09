@@ -2,7 +2,7 @@
 {
     public interface ICodeBlock
     {
-        ICodeBlock ParentBlock { get; }
+        ICodeBlock ParentBlock { get; set; }
 
         Container GatVariable(string name);
 
