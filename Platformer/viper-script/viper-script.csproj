@@ -49,6 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeBlocks\ComplexBlock.cs" />
+    <Compile Include="CodeBlocks\ConditionBlock.cs" />
+    <Compile Include="CodeBlocks\NamespaceBlock.cs" />
+    <Compile Include="CodeBlocks\PlainBlock.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="CodeBlocks\ICodeBlock.cs" />
+    <Compile Include="Interpreter.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Tests\TokenLineTest.cs" />
     <Compile Include="Tests\MultiTreeNodeTest.cs" />

@@ -9,8 +9,8 @@ namespace viper_script
 
         private Dictionary<string, int> Operators { get; } = new Dictionary<string, int>
         {
+            {"(", -2},
             {"=", -1},
-            {"(", 0},
             {",", 0},
             {"+", 1},
             { "-",1},
@@ -19,7 +19,7 @@ namespace viper_script
             { "ByIdx",5},
         };
 
-        private HashSet<string> Functions { get; } = new HashSet<string> {"f", "max", "len", "MkList"};
+        private HashSet<string> Functions { get; } = new HashSet<string> {"f", "max", "len", "MkList", "print"};
 
         public LineParser()
         {
@@ -72,7 +72,7 @@ namespace viper_script
 
             OperationsStack.Pop();
 
-            if (Functions.Contains(OperationsStack.Peek()))
+            if (OperationsStack.Count > 0 && Functions.Contains(OperationsStack.Peek()))
             {
                 funcNode.Data = OperationsStack.Pop();
                 OperandsStack.Push(funcNode);

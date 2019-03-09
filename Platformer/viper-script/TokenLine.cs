@@ -146,12 +146,21 @@ namespace viper_script
     {
         private static void Main()
         {
-            var lp = new LineParser();
-            var tree = lp.ParseLine("[0-1]");
-            tree.Print();
-            Console.WriteLine();
-            foreach (var x in tree.Traverse())
-                Console.Write($"{x}   ");
+            var code = new List<string>
+            {
+                "print(v)",
+                "if (a = b):",
+                "   print(a)",
+                "   print(123)",
+                "else:",
+                "   print(b)",
+                "   if (x):",
+                "       a = b",
+                "",
+            };
+            var nb = Interpreter.Translate(code);
+            Console.WriteLine("------------------------------------");
+            nb.Print();
             Console.Read();
         }
     }

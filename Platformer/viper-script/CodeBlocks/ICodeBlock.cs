@@ -9,5 +9,7 @@
         void SetVariable(string name, object value);
 
         void Interpret();
+
+        void Print(int offset = 0);
     }
 }

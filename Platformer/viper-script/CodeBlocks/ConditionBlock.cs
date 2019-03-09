@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace viper_script.CodeBlocks
 {
@@ -8,11 +6,11 @@ namespace viper_script.CodeBlocks
     {
         public ICodeBlock ParentBlock { get; }
 
-        private MultiTreeNode<string> Condition { get; }
+        public MultiTreeNode<string> Condition { get; set; }
 
-        private ICodeBlock IfCode { get; }
+        public ICodeBlock IfCode { get; set; }
 
-        private ICodeBlock ElseCode { get; }
+        public ICodeBlock ElseCode { get; set; }
 
         public Container GatVariable(string name) => ParentBlock.GatVariable(name);
 
@@ -39,6 +37,22 @@ namespace viper_script.CodeBlocks
             else
             {
                 throw new ArgumentException("Logical expression was expected");
+            }
+        }
+
+        public void Print(int offset = 0)
+        {
+            for (int i = 0; i < offset; i++) Console.Write("   ");
+
+            Console.WriteLine($"ConditionBlock {{{string.Join("  ", Condition.Traverse())}}}:");
+
+            IfCode.Print(offset + 1);
+
+            if (ElseCode != null)
+            {
+                for (var i = 0; i < offset; i++) Console.Write("   ");
+                Console.WriteLine("ElseCode:");
+                ElseCode.Print(offset + 1);
             }
         }
     }
