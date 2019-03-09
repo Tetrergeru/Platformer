@@ -55,6 +55,14 @@ namespace viper_script
             }
         }
 
+        public IEnumerable<T> Traverse()
+        {
+            yield return Data;
+            foreach (var child in GetChildren())
+            foreach (var data in child.Traverse())
+                yield return data;
+        }
+
         public MultiTreeNode<T> this[int key]
         {
             get

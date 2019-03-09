@@ -106,7 +106,7 @@ namespace viper_script
                 => _position >= _tokens.Count ? null : _tokens[_position + 1];
 
             public string PeekPrev()
-                => _position <= -1 ? null : _tokens[_position - 1];
+                => _position <= 0 ? null : _tokens[_position - 1];
 
             public void Reset()
             {
@@ -147,7 +147,11 @@ namespace viper_script
         private static void Main()
         {
             var lp = new LineParser();
-            lp.ParseLine("op = [1,2,3,4,f(1,2) + f(3,4)]").Print();
+            var tree = lp.ParseLine("[0-1]");
+            tree.Print();
+            Console.WriteLine();
+            foreach (var x in tree.Traverse())
+                Console.Write($"{x}   ");
             Console.Read();
         }
     }
