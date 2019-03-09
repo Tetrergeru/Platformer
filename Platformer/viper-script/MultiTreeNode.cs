@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace viper_script
@@ -15,7 +16,7 @@ namespace viper_script
 
         private MultiTreeNode<T> _sibling;
 
-        public T Data { get; }
+        public T Data { get; set; }
 
         public MultiTreeNode(T data, MultiTreeNode<T> parent = null)
         {
@@ -65,6 +66,16 @@ namespace viper_script
                         key--;
                 throw new ArgumentException("Argument key should be lesser the child number");
             }
+        }
+
+        public void Print(int tab = 0)
+        {
+            foreach (var child in GetChildren().Reverse())
+                child.Print(tab + 1);
+            
+            for (var i = 0; i < tab; i++)
+                Console.Write("\t");
+            Console.WriteLine(Data);
         }
     }
 }

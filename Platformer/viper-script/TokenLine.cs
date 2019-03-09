@@ -146,6 +146,9 @@ namespace viper_script
     {
         private static void Main()
         {
+            var lp = new LineParser();
+            lp.ParseLine("op = [1,2,3,4,f(1,2) + f(3,4)]").Print();
+            Console.Read();
         }
     }
 }

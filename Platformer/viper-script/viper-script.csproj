@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LineParser.cs" />
     <Compile Include="Tests\TokenLineTest.cs" />
     <Compile Include="Tests\MultiTreeNodeTest.cs" />
     <Compile Include="TokenLine.cs" />
