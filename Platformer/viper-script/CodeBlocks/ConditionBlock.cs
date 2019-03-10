@@ -2,21 +2,21 @@
 
 namespace viper_script.CodeBlocks
 {
-    public class ConditionBlock : ICodeBlock
+    internal class ConditionBlock : ICodeBlock
     {
         public ICodeBlock ParentBlock { get; set; }
 
-        public MultiTreeNode<string> Condition { get; set; }
+        public MultiTreeNode<Value> Condition { get; set; }
 
         public ICodeBlock IfCode { get; set; }
 
         public ICodeBlock ElseCode { get; set; }
 
-        public Container GatVariable(string name) => ParentBlock.GatVariable(name);
+        public Container GetVariable(string name) => ParentBlock.GetVariable(name);
 
         public void SetVariable(string name, object value) => ParentBlock.SetVariable(name, value);
 
-        public ConditionBlock(ICodeBlock parentBlock, MultiTreeNode<string> condition,
+        public ConditionBlock(ICodeBlock parentBlock, MultiTreeNode<Value> condition,
             ICodeBlock ifCode, ICodeBlock elseCode = null)
         {
             ParentBlock = parentBlock;

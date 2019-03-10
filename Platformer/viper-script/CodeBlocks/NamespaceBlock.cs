@@ -11,13 +11,13 @@ namespace viper_script.CodeBlocks
 
         public List<ICodeBlock> Code { get; set; }
 
-        public Container GatVariable(string name)
+        public Container GetVariable(string name)
         {
             if (Variables.ContainsKey(name))
                 return Variables[name];
 
             if (ParentBlock != null)
-                return ParentBlock.GatVariable(name);
+                return ParentBlock.GetVariable(name);
 
             throw new ArgumentException($"Variable <{name}> not in scope");
         }

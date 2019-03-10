@@ -79,5 +79,12 @@ namespace viper_script.Tests
             var res = new TokenLine(line);
             Assert.AreEqual(res, tokens);
         }
+
+        [Test]
+        public void DoubleValue()
+        {
+            var res = new TokenLine("   2.3     6,6   a.s");
+            Assert.AreEqual(res, new[] {"2.3", "6", ",", "6", "a", ".", "s"});
+        }
     }
 }

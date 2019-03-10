@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace viper_script.CodeBlocks
 {
-    public class PlainBlock : ICodeBlock
+    internal class PlainBlock : ICodeBlock
     {
         public ICodeBlock ParentBlock { get; set; }
 
-        public List<MultiTreeNode<string>> Code { get; set; }
+        public List<MultiTreeNode<Value>> Code { get; set; }
 
-        public Container GatVariable(string name) => ParentBlock.GatVariable(name);
+        public Container GetVariable(string name) => ParentBlock.GetVariable(name);
 
         public void SetVariable(string name, object value) => ParentBlock.SetVariable(name, value);
 
-        public PlainBlock(ICodeBlock parentBlock, List<MultiTreeNode<string>> code)
+        public PlainBlock(ICodeBlock parentBlock, List<MultiTreeNode<Value>> code)
         {
             ParentBlock = parentBlock;
             Code = code;

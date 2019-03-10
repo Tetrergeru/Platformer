@@ -9,7 +9,7 @@ namespace viper_script.CodeBlocks
 
         public List<ICodeBlock> Code { get; set; }
 
-        public Container GatVariable(string name) => ParentBlock.GatVariable(name);
+        public Container GetVariable(string name) => ParentBlock.GetVariable(name);
 
         public void SetVariable(string name, object value) => ParentBlock.SetVariable(name, value);
 

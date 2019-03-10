@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace viper_script
 {
@@ -15,7 +16,8 @@ namespace viper_script
             => token >= 'a' && token <= 'z'
                || token >= 'A' && token <= 'Z'
                || token >= '0' && token <= '9'
-               || token == '_';
+               || token == '_'
+               || token == '.';
 
         private string CodeLine { get; }
 
@@ -57,6 +59,17 @@ namespace viper_script
             if (CodeLine[startPos] == '\'')
             {
                 endPos = CodeLine.IndexOf('\'', startPos + 1);
+                return CodeLine.Substring(startPos, endPos - startPos + 1);
+            }
+
+            if (char.IsDigit(CodeLine[startPos]))
+            {
+                while (endPos < CodeLine.Length
+                       && (!IsUnionToken(CodeLine[endPos]) || CodeLine[endPos] == '.')
+                       && CodeLine[endPos] != ' '
+                       && (char.IsDigit(CodeLine[startPos]) || CodeLine[startPos] == '.'))
+                    endPos++;
+                endPos--;
                 return CodeLine.Substring(startPos, endPos - startPos + 1);
             }
 
@@ -146,14 +159,15 @@ namespace viper_script
     {
         private static void Main()
         {
+            
             var code = new List<string>
             {
                 "print(1)",
-                "print(2)",
-                "print(3)",
-                "print(4)",
-                "print(5)",
-                "print(6)",
+                "print('123')",
+                "print('123 123')",
+                "print(True)",
+                "print(False)",
+                "print(1.15)",
                 "if (a = b):",
                 "   print(a)",
                 "   print(123)",
@@ -169,6 +183,7 @@ namespace viper_script
             Console.WriteLine("------------------------------------");
             nb.Print();
             Console.Read();
+            //*/
         }
     }
 }

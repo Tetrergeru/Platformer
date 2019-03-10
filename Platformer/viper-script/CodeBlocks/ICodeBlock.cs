@@ -4,7 +4,7 @@
     {
         ICodeBlock ParentBlock { get; set; }
 
-        Container GatVariable(string name);
+        Container GetVariable(string name);
 
         void SetVariable(string name, object value);
 

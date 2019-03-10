@@ -63,6 +63,7 @@
     <Compile Include="TokenLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MultiTreeNode.cs" />
+    <Compile Include="Value.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

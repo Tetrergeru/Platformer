@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace viper_script
 {
-    public class LineParser
+    internal class LineParser
     {
         private HashSet<string> RouteOperators { get; } = new HashSet<string> {"(", ".", ","};
 
         private Dictionary<string, int> Operators { get; } = new Dictionary<string, int>
         {
-            {"(", -2},
+            {"(", int.MinValue},
             {"=", -1},
             {",", 0},
             {"+", 1},
@@ -20,16 +20,12 @@ namespace viper_script
         };
 
         private HashSet<string> Functions { get; } = new HashSet<string> {"f", "max", "len", "MkList", "print"};
-
-        public LineParser()
-        {
-        }
-
+        
         private Stack<string> OperationsStack { get; } = new Stack<string>();
 
-        private Stack<MultiTreeNode<string>> OperandsStack { get; } = new Stack<MultiTreeNode<string>>();
+        private Stack<MultiTreeNode<Value>> OperandsStack { get; } = new Stack<MultiTreeNode<Value>>();
 
-        public MultiTreeNode<string> ParseLine(string line)
+        public MultiTreeNode<Value> ParseLine(string line)
         {
             var currentToken = new TokenLine(line).GetEnumerator();
 
@@ -55,7 +51,7 @@ namespace viper_script
             if (!Operators.ContainsKey(op))
                 throw new ArgumentException($"Expected operator, but was <{op}>");
 
-            var opNode = new MultiTreeNode<string>(op);
+            var opNode = new MultiTreeNode<Value>(new Value(ValueType.Function, op));
             opNode.AddChild(OperandsStack.Pop());
             opNode.AddChild(OperandsStack.Pop());
             OperandsStack.Push(opNode);
@@ -64,7 +60,7 @@ namespace viper_script
 
         private void OnClosingBracket()
         {
-            var funcNode = new MultiTreeNode<string>("");
+            var funcNode = new MultiTreeNode<Value>(new Value(ValueType.Function, null));
 
             while (OperationsStack.Peek() != "(")
                 if (EvalOperator() == ",")
@@ -74,14 +70,14 @@ namespace viper_script
 
             if (OperationsStack.Count > 0 && Functions.Contains(OperationsStack.Peek()))
             {
-                funcNode.Data = OperationsStack.Pop();
+                funcNode.Data.Val = OperationsStack.Pop();
                 OperandsStack.Push(funcNode);
                 return;
             }
 
             if (funcNode.Count > 0)
             {
-                funcNode.Data = "MkTuple";
+                funcNode.Data.Val = "MkTuple";
                 OperandsStack.Push(funcNode);
             }
         }
@@ -113,7 +109,7 @@ namespace viper_script
                     OperationsStack.Push(",");
             }
             else
-                OperandsStack.Push(new MultiTreeNode<string>(token.Current));
+                OperandsStack.Push(new MultiTreeNode<Value>(new Value(ValueType.Variable, token.Current)));
         }
 
         private void ParseToken(TokenLine.TokenEnum token)
@@ -139,7 +135,12 @@ namespace viper_script
             }
 
             else
-                OperandsStack.Push(new MultiTreeNode<string>(token.Current));
+            {
+                var value = Interpreter.ParseTypes(token.Current);
+                OperandsStack.Push(value == null
+                    ? new MultiTreeNode<Value>(new Value(ValueType.Variable, token.Current))
+                    : new MultiTreeNode<Value>(new Value(ValueType.Value, value)));
+            }
         }
     }
 }

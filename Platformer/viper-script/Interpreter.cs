@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using viper_script.CodeBlocks;
 
 namespace viper_script
 {
-    public class Interpreter
+    internal class Interpreter
     {
         private static readonly LineParser Parser = new LineParser();
 
@@ -35,6 +36,15 @@ namespace viper_script
         /// Проверяет, является ли строка веткой "иначе" условного оператора
         /// </summary>
         private static Regex ElseBranch { get; } = new Regex(@"^ *else *: *$");
+
+        /// <summary>
+        /// Стандартный тип Integer
+        /// </summary>
+        private static Regex Integer { get; } = new Regex(@"^ *(?<value>-?[0-9]+) *$");
+        private static Regex Double { get; } = new Regex(@"^ *(?<value>-?[0-9]+\.[0-9]+) *$");
+        private static Regex Str { get; } = new Regex(@"^ *'(?<value>.*)' *$");
+        private static Regex Bool { get; } = new Regex(@"^ *(?<value>(True)|(False)) *$");
+
 
         public static ICodeBlock Translate(List<string> code, ICodeBlock parent = null, int start = 0, int finish = -1)
         {
@@ -95,7 +105,7 @@ namespace viper_script
 
         private static PlainBlock TranslatePlain(IReadOnlyList<string> code, ICodeBlock parent, int start, int finish)
         {
-            var translated = new List<MultiTreeNode<string>>();
+            var translated = new List<MultiTreeNode<Value>>();
             for (var i = start; i < finish; i++)
             {
                 if (Empty.IsMatch(code[i]) || Comment.IsMatch(code[i]))
@@ -151,8 +161,27 @@ namespace viper_script
             return count;
         }
 
-        public static object Interpret(ICodeBlock context, MultiTreeNode<string> line)
+        public static  object ParseTypes(string rvalue)
         {
+            if (Integer.IsMatch(rvalue))
+                return int.Parse(Integer.Match(rvalue).Groups["value"].ToString());
+
+            if (Double.IsMatch(rvalue))
+                return double.Parse(Double.Match(rvalue).Groups["value"].ToString(), CultureInfo.InvariantCulture);
+
+            if (Str.IsMatch(rvalue))
+                return Str.Match(rvalue).Groups["value"].ToString();
+
+            if (Bool.IsMatch(rvalue))
+                return Bool.Match(rvalue).Groups["value"].ToString() == "True";
+
+            return null;
+        }
+
+
+        public static object Interpret(ICodeBlock context, MultiTreeNode<Value> line)
+        {
+
             throw new NotImplementedException();
         }
     }
