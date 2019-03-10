@@ -162,26 +162,17 @@ namespace viper_script
             
             var code = new List<string>
             {
-                "print(1)",
-                "print('123')",
-                "print('123 123')",
-                "print(True)",
-                "print(False)",
-                "print(1.15)",
-                "if (a = b):",
-                "   print(a)",
-                "   print(123)",
-                "   ",
-                "   ",
-                "elif (a + b):",
-                "   print(b)",
-                "   if (x):",
-                "       a = b",
-                "",
+                "a = 1",
+                "print(a + 2)",
+                "if False:",
+                "   print('hello')",
+                "else:",
+                "   print('not')",
             };
             var nb = Interpreter.Translate(code);
-            Console.WriteLine("------------------------------------");
             nb.Print();
+            Console.WriteLine("------------------------------------");
+            nb.Interpret();
             Console.Read();
             //*/
         }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace viper_script
 {
@@ -43,6 +41,17 @@ namespace viper_script
             _child = _child._sibling;
             Count--;
             return c;
+        }
+
+        public MultiTreeNode<T> PeekChild()
+        {
+            return _child;
+
+        }
+
+        public MultiTreeNode<T> PeekSibling()
+        {
+            return _sibling;
         }
 
         public IEnumerable<MultiTreeNode<T>> GetChildren()

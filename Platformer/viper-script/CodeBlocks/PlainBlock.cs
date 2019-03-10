@@ -27,11 +27,14 @@ namespace viper_script.CodeBlocks
 
         public void Print(int offset = 0)
         {
-            for (int i = 0; i < offset; i++) Console.Write("   ");
-            Console.WriteLine("PlainBlock: ");
+            for (var i = 0; i < offset; i++)
+                Console.Write("   ");
+
+            Console.WriteLine("PlainBlock:");
             foreach (var x in Code)
             {
-                for (int i = 0; i <= offset; i++) Console.Write("   ");
+                for (var i = 0; i <= offset; i++)
+                    Console.Write("   ");
                 Console.WriteLine(string.Join(" ", x.Traverse()));
             }
         }

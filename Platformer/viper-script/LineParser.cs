@@ -7,17 +7,6 @@ namespace viper_script
     {
         private HashSet<string> RouteOperators { get; } = new HashSet<string> {"(", ".", ","};
 
-        private Dictionary<string, int> Operators { get; } = new Dictionary<string, int>
-        {
-            {"(", int.MinValue},
-            {"=", -1},
-            {",", 0},
-            {"+", 1},
-            { "-",1},
-            { "*",2},
-            { "/",2},
-            { "ByIdx",5},
-        };
 
         private HashSet<string> Functions { get; } = new HashSet<string> {"f", "max", "len", "MkList", "print"};
         
@@ -48,7 +37,7 @@ namespace viper_script
             if (op == ",")
                 return op;
 
-            if (!Operators.ContainsKey(op))
+            if (!Library.Operators.ContainsKey(op))
                 throw new ArgumentException($"Expected operator, but was <{op}>");
 
             var opNode = new MultiTreeNode<Value>(new Value(ValueType.Function, op));
@@ -84,7 +73,7 @@ namespace viper_script
 
         private void OnOpeningSquareBracket(TokenLine.TokenEnum token)
         {
-            if (token.PeekPrev() == null || token.PeekPrev() == "(" || token.PeekPrev() == "[" || Operators.ContainsKey(token.PeekPrev()))
+            if (token.PeekPrev() == null || token.PeekPrev() == "(" || token.PeekPrev() == "[" || Library.Operators.ContainsKey(token.PeekPrev()))
             {
                 OperationsStack.Push("MkList");
                 OperationsStack.Push("(");
@@ -126,9 +115,9 @@ namespace viper_script
             else if (token.Current == ")" || token.Current == "]")
                 OnClosingBracket();
             
-            else if (Operators.ContainsKey(token.Current))
+            else if (Library.Operators.ContainsKey(token.Current))
             {
-                while (OperationsStack.Count > 0 && Operators[OperationsStack.Peek()] >= Operators[token.Current])
+                while (OperationsStack.Count > 0 && Library.Operators[OperationsStack.Peek()] >= Library.Operators[token.Current])
                     EvalOperator();
 
                 OperationsStack.Push(token.Current);

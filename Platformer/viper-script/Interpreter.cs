@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using viper_script.CodeBlocks;
 
@@ -80,7 +82,7 @@ namespace viper_script
 
             CheckForPlain(code, result, startPlainBlock, finish, interpreted);
 
-            if (interpreted.Count == 1)
+            if (interpreted.Count == 1 && parent != null)
             {
                 result = interpreted[0];
                 result.ParentBlock = parent;
@@ -177,12 +179,33 @@ namespace viper_script
 
             return null;
         }
-
-
-        public static object Interpret(ICodeBlock context, MultiTreeNode<Value> line)
+        
+        public static Container Interpret(ICodeBlock context, MultiTreeNode<Value> line)
         {
+            switch (line.Data.Type)
+            {
+                case ValueType.Function when line.Data.Val is string fname:
+                    if (fname == "=" && line.PeekChild().Data.Type == ValueType.Variable)
+                    {
+                        context.SetVariable(line.PeekChild().Data.Val as string,
+                            Interpret(context, line.PeekChild().PeekSibling()).value);
+                        return null;
+                    }
+                    else
+                    {
+                        return Library.Functions[fname]
+                            (line.GetChildren().Select(v => Interpret(context, v)).ToList());
+                    }
 
-            throw new NotImplementedException();
+                case ValueType.Value:
+                    return new Container(line.Data.Val);
+
+                case ValueType.Variable when line.Data.Val is string vname:
+                    return context.GetVariable(vname);
+
+                default:
+                    return null;
+            }
         }
     }
 }

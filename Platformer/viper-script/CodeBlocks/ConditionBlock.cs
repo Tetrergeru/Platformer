@@ -27,7 +27,7 @@ namespace viper_script.CodeBlocks
 
         public void Interpret()
         {
-            if (Interpreter.Interpret(this, Condition) is bool condition)
+            if (Interpreter.Interpret(this, Condition).value is bool condition)
             {
                 if (condition)
                     IfCode.Interpret();
