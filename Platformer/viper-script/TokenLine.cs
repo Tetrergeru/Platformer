@@ -161,7 +161,6 @@ namespace viper_script
     {
         private static void Main()
         {
-            Library.IsOperator("+");
             var nb = Interpreter.Translate(File.ReadLines("Factorization.txt").ToList());
             nb.Print();
             Console.WriteLine("------------------------------------");

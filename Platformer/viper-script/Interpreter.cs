@@ -75,7 +75,6 @@ namespace viper_script
                 var match = Condition.Match(code[i]);
                 if (match.Success)
                 {
-                    Console.WriteLine($"---{code[i]}---");
                     CheckForPlain(code, result, startPlainBlock, i, interpreted);
 
                     interpreted.Add(TranslateCondition(code, result, match.Groups["condition"].ToString(), i, out i));
@@ -166,9 +165,9 @@ namespace viper_script
             (List<string> code, ICodeBlock parent, string condition, int startPos, out int endPos)
         {
             var result = new WhileBlock(parent, Parser.ParseLine(condition), null);
-            endPos = FindBlockEnd(code, startPos + 1);
+            endPos = FindBlockEnd(code, startPos + 1) - 1;
 
-            result.Code = Translate(code, result, startPos + 1, endPos);
+            result.Code = Translate(code, result, startPos + 1, endPos + 1);
 
             return result;
         }

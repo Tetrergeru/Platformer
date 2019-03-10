@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
-using viper_script.CodeBlocks;
 
 namespace viper_script
 {
@@ -28,7 +26,7 @@ namespace viper_script
             return Operators.ContainsKey(token);
         }
 
-        public static Dictionary<string, Func<List<Container>, Container>> Functions
+        public static Dictionary<string, Func<List<Container>, Container>> Functions { get; }
             = new Dictionary<string, Func<List<Container>, Container>>
             {
                 {"+=", Add},
@@ -83,14 +81,14 @@ namespace viper_script
         private static Container Minus(List<Container> variables)
         {
             if (variables.Count != 2)
-                throw new ArgumentException("There should be two operands in + operation");
+                throw new ArgumentException("There should be two operands in - operation");
             return new Container((int)variables[0].value - (int)variables[1].value);
         }
 
         private static Container Divide(List<Container> variables)
         {
             if (variables.Count != 2)
-                throw new ArgumentException("There should be two operands in + operation");
+                throw new ArgumentException("There should be two operands in / operation");
 
             return new Container((int)variables[0].value / (int)variables[1].value);
         }
