@@ -5,10 +5,7 @@ namespace viper_script
 {
     internal class LineParser
     {
-        private HashSet<string> RouteOperators { get; } = new HashSet<string> {"(", ".", ","};
-
-
-        private HashSet<string> Functions { get; } = new HashSet<string> {"f", "max", "len", "MkList", "print"};
+        private static HashSet<string> RouteOperators { get; } = new HashSet<string> {"(", ".", ","};
         
         private Stack<string> OperationsStack { get; } = new Stack<string>();
 
@@ -57,7 +54,7 @@ namespace viper_script
 
             OperationsStack.Pop();
 
-            if (OperationsStack.Count > 0 && Functions.Contains(OperationsStack.Peek()))
+            if (OperationsStack.Count > 0 && Library.IsFunction(OperationsStack.Peek()))
             {
                 funcNode.Data.Val = OperationsStack.Pop();
                 OperandsStack.Push(funcNode);
@@ -71,19 +68,47 @@ namespace viper_script
             }
         }
 
+        private void OnClosingSquareBracket()
+        {
+            var funcNode = new MultiTreeNode<Value>(new Value(ValueType.Function, null));
+
+            while (OperationsStack.Peek() != "[")
+                if (EvalOperator() == ",")
+                    funcNode.AddChild(OperandsStack.Pop());
+
+            OperationsStack.Pop();
+            
+            if (OperationsStack.Count > 0 && OperationsStack.Peek() == "MkList")
+            {
+                funcNode.Data.Val = OperationsStack.Pop();
+                OperandsStack.Push(funcNode);
+                return;
+            }
+
+            if (OperationsStack.Count > 0 && OperationsStack.Peek() == "ByIdx")
+            {
+                funcNode.Data.Val = OperationsStack.Pop();
+                funcNode.AddChild(OperandsStack.Pop());
+                funcNode.AddChild(OperandsStack.Pop());
+                OperandsStack.Push(funcNode);
+                return;
+            }
+        }
+
         private void OnOpeningSquareBracket(TokenLine.TokenEnum token)
         {
-            if (token.PeekPrev() == null || token.PeekPrev() == "(" || token.PeekPrev() == "[" || Library.Operators.ContainsKey(token.PeekPrev()))
+            if (token.PeekPrev() == null || token.PeekPrev() == "(" || token.PeekPrev() == "[" ||
+                Library.Operators.ContainsKey(token.PeekPrev()))
             {
                 OperationsStack.Push("MkList");
-                OperationsStack.Push("(");
+                OperationsStack.Push("[");
                 if (token.PeekNext() != "]")
                     OperationsStack.Push(",");
             }
             else
             {
                 OperationsStack.Push("ByIdx");
-                OperationsStack.Push("(");
+                OperationsStack.Push("[");
             }
         }
 
@@ -103,7 +128,7 @@ namespace viper_script
 
         private void ParseToken(TokenLine.TokenEnum token)
         {
-            if (Functions.Contains(token.Current))
+            if (Library.IsFunction(token.Current))
                 OnFunction(token);
             
             else if (token.Current == "[")
@@ -112,9 +137,12 @@ namespace viper_script
             else if (RouteOperators.Contains(token.Current))
                 OperationsStack.Push(token.Current);
             
-            else if (token.Current == ")" || token.Current == "]")
+            else if (token.Current == ")")
                 OnClosingBracket();
-            
+
+            else if (token.Current == "]")
+                OnClosingSquareBracket();
+
             else if (Library.IsOperator(token.Current))
             {
                 while (OperationsStack.Count > 0 && Library.Operators[OperationsStack.Peek()] >= Library.Operators[token.Current])

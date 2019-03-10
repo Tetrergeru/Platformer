@@ -90,7 +90,7 @@ namespace viper_script
 
                     interpreted.Add(TranslateWhile(code, result, match.Groups["condition"].ToString(), i, out i));
                     
-                    startPlainBlock = i;
+                    startPlainBlock = i + 1;
                     continue;
                 }
 
@@ -202,7 +202,7 @@ namespace viper_script
                 return double.Parse(Double.Match(rvalue).Groups["value"].ToString(), CultureInfo.InvariantCulture);
 
             if (Str.IsMatch(rvalue))
-                return Str.Match(rvalue).Groups["value"].ToString();
+                return Str.Match(rvalue).Groups["value"].ToString().Replace("\\n","\n");
 
             if (Bool.IsMatch(rvalue))
                 return Bool.Match(rvalue).Groups["value"].ToString() == "True";
