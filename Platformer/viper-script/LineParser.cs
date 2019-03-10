@@ -115,7 +115,7 @@ namespace viper_script
             else if (token.Current == ")" || token.Current == "]")
                 OnClosingBracket();
             
-            else if (Library.Operators.ContainsKey(token.Current))
+            else if (Library.IsOperator(token.Current))
             {
                 while (OperationsStack.Count > 0 && Library.Operators[OperationsStack.Peek()] >= Library.Operators[token.Current])
                     EvalOperator();

@@ -53,6 +53,7 @@
     <Compile Include="CodeBlocks\ConditionBlock.cs" />
     <Compile Include="CodeBlocks\NamespaceBlock.cs" />
     <Compile Include="CodeBlocks\PlainBlock.cs" />
+    <Compile Include="CodeBlocks\WhileBlock.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="CodeBlocks\ICodeBlock.cs" />
     <Compile Include="Interpreter.cs" />

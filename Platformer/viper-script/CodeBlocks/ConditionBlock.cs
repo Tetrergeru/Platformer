@@ -32,7 +32,7 @@ namespace viper_script.CodeBlocks
                 if (condition)
                     IfCode.Interpret();
                 else
-                    ElseCode.Interpret();
+                    ElseCode?.Interpret();
             }
             else
             {

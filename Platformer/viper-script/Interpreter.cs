@@ -39,14 +39,18 @@ namespace viper_script
         /// </summary>
         private static Regex ElseBranch { get; } = new Regex(@"^ *else *: *$");
 
+        private static Regex WhileCycle { get; } = new Regex(@"^ *while (?<condition>.*): *$");
+
         /// <summary>
         /// Стандартный тип Integer
         /// </summary>
         private static Regex Integer { get; } = new Regex(@"^ *(?<value>-?[0-9]+) *$");
-        private static Regex Double { get; } = new Regex(@"^ *(?<value>-?[0-9]+\.[0-9]+) *$");
-        private static Regex Str { get; } = new Regex(@"^ *'(?<value>.*)' *$");
-        private static Regex Bool { get; } = new Regex(@"^ *(?<value>(True)|(False)) *$");
 
+        private static Regex Double { get; } = new Regex(@"^ *(?<value>-?[0-9]+\.[0-9]+) *$");
+
+        private static Regex Str { get; } = new Regex(@"^ *'(?<value>.*)' *$");
+
+        private static Regex Bool { get; } = new Regex(@"^ *(?<value>(True)|(False)) *$");
 
         public static ICodeBlock Translate(List<string> code, ICodeBlock parent = null, int start = 0, int finish = -1)
         {
@@ -71,13 +75,26 @@ namespace viper_script
                 var match = Condition.Match(code[i]);
                 if (match.Success)
                 {
+                    Console.WriteLine($"---{code[i]}---");
                     CheckForPlain(code, result, startPlainBlock, i, interpreted);
 
                     interpreted.Add(TranslateCondition(code, result, match.Groups["condition"].ToString(), i, out i));
-
+                    
                     startPlainBlock = i;
                     continue;
                 }
+
+                match = WhileCycle.Match(code[i]);
+                if (match.Success)
+                {
+                    CheckForPlain(code, result, startPlainBlock, i, interpreted);
+
+                    interpreted.Add(TranslateWhile(code, result, match.Groups["condition"].ToString(), i, out i));
+                    
+                    startPlainBlock = i;
+                    continue;
+                }
+
             }
 
             CheckForPlain(code, result, startPlainBlock, finish, interpreted);
@@ -126,6 +143,9 @@ namespace viper_script
 
             result.IfCode = Translate(code, result, startPos + 1, endPos);
 
+            if (endPos >= code.Count)
+                return result;
+            
             var match = ElifBranch.Match(code[endPos]);
             if (match.Success)
             {
@@ -138,6 +158,17 @@ namespace viper_script
                 result.ElseCode = Translate(code, result, endPos + 1, endElse);
                 endPos = endElse;
             }
+
+            return result;
+        }
+
+        private static WhileBlock TranslateWhile
+            (List<string> code, ICodeBlock parent, string condition, int startPos, out int endPos)
+        {
+            var result = new WhileBlock(parent, Parser.ParseLine(condition), null);
+            endPos = FindBlockEnd(code, startPos + 1);
+
+            result.Code = Translate(code, result, startPos + 1, endPos);
 
             return result;
         }

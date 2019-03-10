@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace viper_script
 {
@@ -159,22 +161,12 @@ namespace viper_script
     {
         private static void Main()
         {
-            
-            var code = new List<string>
-            {
-                "a = 1",
-                "print(a + 2)",
-                "if False:",
-                "   print('hello')",
-                "else:",
-                "   print('not')",
-            };
-            var nb = Interpreter.Translate(code);
+            Library.IsOperator("+");
+            var nb = Interpreter.Translate(File.ReadLines("Factorization.txt").ToList());
             nb.Print();
             Console.WriteLine("------------------------------------");
             nb.Interpret();
             Console.Read();
-            //*/
         }
     }
 }
