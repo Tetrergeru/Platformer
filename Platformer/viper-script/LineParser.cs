@@ -153,7 +153,7 @@ namespace viper_script
 
             else
             {
-                var value = Interpreter.ParseTypes(token.Current);
+                var value = Translator.ParseTypes(token.Current);
                 OperandsStack.Push(value == null
                     ? new MultiTreeNode<Value>(new Value(ValueType.Variable, token.Current))
                     : new MultiTreeNode<Value>(new Value(ValueType.Value, value)));

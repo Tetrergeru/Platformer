@@ -5,7 +5,7 @@ namespace viper_script.CodeBlocks
 {
     public class NamespaceBlock : ICodeBlock
     {
-        private Dictionary<string, Container> Variables { get; } = new Dictionary<string, Container>();
+        public Dictionary<string, Container> Variables { get; } = new Dictionary<string, Container>();
 
         public ICodeBlock ParentBlock { get; set; }
 

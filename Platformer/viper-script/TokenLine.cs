@@ -161,10 +161,7 @@ namespace viper_script
     {
         private static void Main()
         {
-            var nb = Interpreter.Translate(File.ReadLines("1.txt").ToList());
-            nb.Print();
-            Console.WriteLine("------------------------------------");
-            nb.Interpret();
+            Interpreter.Interpret(File.ReadLines("1.txt").ToList());
             Console.Read();
         }
     }
