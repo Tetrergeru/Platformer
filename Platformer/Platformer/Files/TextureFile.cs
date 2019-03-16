@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Mime;
 using System.Windows.Forms;
@@ -27,9 +28,11 @@ namespace Platformer.Files
             return result;
         }
 
-        public static ITexture GetTexture(string fname)
+        public static ITexture GetTexture(string fname, int width = -1, int height = -1)
         {
-            var data = Interpreter.Interpret(fname);
+            var data = Interpreter.Interpret(fname,
+                new Dictionary<string, object> {{"width", width}, {"height", height}});
+
             if (data.GetString("type") == "TextureAnimated")
                 return GetTextureAnimated(data);
 

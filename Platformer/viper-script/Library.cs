@@ -201,7 +201,7 @@ namespace viper_script
 
         private static Container Print(List<Container> variables)
         {
-            Console.Write($"{string.Join(" ", variables.Select(v => v.value))}");
+            Console.WriteLine($"{string.Join(" ", variables.Select(v => v.value))}");
             return null;
         }
 

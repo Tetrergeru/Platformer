@@ -63,17 +63,10 @@ namespace Platformer
             {
                 Entity.MakeEntity(this, new HitBox(350, 50, 300, 300), TextureFile.GetTexture("Resources/TextureAssets/Tree_0.texture")),
             };
-
-            TextureAnimated texture = new TextureAnimated(120, 40, 1, 0);
-            texture.AddTexture(new Bitmap("Resources/Textures/HighGrass_1.png"), FillType.Stretch);
-            texture.AddTexture(new Bitmap("Resources/Textures/HighGrass_0.png"), FillType.Stretch);
-
+            
             Frontground = new List<Entity>()
             {
-                Entity.MakeEntity(this, new HitBox(280, 310, 120, 40), texture),
-                Entity.MakeEntity(this, new HitBox(395, 310, 120, 40), texture),
-                Entity.MakeEntity(this, new HitBox(510, 310, 120, 40), texture),
-                Entity.MakeEntity(this, new HitBox(605, 310, 120, 40), texture),
+                Entity.MakeEntity(this, new HitBox(280, 310, 440, 40), TextureFile.GetTexture("Resources/TextureAssets/grass_0.texture", 440, 40)),
             };
         }
 

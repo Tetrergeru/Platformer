@@ -10,7 +10,7 @@ namespace viper_script
         private static readonly LineParser Parser = new LineParser();
 
         private List<string> Code { get; }
-
+        
         #region Грёбаные регексы
 
         /// <summary>
