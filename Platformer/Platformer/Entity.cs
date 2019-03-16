@@ -97,7 +97,7 @@ namespace Platformer
             return result;
         }
 
-        public static Entity MakeEntity(World context, HitBox hitbox, TextureAnimated texture)
+        public static Entity MakeEntity(World context, HitBox hitbox, ITexture texture)
         {
             var result = new Entity(context, hitbox)
             {

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Drawing;
+using System.Net.Mime;
+using System.Windows.Forms;
 using viper_script;
 
 namespace Platformer.Files
@@ -7,7 +10,21 @@ namespace Platformer.Files
     {
         private static TextureAnimated GetTextureAnimated(Data data)
         {
-            throw new NotImplementedException();
+            var w = data.GetInt("width");
+            var h = data.GetInt("height");
+            var delay = data.GetDouble("delay");
+            var delayAfter = data.GetDouble("delay_after");
+            var result = new TextureAnimated(w,h,delay, delayAfter);
+            foreach (var sprite in data.GetList("sprites"))
+            {
+                var s = sprite.GetList();
+                var picture = new Bitmap(s[0].GetString());
+                var ft = (FillType)Enum.Parse(typeof(FillType), s[1].GetString());
+                var scale = s.Count > 2 ? s[2].GetDouble() : 1;
+                result.AddTexture(picture, ft, scale);
+            }
+
+            return result;
         }
 
         public static ITexture GetTexture(string fname)

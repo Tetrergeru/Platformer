@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
+using Platformer.Files;
 
 namespace Platformer
 {
@@ -58,15 +59,9 @@ namespace Platformer
                     new Bitmap("Resources/Textures/Grass_1.png"),FillType.Repeat, 10),
             };
 
-            Background = new List<Entity>()
+            Background = new List<Entity>
             {
-                Entity.MakeEntity(this, new HitBox(350, 50, 300, 300),
-                    new List<Bitmap>
-                    {
-                        new Bitmap("Resources/Textures/Tree_0.png"),
-                        new Bitmap("Resources/Textures/Tree_1.png")
-                    },
-                    FillType.Stretch, 0.3, 0.5)
+                Entity.MakeEntity(this, new HitBox(350, 50, 300, 300), TextureFile.GetTexture("Resources/TextureAssets/Tree_0.texture")),
             };
 
             TextureAnimated texture = new TextureAnimated(120, 40, 1, 0);

@@ -19,18 +19,16 @@ namespace viper_script
         }
 
         public string GetString(string index)
-        {
-            if (Variables[index].value is string str)
-                return str;
-            throw new Exception("Значение было не string");
-        }
+            => Variables[index].GetString();
 
         public int GetInt(string index)
-        {
-            if (Variables[index].value is int x)
-                return x;
-            throw new Exception("Значение было не int");
-        }
+            => Variables[index].GetInt();
+
+        public double GetDouble(string index)
+            => Variables[index].GetDouble();
+
+        public List<Container> GetList(string index)
+            => Variables[index].GetList();
     }
 
     public static class Interpreter
