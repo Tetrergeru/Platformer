@@ -126,7 +126,7 @@ namespace Platformer
         {
             var tempHitbox = new HitBox(Hitbox.X + velocity.x, Hitbox.Y + velocity.y, Hitbox.Width, Hitbox.Height);
 
-            return Context.Entities.All(e => e == this || !e.Intersects(tempHitbox));
+            return Context.SolidEntities.All(e => e == this || !e.Intersects(tempHitbox));
         }
 
         private void MoveTillIntersect(double distance, Axis axis, HitBox target)
@@ -153,7 +153,7 @@ namespace Platformer
             if (Math.Abs(distance) < 1e-10) return;
             var tempHitbox = new HitBox(Hitbox,  axis, distance);
 
-            foreach (var e in Context.Entities)
+            foreach (var e in Context.SolidEntities)
                 if (e != this && e.Intersects(tempHitbox))
                 {
                     MoveTillIntersect(distance, axis, e.Hitbox);

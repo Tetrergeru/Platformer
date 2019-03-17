@@ -10,10 +10,13 @@ blocks += [[grass_name, 700, 400]]
 blocks += [[grass_name, 280, 350]]
 blocks += [[grass_name, 450, 430]]
 
-i = 0 - 10
-while i < 10:
-    blocks += [[grass_name, i * 300, random(0-10, 10) * 10 + 900]]
+i = 0
+while i < 50:
+    blocks += [[grass_name, random(0-5000, 5000), random(0-1000, 1000)]]
     i += 1
+
+blocks += [[res + 'bedrock_0.entity', 0-5000, 1000]]
+
 
 decorations = []
 //and some tree

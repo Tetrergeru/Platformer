@@ -1,7 +1,6 @@
 ﻿type = 'Texture'
 
-w_h = width / height
-height = 10
-width = 10 * w_h
+height = height / 10
+width = width / 10
 
-sprite = ['Resources/Textures/Stone_1.png', 'StretchDown']
+sprite = ['Resources/Textures/Stone_1.png', 'Repeat']

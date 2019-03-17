@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -191,9 +193,9 @@ namespace Platformer
 
         public void Draw(IEnumerable<Entity> entities)
         {
-            foreach (var e in entities)
+            foreach (var entity in entities.OrderBy(e => e.DrawPriority))
             {
-                Draw(e);
+                Draw(entity);
             }
         }
 

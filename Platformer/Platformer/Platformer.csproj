@@ -79,6 +79,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Resources\Entities\bedrock_0.entity">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Entities\grass_block_0.entity">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

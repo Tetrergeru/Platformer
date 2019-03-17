@@ -1,15 +1,8 @@
-﻿using System;
-using System.Timers;
+﻿using Platformer.Files;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.Threading.Tasks;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using Platformer.Files;
+using System.Timers;
 using Timer = System.Timers.Timer;
-
-// ReSharper disable All
 
 namespace Platformer
 {
@@ -52,6 +45,7 @@ namespace Platformer
 
             Player = new Player(new Vector { x = 30, y = 60});
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
+            Player.DrawPriority = 10;
 
             world = WorldFile.GetWorld("Resources/Worlds/test.world");
             world.SetPlayer(Player, new Vector { x = 200, y = 40 });
@@ -87,19 +81,14 @@ namespace Platformer
 
             window.Clear(world.BackGroundColor);
 
-            window.Draw(world.Background);
-            window.Draw(Player);
-            window.Draw(world.Frontground);
-            window.Draw(world.Block);
+            window.Draw(world.AllEntities);
 
             if (DrawDebug)
             {
-                foreach (var x in world.Background)
+                foreach (var x in world.Decorations)
                     window.Draw(Color.DarkGreen, x.Hitbox);
                 window.Draw(Color.Red, world.Player.Hitbox);
-                foreach (var x in world.Frontground)
-                    window.Draw(Color.Yellow, x.Hitbox);
-                foreach (var x in world.Block)
+                foreach (var x in world.Blocks)
                     window.Draw(Color.Blue, x.Hitbox);
             }
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Net.Mime;
-using System.Windows.Forms;
 using viper_script;
 
 namespace Platformer.Files

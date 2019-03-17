@@ -11,6 +11,8 @@ namespace Platformer.Files
             var ent = e.GetList();
             var entity = EntityFile.GetEntity(ent[0].GetString(), context);
             entity.Move(new Vector { x = ent[1].GetDouble(), y = ent[2].GetDouble() });
+            if (ent.Count > 3)
+                entity.DrawPriority = ent[3].GetDouble();
             return entity;
         }
 
@@ -23,10 +25,10 @@ namespace Platformer.Files
             world.BackGroundColor = Color.FromArgb(color[0].GetInt(), color[1].GetInt(), color[2].GetInt());
 
             foreach (var entity in data.GetList("blocks"))
-                world.Block.Add(GetEntity(entity, world));
+                world.Blocks.Add(GetEntity(entity, world));
 
             foreach (var entity in data.GetList("decorations"))
-                world.Background.Add(GetEntity(entity, world));
+                world.Decorations.Add(GetEntity(entity, world));
 
             return world;
         }

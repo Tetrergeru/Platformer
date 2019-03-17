@@ -21,21 +21,31 @@ namespace Platformer
         /// <summary>
         /// Твёрдые объекты, структура мира...
         /// </summary>
-        public List<Entity> Block { get; } = new List<Entity>();
+        public List<Entity> Blocks { get; } = new List<Entity>();
 
-        public List<Entity> Background { get; } = new List<Entity>();
+        public List<Entity> Decorations { get; } = new List<Entity>();
 
-        public List<Entity> Frontground { get; } = new List<Entity>();
-
-        /// <summary>
-        /// Возвращает все объекты, с которыми можно взаимойдействовать
-        /// </summary>
-        public IEnumerable<Entity> Entities
+        public IEnumerable<Entity> AllEntities
         {
             get
             {
                 yield return Player;
-                foreach (var x in Block)
+                foreach (var b in Blocks)
+                    yield return b;
+                foreach (var d in Decorations)
+                    yield return d;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает все объекты, с которыми можно взаимойдействовать
+        /// </summary>
+        public IEnumerable<Entity> SolidEntities
+        {
+            get
+            {
+                yield return Player;
+                foreach (var x in Blocks)
                     yield return x;
             }
         }
@@ -46,29 +56,6 @@ namespace Platformer
         public World()
         {
             Gravity = new Vector {x = 0, y = 1000 * 9.8};
-            /*
-            Block = new List<Entity>()
-            {
-                Entity.MakeEntity(this, new HitBox(0, 400, 300, 100),
-                    TextureFile.GetTexture("Resources/TextureAssets/grass_0.texture",300, 100)),
-                Entity.MakeEntity(this, new HitBox(700, 400, 300, 100),
-                    TextureFile.GetTexture("Resources/TextureAssets/grass_0.texture",300, 100)),
-                Entity.MakeEntity(this, new HitBox(300, 400, 400, 100),
-                    TextureFile.GetTexture("Resources/TextureAssets/stone_0.texture",400, 100)),
-                Entity.MakeEntity(this, new HitBox(280, 350, 440, 50),
-                    TextureFile.GetTexture("Resources/TextureAssets/grass_0.texture",440, 50)),
-            };
-
-            Background = new List<Entity>
-            {
-                Entity.MakeEntity(this, new HitBox(350, 50, 300, 300), TextureFile.GetTexture("Resources/TextureAssets/Tree_0.texture", 50, 50)),
-            };
-            
-            Frontground = new List<Entity>()
-            {
-                Entity.MakeEntity(this, new HitBox(280, 310, 440, 40), TextureFile.GetTexture("Resources/TextureAssets/highgrass_0.texture", 440, 40)),
-            };
-            //*/
         }
 
         /// <summary>
@@ -87,10 +74,7 @@ namespace Platformer
         {
             Player.Tick(deltaTime);
 
-            foreach (var x in Background)
-                x.Tick(deltaTime);
-
-            foreach (var x in Frontground)
+            foreach (var x in Decorations)
                 x.Tick(deltaTime);
         }
     }
