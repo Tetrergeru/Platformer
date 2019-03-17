@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,7 +58,9 @@
     <Compile Include="Container.cs" />
     <Compile Include="CodeBlocks\ICodeBlock.cs" />
     <Compile Include="Interpreter.cs" />
-    <Compile Include="Library.cs" />
+    <Compile Include="Libraries\Graphic.cs" />
+    <Compile Include="Libraries\Standard.cs" />
+    <Compile Include="Libraries\Library.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Tests\TokenLineTest.cs" />
     <Compile Include="Tests\MultiTreeNodeTest.cs" />

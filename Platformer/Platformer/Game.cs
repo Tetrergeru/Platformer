@@ -47,7 +47,7 @@ namespace Platformer
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
             Player.DrawPriority = 10;
 
-            world = WorldFile.GetWorld("Resources/Worlds/test_1.world");
+            world = WorldFile.GetWorld("Resources/Worlds/test.world");
             world.SetPlayer(Player, new Vector { x = 0, y = 0 });
             
             //grassImg = ;

@@ -32,11 +32,19 @@ namespace Platformer.Files
             var h = data.GetInt("height");
             var result = new Texture(w, h);
 
-            var s = data.GetList("sprite");
-            var picture = new Bitmap(s[0].GetString());
-            var ft = (FillType)Enum.Parse(typeof(FillType), s[1].GetString());
-            var scale = s.Count > 2 ? s[2].GetDouble() : 1;
-            result.AddTexture(picture, ft, scale);
+            if (data.Is<List<Container>>("sprite"))
+            {
+                var s = data.GetList("sprite");
+                var picture = new Bitmap(s[0].GetString());
+                var ft = (FillType) Enum.Parse(typeof(FillType), s[1].GetString());
+                var scale = s.Count > 2 ? s[2].GetDouble() : 1;
+                result.AddTexture(picture, ft, scale);
+            }
+            else if (data.Is<Bitmap>("sprite"))
+            {
+                var picture = data.Get<Bitmap>("sprite");
+                result.AddTexture(picture, FillType.Repeat);
+            }
 
             return result;
         }

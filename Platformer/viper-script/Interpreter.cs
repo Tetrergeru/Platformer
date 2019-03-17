@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
 using viper_script.CodeBlocks;
+using viper_script.Libraries;
 
 namespace viper_script
 {
@@ -29,6 +27,12 @@ namespace viper_script
 
         public List<Container> GetList(string index)
             => Variables[index].GetList();
+
+        public T Get<T>(string index)
+            => Variables[index].Get<T>();
+
+        public bool Is<T>(string index)
+            => Variables[index].Is<T>();
     }
 
     public static class Interpreter

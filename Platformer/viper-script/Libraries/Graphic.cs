@@ -50,11 +50,11 @@ namespace viper_script.Libraries
 
         internal static Container Draw(List<Container> variables)
         {
-            if (variables.Count != 5 || variables.Count != 4)
-                throw new ArgumentException("There should be five operands in draw function");
+            if (variables.Count != 5 && variables.Count != 4)
+                throw new ArgumentException("There should be five or foure operands in draw function");
 
             float scale = 1;
-            if (variables.Count == 4)
+            if (variables.Count == 5)
             {
                 switch (variables[4].value)
                 {

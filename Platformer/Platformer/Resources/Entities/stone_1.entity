@@ -1,6 +1,6 @@
 ﻿type = 'Entity'
 
-width = 150
+width = 300
 height = 300
 
-texture = 'Resources/TextureAssets/stone_0.texture'
+texture = 'Resources/TextureAssets/stone_grass_0.texture'

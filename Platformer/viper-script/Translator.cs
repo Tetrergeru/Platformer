@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using viper_script.CodeBlocks;
@@ -16,42 +17,42 @@ namespace viper_script
         /// <summary>
         /// Проверяет строку на пустоту
         /// </summary>
-        private static Regex Empty { get; } = new Regex(@"^ *$");
+        private static Regex Empty { get; } = new Regex(@"^\s*$");
 
         /// <summary>
         /// Проверяет, является ли строка комментарием
         /// </summary>
-        private static Regex Comment { get; } = new Regex(@"^ *(//)|(#)|(--).*$");
+        private static Regex Comment { get; } = new Regex(@"^\s*(//)|(#)|(--).*$");
 
         /// <summary>
         /// Проверяет, является ли строка условным оператором.
         /// Если является -- записывает условие в группу condition
         /// </summary>
-        private static Regex Condition { get; } = new Regex(@"^ *if (?<condition>.*): *$");
+        private static Regex Condition { get; } = new Regex(@"^\s*if (?<condition>.*):\s*$");
 
         /// <summary>
         /// Проверяет, является ли строка веткой "иначе если".
         /// Если является -- записывает условие в группу condition
         /// </summary>
-        private static Regex ElifBranch { get; } = new Regex(@"^ *elif (?<condition>.*): *$");
+        private static Regex ElifBranch { get; } = new Regex(@"^\s*elif (?<condition>.*):\s*$");
 
         /// <summary>
         /// Проверяет, является ли строка веткой "иначе" условного оператора
         /// </summary>
-        private static Regex ElseBranch { get; } = new Regex(@"^ *else *: *$");
+        private static Regex ElseBranch { get; } = new Regex(@"^\s*else\s*:\s*$");
 
-        private static Regex WhileCycle { get; } = new Regex(@"^ *while (?<condition>.*): *$");
+        private static Regex WhileCycle { get; } = new Regex(@"^\s*while (?<condition>.*):\s*$");
 
         /// <summary>
         /// Стандартный тип Integer
         /// </summary>
-        private static Regex Integer { get; } = new Regex(@"^ *(?<value>-?[0-9]+) *$");
+        private static Regex Integer { get; } = new Regex(@"^\s*(?<value>-?[0-9]+)\s*$");
 
-        private static Regex Double { get; } = new Regex(@"^ *(?<value>-?[0-9]+\.[0-9]+) *$");
+        private static Regex Double { get; } = new Regex(@"^\s*(?<value>-?[0-9]+\.[0-9]+)\s*$");
 
-        private static Regex Str { get; } = new Regex(@"^ *'(?<value>.*)' *$");
+        private static Regex Str { get; } = new Regex(@"^\s*'(?<value>.*)'\s*$");
 
-        private static Regex Bool { get; } = new Regex(@"^ *(?<value>(True)|(False)) *$");
+        private static Regex Bool { get; } = new Regex(@"^\s*(?<value>(True)|(False))\s*$");
 
         #endregion
 
@@ -169,7 +170,6 @@ namespace viper_script
         {
             var result = new WhileBlock(parent, Parser.ParseLine(condition), null);
             endPos = FindBlockEnd(startPos + 1) - 1;
-
             result.Code = Translate(result, startPos + 1, endPos + 1);
 
             return result;
@@ -191,8 +191,12 @@ namespace viper_script
         private int SpacesInBegin(int line)
         {
             var count = 0;
-            while (Code[line].Length > count && Code[line][count] == ' ')
-                count++;
+            var i = 0;
+            while (Code[line].Length > i && (Code[line][i] == ' ' || Code[line][i] == '\t'))
+            {
+                count += (Code[line][i] == '\t') ? 4 : 1;
+                i++;
+            }
             return count;
         }
 

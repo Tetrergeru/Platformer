@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using NUnit.Framework;
 
 namespace viper_script
 {
@@ -47,5 +49,15 @@ namespace viper_script
                 return list;
             throw new Exception("Значение было не List");
         }
+
+        public T Get<T>()
+        {
+            if (value is T t)
+                return t;
+            throw new Exception($"Значение было не {typeof(T)}");
+        }
+        
+        public bool Is<T>()
+            => value is T;
     }
 }

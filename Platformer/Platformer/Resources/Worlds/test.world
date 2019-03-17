@@ -8,7 +8,7 @@ blocks = []
 blocks += [[grass_name, 0, 400]]
 blocks += [[grass_name, 700, 400]]
 blocks += [[grass_name, 280, 350]]
-blocks += [[grass_name, 450, 430]]
+blocks += [[res + 'stone_1.entity', 450, 430]]
 
 i = 0
 while i < 50:

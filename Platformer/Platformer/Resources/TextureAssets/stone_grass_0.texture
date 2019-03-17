@@ -1,0 +1,24 @@
+﻿type = 'Texture'
+
+width = width / 10
+height = height / 10
+
+sprite = create_img(width, height)
+sprite_width = get_width(sprite)
+sprite_height = get_height(sprite)
+
+grass = load_img('Resources\Textures\Grass_1.png')
+stone = load_img('Resources\Textures\Stone_1.png')
+
+i = 0
+while i < sprite_width:
+	draw(sprite, grass, i, 0)
+	i += get_width(grass)
+
+j = get_height(grass)
+while j < sprite_height:
+	i = 0
+	while i < sprite_width:
+		draw(sprite, stone, i, j)
+		i += get_width(stone)
+	j += get_height(stone)

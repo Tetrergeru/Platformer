@@ -162,10 +162,10 @@ namespace viper_script
     {
         private static void Main()
         {
-            var lp = new LineParser();
-            var l = lp.ParseLine("0-10");
-            l.Print();
+            var t = new Translator(File.ReadLines("1.txt").ToList());
+            var b = t.Translate();
+            b.Print();
             Console.Read();
-        }
+        }   
     }
 }
