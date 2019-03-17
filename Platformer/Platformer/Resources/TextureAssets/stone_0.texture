@@ -1,0 +1,7 @@
+﻿type = 'Texture'
+
+w_h = width / height
+height = 10
+width = 10 * w_h
+
+sprite = ['Resources/Textures/Stone_1.png', 'StretchDown']

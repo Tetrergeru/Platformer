@@ -11,6 +11,11 @@ namespace Platformer
     internal class Entity
     {
         /// <summary>
+        /// Приоритет отрисовки
+        /// </summary>
+        public double DrawPriority { get; set; }
+
+        /// <summary>
         /// Область занимаемая сущностью
         /// </summary>
         public HitBox Hitbox { get; set;  }

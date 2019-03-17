@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Platformer.Files;
 using Timer = System.Timers.Timer;
 
 // ReSharper disable All
@@ -51,8 +52,8 @@ namespace Platformer
 
             Player = new Player(new Vector { x = 30, y = 60});
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
-            
-            world = new World();
+
+            world = WorldFile.GetWorld("Resources/Worlds/test.world");
             world.SetPlayer(Player, new Vector { x = 200, y = 40 });
             
             //grassImg = ;
@@ -84,21 +85,21 @@ namespace Platformer
 
             window.AdjustBy(Player.Hitbox);
 
-            window.Clear(Color.SkyBlue);
+            window.Clear(world.BackGroundColor);
 
             window.Draw(world.Background);
             window.Draw(Player);
             window.Draw(world.Frontground);
-            window.Draw(world.block);
+            window.Draw(world.Block);
 
             if (DrawDebug)
             {
                 foreach (var x in world.Background)
                     window.Draw(Color.DarkGreen, x.Hitbox);
-                window.Draw(Color.Red, world.player.Hitbox);
+                window.Draw(Color.Red, world.Player.Hitbox);
                 foreach (var x in world.Frontground)
                     window.Draw(Color.Yellow, x.Hitbox);
-                foreach (var x in world.block)
+                foreach (var x in world.Block)
                     window.Draw(Color.Blue, x.Hitbox);
             }
 

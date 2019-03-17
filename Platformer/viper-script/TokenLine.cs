@@ -161,6 +161,9 @@ namespace viper_script
     {
         private static void Main()
         {
+            var lp = new LineParser();
+            var l = lp.ParseLine("a['1',2]");
+            l.Print();
             Interpreter.Interpret(File.ReadLines("1.txt").ToList());
             Console.Read();
         }

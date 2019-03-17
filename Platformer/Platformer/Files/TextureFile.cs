@@ -28,6 +28,21 @@ namespace Platformer.Files
             return result;
         }
 
+        private static Texture GetTexture(Data data)
+        {
+            var w = data.GetInt("width");
+            var h = data.GetInt("height");
+            var result = new Texture(w, h);
+
+            var s = data.GetList("sprite");
+            var picture = new Bitmap(s[0].GetString());
+            var ft = (FillType)Enum.Parse(typeof(FillType), s[1].GetString());
+            var scale = s.Count > 2 ? s[2].GetDouble() : 1;
+            result.AddTexture(picture, ft, scale);
+
+            return result;
+        }
+
         public static ITexture GetTexture(string fname, int width = -1, int height = -1)
         {
             var data = Interpreter.Interpret(fname,
@@ -35,6 +50,9 @@ namespace Platformer.Files
 
             if (data.GetString("type") == "TextureAnimated")
                 return GetTextureAnimated(data);
+
+            if (data.GetString("type") == "Texture")
+                return GetTexture(data);
 
             throw new NotImplementedException();
         }

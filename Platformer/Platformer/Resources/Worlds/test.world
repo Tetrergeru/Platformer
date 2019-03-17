@@ -1,0 +1,20 @@
+﻿background_color = [135, 206, 250]
+
+res = 'Resources/Entities/'
+grass_name = res + '/grass_block_0.entity'
+blocks = []
+
+//adding some grass
+blocks += [[grass_name, 0, 400]]
+blocks += [[grass_name, 700, 400]]
+blocks += [[grass_name, 280, 350]]
+blocks += [[grass_name, 450, 430]]
+
+i = 0 - 10
+while i < 10:
+    blocks += [[grass_name, i * 300, 1000]]
+    i += 1
+
+decorations = []
+//and some tree
+decorations += [[res + 'tree_0.entity', 350, 50]]
