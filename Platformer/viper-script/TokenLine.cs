@@ -69,8 +69,9 @@ namespace viper_script
                 while (endPos < CodeLine.Length
                        && (!IsUnionToken(CodeLine[endPos]) || CodeLine[endPos] == '.')
                        && CodeLine[endPos] != ' '
-                       && (char.IsDigit(CodeLine[startPos]) || CodeLine[startPos] == '.'))
+                       && (char.IsDigit(CodeLine[endPos]) || CodeLine[endPos] == '.'))
                     endPos++;
+
                 endPos--;
                 return CodeLine.Substring(startPos, endPos - startPos + 1);
             }
@@ -162,9 +163,8 @@ namespace viper_script
         private static void Main()
         {
             var lp = new LineParser();
-            var l = lp.ParseLine("a['1',2]");
+            var l = lp.ParseLine("0-10");
             l.Print();
-            Interpreter.Interpret(File.ReadLines("1.txt").ToList());
             Console.Read();
         }
     }

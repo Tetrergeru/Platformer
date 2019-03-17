@@ -50,6 +50,7 @@ namespace viper_script
                 {"str", ToString},
                 {"len", Length},
                 {"ByIdx", ByIndex},
+                {"random", MakeRandom},
             };
 
         private static Container Assign(List<Container> variables)
@@ -544,6 +545,36 @@ namespace viper_script
                 }
                 default:
                     throw new Exception("Типы не совпадают");
+            }
+        }
+
+        private static readonly Random Random = new Random();
+
+        private static Container MakeRandom(List<Container> variables)
+        {
+            switch (variables.Count)
+            {
+                case 0:
+                    return new Container(Random.NextDouble());
+
+                case 1:
+                    switch (variables[0].value)
+                    {
+                        case int a:
+                            return new Container(Random.Next(a));
+
+                        case List<Container> list:
+                            return new Container(list[Random.Next(list.Count)]);
+
+                        default:
+                            throw new Exception("Неправильные параметры в функции random()");
+                    }
+
+                case 2 when variables[0].value is int x && variables[1].value is int y:
+                    return new Container(Random.Next(x, y));
+
+                default:
+                    throw new Exception("Неправильные параметры в функции random()");
             }
         }
     }
