@@ -2,58 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace viper_script
+namespace viper_script.Libraries
 {
-    internal class Library
+    internal static class Standard
     {
-        public static Dictionary<string, int> Operators { get; } = new Dictionary<string, int>
-        {
-            {"(", -100},
-            {"[", -100},
-            {"=", -50},
-            {"+=", -50},
-            {"<", 0},
-            {",", 0},
-            {"+", 1},
-            {"==", 1},
-            { "-",1},
-            { "*",2},
-            { "/",2},
-            { "%",2},
-            { "ByIdx",5},
-        };
-
-        public static bool IsOperator(string token)
-        {
-            return Operators.ContainsKey(token);
-        }
-
-        public static bool IsFunction(string token)
-        {
-            return Functions.ContainsKey(token) && !IsOperator(token);
-        }
-
-        public static Dictionary<string, Func<List<Container>, Container>> Functions { get; }
-            = new Dictionary<string, Func<List<Container>, Container>>
-            {
-                {"+=", Add},
-                {"=", Assign},
-                {"==", Equal},
-                {"+", Plus},
-                {"*", Multiply},
-                {"-", Minus},
-                {"<", Lesser},
-                {"/", Divide},
-                {"%", Mod},
-                {"print", Print},
-                {"MkList", MakeList},
-                {"str", ToString},
-                {"len", Length},
-                {"ByIdx", ByIndex},
-                {"random", MakeRandom},
-            };
-
-        private static Container Assign(List<Container> variables)
+        internal static Container Assign(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in = operation");
@@ -61,7 +14,7 @@ namespace viper_script
             return null;
         }
 
-        private static Container Equal(List<Container> variables)
+        internal static Container Equal(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in == operation");
@@ -73,45 +26,45 @@ namespace viper_script
             switch (a)
             {
                 case int x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = x == y;
-                            break;
-                        case double z:
-                            result = Math.Abs(x - z) < 1e-10;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
-                    }
+                        switch (b)
+                        {
+                            case int y:
+                                result = x == y;
+                                break;
+                            case double z:
+                                result = Math.Abs(x - z) < 1e-10;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case double x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = Math.Abs(x - y) < 1e-10;
-                            break;
-                        case double z:
-                            result = Math.Abs(x - z) < 1e-10;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
-                    }
+                        switch (b)
+                        {
+                            case int y:
+                                result = Math.Abs(x - y) < 1e-10;
+                                break;
+                            case double z:
+                                result = Math.Abs(x - z) < 1e-10;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case string s1:
-                {
-                    if (b is string s2)
-                        result = s1 == s2;
-                    else
-                        throw new Exception("Типы не совпадают");
-                    break;
-                }
+                    {
+                        if (b is string s2)
+                            result = s1 == s2;
+                        else
+                            throw new Exception("Типы не совпадают");
+                        break;
+                    }
                 default:
                     throw new Exception("Типы не совпадают");
             }
@@ -119,7 +72,7 @@ namespace viper_script
             return new Container(result);
         }
 
-        private static Container Plus(List<Container> variables)
+        internal static Container Plus(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in += operation");
@@ -200,13 +153,13 @@ namespace viper_script
             return new Container(result);
         }
 
-        private static Container Print(List<Container> variables)
+        internal static Container Print(List<Container> variables)
         {
             Console.WriteLine($"{string.Join(" ", variables.Select(v => v.value))}");
             return null;
         }
 
-        private static Container Add(List<Container> variables)
+        internal static Container Add(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in += operation");
@@ -217,20 +170,20 @@ namespace viper_script
             switch (a)
             {
                 case int x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            variables[0].value = x + y;
-                            break;
-                        case double z:
-                            variables[0].value = x + z;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
+                        switch (b)
+                        {
+                            case int y:
+                                variables[0].value = x + y;
+                                break;
+                            case double z:
+                                variables[0].value = x + z;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
+                        break;
                     }
-                    break;
-                }
                 case double x:
                     {
                         switch (b)
@@ -248,32 +201,32 @@ namespace viper_script
                         break;
                     }
                 case string s1:
-                {
-                    if (b is string s2)
-                        variables[0].value = string.Concat(s1, s2);
-                    else
-                        throw new Exception("Типы не совпадают");
-                    break;
-                }
-                case List<Container> list:
-                {
-                    switch (b)
                     {
-                        case List<Container> l2:
-                        {
-                            list.AddRange(l2);
-                            break;
-                        }
-                        case object obj:
-                        {
-                            list.Add(new Container(obj));
-                            break;
-                        }
-                        default:
+                        if (b is string s2)
+                            variables[0].value = string.Concat(s1, s2);
+                        else
                             throw new Exception("Типы не совпадают");
+                        break;
                     }
-                    break;
-                }
+                case List<Container> list:
+                    {
+                        switch (b)
+                        {
+                            case List<Container> l2:
+                                {
+                                    list.AddRange(l2);
+                                    break;
+                                }
+                            case object obj:
+                                {
+                                    list.Add(new Container(obj));
+                                    break;
+                                }
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
+                        break;
+                    }
                 default:
                     throw new Exception("Типы не совпадают");
             }
@@ -281,7 +234,7 @@ namespace viper_script
             return null;
         }
 
-        private static Container Multiply(List<Container> variables)
+        internal static Container Multiply(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in + operation");
@@ -293,35 +246,35 @@ namespace viper_script
             switch (a)
             {
                 case int x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = x * y;
-                            break;
-                        case double z:
-                            result =x * z;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
+                        switch (b)
+                        {
+                            case int y:
+                                result = x * y;
+                                break;
+                            case double z:
+                                result = x * z;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
+                        break;
                     }
-                    break;
-                }
                 case double x:
-                {
-                    if (b is double z)
-                        result = x * z;
-                    else
-                        throw new Exception("Типы не совпадают");
-                    break;
-                }
+                    {
+                        if (b is double z)
+                            result = x * z;
+                        else
+                            throw new Exception("Типы не совпадают");
+                        break;
+                    }
                 default:
                     throw new Exception("Типы не совпадают");
             }
             return new Container(result);
         }
 
-        private static Container Minus(List<Container> variables)
+        internal static Container Minus(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in - operation");
@@ -333,37 +286,37 @@ namespace viper_script
             switch (a)
             {
                 case int x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = x - y;
-                            break;
-                        case double z:
-                            result = x - z;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
-                    }
+                        switch (b)
+                        {
+                            case int y:
+                                result = x - y;
+                                break;
+                            case double z:
+                                result = x - z;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case double x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = x - y;
-                            break;
-                        case double z:
-                            result = x - z;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
-                    }
+                        switch (b)
+                        {
+                            case int y:
+                                result = x - y;
+                                break;
+                            case double z:
+                                result = x - z;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
 
                 default:
                     throw new Exception("Типы не совпадают");
@@ -372,7 +325,7 @@ namespace viper_script
             return new Container(result);
         }
 
-        private static Container Divide(List<Container> variables)
+        internal static Container Divide(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in / operation");
@@ -384,29 +337,29 @@ namespace viper_script
             switch (a)
             {
                 case int x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = x / y;
-                            break;
-                        case double z:
-                            result = x / z;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
-                    }
+                        switch (b)
+                        {
+                            case int y:
+                                result = x / y;
+                                break;
+                            case double z:
+                                result = x / z;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case double x:
-                {
-                    if (b is double z)
-                        result = x / z;
-                    else
-                        throw new Exception("Типы не совпадают");
-                    break;
-                }
+                    {
+                        if (b is double z)
+                            result = x / z;
+                        else
+                            throw new Exception("Типы не совпадают");
+                        break;
+                    }
                 default:
                     throw new Exception("Типы не совпадают");
             }
@@ -414,7 +367,7 @@ namespace viper_script
             return new Container(result);
         }
 
-        private static Container Mod(List<Container> variables)
+        internal static Container Mod(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in + operation");
@@ -428,7 +381,7 @@ namespace viper_script
             throw new Exception("Типы не совпадают");
         }
 
-        private static Container Lesser(List<Container> variables)
+        internal static Container Lesser(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in < operation");
@@ -440,37 +393,37 @@ namespace viper_script
             switch (a)
             {
                 case int x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = x < y;
-                            break;
-                        case double z:
-                            result = x < z;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
-                    }
+                        switch (b)
+                        {
+                            case int y:
+                                result = x < y;
+                                break;
+                            case double z:
+                                result = x < z;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case double x:
-                {
-                    switch (b)
                     {
-                        case int y:
-                            result = x < y;
-                            break;
-                        case double z:
-                            result = x < z;
-                            break;
-                        default:
-                            throw new Exception("Типы не совпадают");
-                    }
+                        switch (b)
+                        {
+                            case int y:
+                                result = x < y;
+                                break;
+                            case double z:
+                                result = x < z;
+                                break;
+                            default:
+                                throw new Exception("Типы не совпадают");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
 
                 default:
                     throw new Exception("Типы не совпадают");
@@ -479,25 +432,25 @@ namespace viper_script
             return new Container(result);
         }
 
-        private static Container MakeList(List<Container> variables)
+        internal static Container MakeList(List<Container> variables)
         {
             return new Container(variables);
         }
 
-        private static Container ToString(List<Container> variables)
+        internal static Container ToString(List<Container> variables)
         {
             if (variables.Count != 1)
                 throw new ArgumentException("There should be one operand in str() function");
-            
+
             return new Container(ToString(variables[0]));
         }
 
-        private static string ToString(Container variable)
+        internal static string ToString(Container variable)
         {
             switch (variable.value)
             {
                 case List<Container> list:
-                    return $"[{string.Join(", ",list.Select(ToString))}]";
+                    return $"[{string.Join(", ", list.Select(ToString))}]";
                 case string str:
                     return $"'{str}'";
                 default:
@@ -505,7 +458,7 @@ namespace viper_script
             }
         }
 
-        private static Container Length(List<Container> variables)
+        internal static Container Length(List<Container> variables)
         {
             if (variables.Count != 1)
                 throw new ArgumentException("There should be one operand in len() function");
@@ -513,19 +466,19 @@ namespace viper_script
             switch (variables[0].value)
             {
                 case List<Container> list:
-                {
-                    return new Container(list.Count);
-                }
+                    {
+                        return new Container(list.Count);
+                    }
                 case string str:
-                {
-                    return new Container(str.Length);
-                }
+                    {
+                        return new Container(str.Length);
+                    }
                 default:
                     throw new Exception("Типы не совпадают");
             }
         }
 
-        private static Container ByIndex(List<Container> variables)
+        internal static Container ByIndex(List<Container> variables)
         {
             if (variables.Count != 2)
                 throw new ArgumentException("There should be two operands in ByIdx operator");
@@ -536,13 +489,13 @@ namespace viper_script
             switch (variables[0].value)
             {
                 case List<Container> list:
-                {
-                    return list[idx];
-                }
+                    {
+                        return list[idx];
+                    }
                 case string str:
-                {
-                    return new Container($"{str[idx]}");
-                }
+                    {
+                        return new Container($"{str[idx]}");
+                    }
                 default:
                     throw new Exception("Типы не совпадают");
             }
@@ -550,7 +503,7 @@ namespace viper_script
 
         private static readonly Random Random = new Random();
 
-        private static Container MakeRandom(List<Container> variables)
+        internal static Container MakeRandom(List<Container> variables)
         {
             switch (variables.Count)
             {
