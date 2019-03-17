@@ -47,8 +47,8 @@ namespace Platformer
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
             Player.DrawPriority = 10;
 
-            world = WorldFile.GetWorld("Resources/Worlds/test.world");
-            world.SetPlayer(Player, new Vector { x = 200, y = 40 });
+            world = WorldFile.GetWorld("Resources/Worlds/test_1.world");
+            world.SetPlayer(Player, new Vector { x = 0, y = 0 });
             
             //grassImg = ;
         }
@@ -151,7 +151,7 @@ namespace Platformer
                 }
                 case Controls.Control.Debug:
                 {
-                    Player.Hitbox.MoveTo(new Vector {x = 40, y = 40});
+                    Player.Hitbox.MoveTo(new Vector {x = 0, y = 0});
                     DrawDebug = !DrawDebug;
                     break;
                 }
@@ -162,12 +162,12 @@ namespace Platformer
                 }
                 case Controls.Control.ScaleMinus:
                 {
-                    window.ChangeScale(0.5);
+                    window.ChangeScale(0.9);
                     break;
                 }
                 case Controls.Control.ScalePlus:
                 {
-                    window.ChangeScale(2);
+                    window.ChangeScale(10/9.0);
                     break;
                 }
             }

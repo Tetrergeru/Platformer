@@ -1,7 +1,7 @@
 ﻿background_color = [135, 206, 250]
 
 res = 'Resources/Entities/'
-grass_name = res + '/grass_block_0.entity'
+grass_name = res + 'grass_block_0.entity'
 blocks = []
 
 //adding some grass
@@ -12,7 +12,7 @@ blocks += [[grass_name, 450, 430]]
 
 i = 0
 while i < 50:
-    blocks += [[grass_name, random(0-5000, 5000), random(0-1000, 1000)]]
+    blocks += [[res + '/grass_block_' + str(random(0, 2)) + '.entity', random(0-5000, 5000), random(0-1000, 1000)]]
     i += 1
 
 blocks += [[res + 'bedrock_0.entity', 0-5000, 1000]]

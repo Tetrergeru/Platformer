@@ -1,0 +1,35 @@
+﻿background_color = [135, 206, 250]
+
+res = 'Resources/Entities/'
+
+blocks = []
+
+//first block
+blocks += [[res + 'grass_block_0.entity', 0-150, 100]]
+
+//left direction
+blocks += [[res + 'grass_block_0.entity', 0-450, 150]]
+blocks += [[res + 'grass_block_0.entity', 0-750, 150]]
+
+//right direction
+blocks += [[res + 'grass_block_1.entity', 150, 150]]
+blocks += [[res + 'grass_block_0.entity', 300, 100]]
+blocks += [[res + 'grass_block_1.entity', 600, 0]]
+blocks += [[res + 'grass_block_2.entity', 600, 0-150]]
+blocks += [[res + 'grass_block_0.entity', 750, 0-200]]
+
+//down
+blocks += [[res + 'stone_0.entity', 0-750, 200]]
+blocks += [[res + 'stone_0.entity', 0-550, 200]]
+blocks += [[res + 'stone_0.entity', 0-350, 200]]
+blocks += [[res + 'stone_0.entity', 0-150, 200]]
+blocks += [[res + 'stone_0.entity', 50, 200]]
+blocks += [[res + 'stone_0.entity', 250, 200, 25]]
+blocks += [[res + 'stone_0.entity', 400, 200, 25]]
+
+blocks += [[res + 'stone_0.entity', 0-150, 150, 20]]
+blocks += [[res + 'stone_0.entity', 0-50, 150, 20]]
+blocks += [[res + 'stone_0.entity', 400, 150, 20]]
+blocks += [[res + 'stone_0.entity', 300, 150, 20]]
+
+decorations = []
