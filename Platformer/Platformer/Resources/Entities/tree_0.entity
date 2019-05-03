@@ -1,0 +1,6 @@
+﻿type = 'Entity'
+
+width = 300
+height = 300
+
+texture = 'Resources/TextureAssets/tree_0.texture'

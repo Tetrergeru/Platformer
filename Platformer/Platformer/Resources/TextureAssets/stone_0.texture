@@ -1,0 +1,6 @@
+﻿type = 'Texture'
+
+height = height / 10
+width = width / 10
+
+sprite = ['Resources/Textures/Stone_1.png', 'Repeat']

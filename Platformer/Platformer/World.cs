@@ -1,41 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Platformer
 {
     /// <summary>
     /// Представляет собой игровой мир
     /// </summary>
-    class World
+    internal class World
     {
+        public Color BackGroundColor { get; set; }
+
         public Vector Gravity { get; }
 
         /// <summary>
         /// Ссылка на игрока
         /// </summary>
-        public Player player;
+        public Player Player { get; private set; }
 
         /// <summary>
         /// Твёрдые объекты, структура мира...
         /// </summary>
-        public List<SolidBlock> block;
+        public List<Entity> Blocks { get; } = new List<Entity>();
 
-        public List<Entity> Background;
+        public List<Entity> Decorations { get; } = new List<Entity>();
 
-        public List<Entity> Frontground;
+        public IEnumerable<Entity> AllEntities
+        {
+            get
+            {
+                yield return Player;
+                foreach (var b in Blocks)
+                    yield return b;
+                foreach (var d in Decorations)
+                    yield return d;
+            }
+        }
 
         /// <summary>
         /// Возвращает все объекты, с которыми можно взаимойдействовать
         /// </summary>
-        public IEnumerable<Entity> Entities
+        public IEnumerable<Entity> SolidEntities
         {
             get
             {
-                yield return player;
-                foreach (var x in block)
+                yield return Player;
+                foreach (var x in Blocks)
                     yield return x;
             }
         }
@@ -46,40 +55,6 @@ namespace Platformer
         public World()
         {
             Gravity = new Vector {x = 0, y = 1000 * 9.8};
-            block = new List<SolidBlock>()
-            {
-                SolidBlock.Make(this, new HitBox(0, 400, 300, 100),
-                    new Bitmap("Resources/Textures/Grass_1.png"),FillType.StretchDown),
-                SolidBlock.Make(this, new HitBox(700, 400, 300, 100),
-                    new Bitmap("Resources/Textures/Grass_1.png"),FillType.StretchDown),
-                SolidBlock.Make(this, new HitBox(300, 400, 400, 100),
-                    new Bitmap("Resources/Textures/Stone_1.png"),FillType.StretchDown),
-                SolidBlock.Make(this, new HitBox(280, 350, 440, 50),
-                    new Bitmap("Resources/Textures/Grass_1.png"),FillType.Repeat, 10),
-            };
-
-            Background = new List<Entity>()
-            {
-                Entity.Make(this, new HitBox(350, 50, 300, 300),
-                    new List<Bitmap>
-                    {
-                        new Bitmap("Resources/Textures/Tree_0.png"),
-                        new Bitmap("Resources/Textures/Tree_1.png")
-                    },
-                    FillType.Stretch, 0.3, 0.5)
-            };
-
-            TextureAnimated texture = new TextureAnimated(120, 40, 1, 0);
-            texture.AddTexture(new Bitmap("Resources/Textures/HighGrass_1.png"), FillType.Stretch);
-            texture.AddTexture(new Bitmap("Resources/Textures/HighGrass_0.png"), FillType.Stretch);
-
-            Frontground = new List<Entity>()
-            {
-                Entity.Make(this, new HitBox(280, 310, 120, 40), texture),
-                Entity.Make(this, new HitBox(395, 310, 120, 40), texture),
-                Entity.Make(this, new HitBox(510, 310, 120, 40), texture),
-                Entity.Make(this, new HitBox(605, 310, 120, 40), texture),
-            };
         }
 
         /// <summary>
@@ -89,19 +64,16 @@ namespace Platformer
         /// <param name="coords"></param>
         public void SetPlayer(Player player, Vector coords)
         {
-            this.player = player;
+            Player = player;
             player.Context = this;
             player.Hitbox.MoveTo(coords);
         }
 
         public void Tick(double deltaTime)
         {
-            player.Tick(deltaTime);
+            Player.Tick(deltaTime);
 
-            foreach (var x in Background)
-                x.Tick(deltaTime);
-
-            foreach (var x in Frontground)
+            foreach (var x in Decorations)
                 x.Tick(deltaTime);
         }
     }

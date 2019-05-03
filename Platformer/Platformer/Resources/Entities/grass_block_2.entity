@@ -1,0 +1,6 @@
+﻿type = 'Entity'
+
+width = 50
+height = 50
+
+texture = 'Resources/TextureAssets/grass_0.texture'

@@ -1,0 +1,10 @@
+﻿type = 'TextureAnimated'
+
+w_h = width / height
+height = 10
+width = 10 * w_h
+
+delay = 0.5
+delay_after = 0
+
+sprites = [['Resources/Textures/HighGrass_1.png', 'StretchDown'], ['Resources/Textures/HighGrass_0.png', 'StretchDown']]
