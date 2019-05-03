@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Platformer.Entities;
 using viper_script;
 
 namespace Platformer.Files

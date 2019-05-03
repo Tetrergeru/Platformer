@@ -1,4 +1,4 @@
-﻿namespace Platformer
+﻿namespace Platformer.Entities
 {
     /// <summary>
     /// Пероснаж игрока

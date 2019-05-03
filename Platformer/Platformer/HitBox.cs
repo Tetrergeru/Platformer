@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Drawing;
+using Platformer.Entities;
 
 namespace Platformer
 {

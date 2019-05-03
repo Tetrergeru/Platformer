@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Windows.Forms;
+using Platformer.Entities;
 
-namespace Platformer
+namespace Platformer.GUI
 {
     public enum State
     {
@@ -112,18 +111,18 @@ namespace Platformer
         {
             if (gameState != State.Running) return;
 
-            if (Platformer.ControlActions.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
+            if (ControlActions.StopTime == GUI.Controls.ControlFromKey(e.KeyCode))
             {
                 Pause();
             }
             else
-                game.KeysPressed.Add(Platformer.Controls.ControlFromKey(e.KeyCode));
+                game.KeysPressed.Add(GUI.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (gameState == State.Running)
-                game.KeysPressed.Remove(Platformer.Controls.ControlFromKey(e.KeyCode));
+                game.KeysPressed.Remove(GUI.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnSizeChanged(object sender, EventArgs e)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Platformer
+namespace Platformer.GUI
 {
     public class TextureAnimated : ITexture
     {

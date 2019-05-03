@@ -1,10 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
+using System.Windows.Forms;
 
-namespace Platformer
+namespace Platformer.GUI
 {
     public enum ControlActions { None, Jump, Right, Left, Stop, StopTime, RunTime, Debug, Fly, ScalePlus, ScaleMinus };
 

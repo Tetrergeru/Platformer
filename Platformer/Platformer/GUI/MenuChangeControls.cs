@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Platformer
+namespace Platformer.GUI
 {
     /// <inheritdoc />
     /// <summary>
@@ -68,7 +68,7 @@ namespace Platformer
 
                 ChoiseButtons[k] = new Button(100, 30) {Location = new Point(200, 50 * count)};
                 ChoiseButtons[k].Click += (o, e) => ChangeControls(k);
-                ChoiseButtons[k].SetText(Platformer.Controls.KeyFromControl(k).ToString());
+                ChoiseButtons[k].SetText(GUI.Controls.KeyFromControl(k).ToString());
                 ControlsPanel.Controls.Add(ChoiseButtons[k]);
 
                 count++;
@@ -85,7 +85,7 @@ namespace Platformer
         {
             Choise = ca;
             foreach (var b in ChoiseButtons)
-                ChoiseButtons[b.Key].SetText(Platformer.Controls.KeyFromControl(b.Key).ToString());
+                ChoiseButtons[b.Key].SetText(GUI.Controls.KeyFromControl(b.Key).ToString());
             ChoiseButtons[ca].SetText("<choose>");
         }
 
@@ -99,9 +99,9 @@ namespace Platformer
         {
             if (Choise == ControlActions.None) return;
             
-            Platformer.Controls.SetControl(Choise, e.KeyCode);
+            GUI.Controls.SetControl(Choise, e.KeyCode);
             foreach (var b in ChoiseButtons)
-                ChoiseButtons[b.Key].SetText(Platformer.Controls.KeyFromControl(b.Key).ToString());
+                ChoiseButtons[b.Key].SetText(GUI.Controls.KeyFromControl(b.Key).ToString());
 
             Choise = ControlActions.None;
         }

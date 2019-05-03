@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Timers;
+using Platformer.Entities;
+using Platformer.GUI;
 using Timer = System.Timers.Timer;
 
 namespace Platformer

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
+using Platformer.GUI;
 
-namespace Platformer
+namespace Platformer.Entities
 {
     /// <summary>
     /// Класс, представляющий сущность игрового мира
