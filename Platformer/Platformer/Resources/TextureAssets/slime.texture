@@ -1,0 +1,3 @@
+﻿type = 'Texture'
+
+sprite = ['Resources/Textures/slime_0.png', 'Stretch']

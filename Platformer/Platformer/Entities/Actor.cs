@@ -78,12 +78,12 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        const double RunningSpeed = 200;
+        protected double RunningSpeed = 200;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        private const double JumpHeight = 200 * 9.8;
+        protected double JumpHeight = 200 * 9.8;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -153,7 +153,16 @@ namespace Platformer.Entities
                 if (e != this && e.Intersects(tempHitbox))
                 {
                     MoveTillIntersect(distance, axis, e.Hitbox);
-                    velocity.SetAxis(axis, 0);
+                    if (e is Actor)
+                    {
+                        var d = distance > 0 ? -500 : 500;
+                        if (axis == Axis.Horizontal)
+                            d *= 1000;
+
+                        velocity.SetAxis(axis, d);
+                    }
+                    else
+                        velocity.SetAxis(axis, 0);
                     return;
                 }
 

@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Entities\Actor.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\Monster.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Files\EntityFile.cs" />
     <Compile Include="Files\TextureFile.cs" />
@@ -104,7 +105,13 @@
     <None Include="Resources\Entities\tree_0.entity">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\TextureAssets\slime.texture">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\TextureAssets\stone_grass_0.texture">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Worlds\simple_world.world">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Worlds\test_1.world">
@@ -140,6 +147,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Textures\Player_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Textures\slime_0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Textures\Stone_1.png">

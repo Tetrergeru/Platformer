@@ -19,7 +19,7 @@ namespace Platformer.Entities
         /// Область занимаемая сущностью
         /// </summary>
         public HitBox Hitbox { get; set;  }
-
+        
         /// <summary>
         /// Мир, в котором эта сущность расположена
         /// </summary>

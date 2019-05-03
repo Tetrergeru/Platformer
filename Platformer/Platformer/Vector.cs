@@ -1,10 +1,5 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Platformer.Entities;
+﻿using Platformer.Entities;
+using System;
 
 namespace Platformer
 {
@@ -36,6 +31,9 @@ namespace Platformer
         /// <returns>Копию вектора с обнулённым игреком</returns>
         public Vector ZeroY()
             => new Vector { x = x, y = 0 };
+
+        public double DistanceTo(Vector other)
+            => Math.Sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 
         /// <summary>
         /// Приводит вектор к строковому представлению

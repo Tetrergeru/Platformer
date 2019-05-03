@@ -49,7 +49,7 @@ namespace Platformer
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
             Player.DrawPriority = 10;
 
-            world = WorldFile.GetWorld("Resources/Worlds/test.world");
+            world = WorldFile.GetWorld("Resources/Worlds/simple_world.world");
             world.SetPlayer(Player, new Vector { x = 0, y = 0 });
             
             //grassImg = ;
@@ -123,16 +123,22 @@ namespace Platformer
                 case ControlActions.Right:
                 {
                     Player.Run(Actor.Direction.Right);
-                    break;
+                    //foreach (var enemy in world.Enemies)
+                     //   enemy.Run(Actor.Direction.Right);
+                        break;
                 }
                 case ControlActions.Left:
                 {
                     Player.Run(Actor.Direction.Left);
+                    //foreach (var enemy in world.Enemies)
+                    //    enemy.Run(Actor.Direction.Left);
                     break;
                 }
                 case ControlActions.Jump:
                 {
                     Player.Jump();
+                    //foreach (var enemy in world.Enemies)
+                    //    enemy.Jump();
                     break;
                 }
                 case ControlActions.Stop:
