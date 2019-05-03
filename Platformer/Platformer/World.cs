@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using Platformer.Files;
 
 namespace Platformer
 {
