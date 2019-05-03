@@ -1,14 +1,8 @@
-﻿using System;
-using System.Timers;
+﻿using Platformer.Files;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.Threading.Tasks;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+using System.Timers;
 using Timer = System.Timers.Timer;
-
-// ReSharper disable All
 
 namespace Platformer
 {
@@ -17,7 +11,7 @@ namespace Platformer
     /// </summary>
     class Game
     {
-        public HashSet<Controls.Control> KeysPressed = new HashSet<Controls.Control>();
+        public HashSet<ControlActions> KeysPressed = new HashSet<ControlActions>();
 
         private bool DrawDebug = false;
         
@@ -51,9 +45,10 @@ namespace Platformer
 
             Player = new Player(new Vector { x = 30, y = 60});
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
-            
-            world = new World();
-            world.SetPlayer(Player, new Vector { x = 200, y = 40 });
+            Player.DrawPriority = 10;
+
+            world = WorldFile.GetWorld("Resources/Worlds/test.world");
+            world.SetPlayer(Player, new Vector { x = 0, y = 0 });
             
             //grassImg = ;
         }
@@ -84,21 +79,16 @@ namespace Platformer
 
             window.AdjustBy(Player.Hitbox);
 
-            window.Clear(Color.SkyBlue);
+            window.Clear(world.BackGroundColor);
 
-            window.Draw(world.Background);
-            window.Draw(Player);
-            window.Draw(world.Frontground);
-            window.Draw(world.block);
+            window.Draw(world.AllEntities);
 
             if (DrawDebug)
             {
-                foreach (var x in world.Background)
+                foreach (var x in world.Decorations)
                     window.Draw(Color.DarkGreen, x.Hitbox);
-                window.Draw(Color.Red, world.player.Hitbox);
-                foreach (var x in world.Frontground)
-                    window.Draw(Color.Yellow, x.Hitbox);
-                foreach (var x in world.block)
+                window.Draw(Color.Red, world.Player.Hitbox);
+                foreach (var x in world.Blocks)
                     window.Draw(Color.Blue, x.Hitbox);
             }
 
@@ -124,60 +114,60 @@ namespace Platformer
         //==========================<o@o>==========================
 
 
-        public void OnControlTrigger(Controls.Control action)
+        public void OnControlTrigger(ControlActions action)
         {
             switch (action)
             {
-                case Controls.Control.Right:
+                case ControlActions.Right:
                 {
                     Player.Run(Actor.Direction.Right);
                     break;
                 }
-                case Controls.Control.Left:
+                case ControlActions.Left:
                 {
                     Player.Run(Actor.Direction.Left);
                     break;
                 }
-                case Controls.Control.Jump:
+                case ControlActions.Jump:
                 {
                     Player.Jump();
                     break;
                 }
-                case Controls.Control.Stop:
+                case ControlActions.Stop:
                 {
                     Player.TryToStop();
                     break;
                 }
-                case Controls.Control.StopTime:
+                case ControlActions.StopTime:
                 {
                     Stop();
                     window.Pause();
                     break;
                 }
-                case Controls.Control.RunTime:
+                case ControlActions.RunTime:
                 {
                     Start();
                     break;
                 }
-                case Controls.Control.Debug:
+                case ControlActions.Debug:
                 {
-                    Player.Hitbox.MoveTo(new Vector {x = 40, y = 40});
+                    Player.Hitbox.MoveTo(new Vector {x = 0, y = 0});
                     DrawDebug = !DrawDebug;
                     break;
                 }
-                case Controls.Control.Fly:
+                case ControlActions.Fly:
                 {
                     Player.Flight = !Player.Flight;
                     break;
                 }
-                case Controls.Control.ScaleMinus:
+                case ControlActions.ScaleMinus:
                 {
-                    window.ChangeScale(0.5);
+                    window.ChangeScale(0.9);
                     break;
                 }
-                case Controls.Control.ScalePlus:
+                case ControlActions.ScalePlus:
                 {
-                    window.ChangeScale(2);
+                    window.ChangeScale(10/9.0);
                     break;
                 }
             }

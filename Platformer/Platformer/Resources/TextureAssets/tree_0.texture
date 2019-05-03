@@ -1,0 +1,6 @@
+type = 'TextureAnimated'
+
+delay = 0.3
+delay_after = 0.5
+
+sprites = [['Resources/Textures/Tree_0.png', 'Stretch'], ['Resources/Textures/Tree_1.png', 'Stretch']]

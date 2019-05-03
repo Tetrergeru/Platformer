@@ -1,0 +1,6 @@
+﻿type = 'Texture'
+
+width = width / 10
+height = height / 10
+
+sprite = ['Resources/Textures/Grass_1.png', 'Repeat']

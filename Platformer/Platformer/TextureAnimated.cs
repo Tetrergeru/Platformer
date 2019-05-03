@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
 
 namespace Platformer
 {
     public class TextureAnimated : ITexture
     {
-        private double timer;
+        private double _timer;
 
         public double timerDelay, afterAnimationDelay;
 
-        private List<Bitmap> Images;
+        private List<Bitmap> Images { get; }
 
         public Bitmap Image
         {
             get
             {
-                if (Images.Count * timerDelay > timer)
-                    return Images[(int)Math.Ceiling(timer / timerDelay) % Images.Count];
+                if (Images.Count * timerDelay > _timer)
+                    return Images[(int)Math.Ceiling(_timer / timerDelay) % Images.Count];
 
-                if (Images.Count * timerDelay + afterAnimationDelay < timer)
-                    timer = 0;
+                if (Images.Count * timerDelay + afterAnimationDelay < _timer)
+                    _timer = 0;
 
                 return Images[0];
             }
@@ -43,7 +41,7 @@ namespace Platformer
 
         public void Tick(double deltaTime)
         {
-            timer += deltaTime;
+            _timer += deltaTime;
         }
 
         public void AddTexture(Bitmap picture, FillType ft, double scale = 1)

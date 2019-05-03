@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Security.Cryptography;
 
 namespace Platformer
 {
@@ -38,10 +37,10 @@ namespace Platformer
                     for (int i = 0; i <= image.Width / (picture.Width * scale); i++)
                     for (int j = 0; j <= image.Height / (picture.Height * scale); j++)
                         graphics.DrawImage(picture,
-                            (int)(i * picture.Width * scale),
-                            (int)(j * picture.Height * scale),
-                            (int)(picture.Width * scale),
-                            (int)(picture.Height * scale));
+                            (int) (i * picture.Width * scale),
+                            (int) (j * picture.Height * scale),
+                            (int) (picture.Width * scale),
+                            (int) (picture.Height * scale));
                     break;
                 }
                 case FillType.Stretch:

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -23,7 +25,11 @@ namespace Platformer
 
         private State gameState = State.Running;
 
-        private MenuPause pause;
+        public Stack<Menu> MenuStack { get; } = new Stack<Menu>();
+
+        public MenuPause pause { get; }
+
+        public MenuChangeControls ChangeControls { get; }
 
         private CoordinateSheet CoordSheet { get; }
 
@@ -80,6 +86,7 @@ namespace Platformer
             screen.MouseMove += OnMouseMove;
 
             pause = new MenuPause(this);
+            ChangeControls = new MenuChangeControls(this);
         }
 
         public void Pause()
@@ -105,7 +112,7 @@ namespace Platformer
         {
             if (gameState != State.Running) return;
 
-            if (Platformer.Controls.Control.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
+            if (Platformer.ControlActions.StopTime == Platformer.Controls.ControlFromKey(e.KeyCode))
             {
                 Pause();
             }
@@ -191,9 +198,9 @@ namespace Platformer
 
         public void Draw(IEnumerable<Entity> entities)
         {
-            foreach (var e in entities)
+            foreach (var entity in entities.OrderBy(e => e.DrawPriority))
             {
-                Draw(e);
+                Draw(entity);
             }
         }
 
