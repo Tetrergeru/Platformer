@@ -10,8 +10,10 @@
         /// <param name="hitbox"></param>
         public Monster(World context, HitBox hitbox) : base(context, hitbox)
         {
+            MaxHealth = 50;
+            Health = MaxHealth;
             JumpHeight = 150 * 9.8;
-            RunningSpeed = 100;
+            RunningSpeed = 150;
         }
 
         /// <inheritdoc />
@@ -40,7 +42,9 @@
             {
                 Run(Context.Player.Hitbox.Centre.x < Hitbox.Centre.x ? Direction.Left : Direction.Right);
                 if (Context.Player.Hitbox.Centre.y < Hitbox.Centre.y)
+                {
                     Jump();
+                }
             }
 
             base.Tick(deltaTime);

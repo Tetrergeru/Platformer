@@ -13,6 +13,26 @@ namespace Platformer.Entities
     /// </summary>
     class Actor : Entity
     {
+        public double MaxHealth { get; protected set; }
+        private double health;
+        public double Health {
+            get => health;
+            protected set
+            {
+                if (value > MaxHealth)
+                    health = MaxHealth;
+                else if (value <= 0)
+                {
+                    if (this is Monster monster)
+                        Context.Enemies.Remove(monster);
+                    else if (this is Player player)
+                        player.GameOver();
+                }
+                else
+                    health = value;
+            }
+        }
+
         public bool Flight;
 
         /// <summary>
@@ -27,12 +47,12 @@ namespace Platformer.Entities
         /// <summary>
         /// Верхняя граница скорости перемещения по горизонтали
         /// </summary>
-        private const double MaxHorizontalVelocity = 20 * 100;
+        protected double MaxHorizontalVelocity = 20 * 100;
 
         /// <summary>
         /// Верхняя граница скорости перемещения по вертикали
         /// </summary>
-        private const double MaxVerticalVelocity = 20 * 100;
+        protected double MaxVerticalVelocity = 20 * 100;
 
         /// <summary>
         /// Скорость перемещения
@@ -153,11 +173,15 @@ namespace Platformer.Entities
                 if (e != this && e.Intersects(tempHitbox))
                 {
                     MoveTillIntersect(distance, axis, e.Hitbox);
-                    if (e is Actor)
+                    if (e is Actor actor)
                     {
                         var d = distance > 0 ? -500 : 500;
                         if (axis == Axis.Horizontal)
-                            d *= 1000;
+                            d *= 500;
+                        else if (d < 0)
+                        {
+                            actor.Health -= 10;
+                        }
 
                         velocity.SetAxis(axis, d);
                     }

@@ -45,7 +45,7 @@ namespace Platformer
             gameLoop = new Timer(TickTime);
             gameLoop.Elapsed += Tick;
 
-            Player = new Player(new Vector { x = 30, y = 60});
+            Player = new Player(new Vector { x = 30, y = 60}, this);
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
             Player.DrawPriority = 10;
 
@@ -111,6 +111,11 @@ namespace Platformer
         public void Stop()
         {
             gameLoop.Stop();
+        }
+
+        public void GameOver()
+        {
+            window.GameOver();
         }
 
         //==========================<o@o>==========================

@@ -30,6 +30,8 @@ namespace Platformer.GUI
 
         public MenuChangeControls ChangeControls { get; }
 
+        public MenuGameOver gameOver { get; }
+
         private CoordinateSheet CoordSheet { get; }
 
         public void ChangeScale(double delta)
@@ -86,6 +88,7 @@ namespace Platformer.GUI
 
             pause = new MenuPause(this);
             ChangeControls = new MenuChangeControls(this);
+            gameOver = new MenuGameOver(this);
         }
 
         public void Pause()
@@ -94,6 +97,14 @@ namespace Platformer.GUI
             Thread.Sleep(10);
             gameState = State.Pause;
             pause.ReceiveControl();
+        }
+
+        public void GameOver()
+        {
+            game.Stop();
+            Thread.Sleep(10);
+            gameState = State.Pause;
+            gameOver.ReceiveControl();
         }
 
         public void Continue()

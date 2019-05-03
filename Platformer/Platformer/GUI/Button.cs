@@ -31,6 +31,16 @@ namespace Platformer
             Image = Image;
         }
 
+        private string _text;
+
+        public override string Text { get => _text;
+            set
+            {
+                _text = value;
+                SetText(_text);
+            }
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// Создаёт кнопку данной ширины и высоты
