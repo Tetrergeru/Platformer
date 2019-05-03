@@ -10,10 +10,9 @@ namespace Platformer
         {
             var game = new Game();
             var gameWindow = new Window(game);
-            new System.Threading.Thread(() => Application.Run(gameWindow)).Start();
-
             game.window = gameWindow;
             game.Start();
+            Application.Run(gameWindow);
         }
     }
 }

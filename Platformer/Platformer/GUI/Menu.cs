@@ -41,6 +41,7 @@ namespace Platformer.GUI
             owner.MouseClick += OnMouseClick;
             foreach (var ctrl in Controls)
             {
+                Console.WriteLine(owner.screen.Controls.Count);
                 owner.screen.Controls.Add(ctrl);
                 ctrl.BringToFront();
             }

@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Win32.SafeHandles;
 using Platformer.Entities;
 
 namespace Platformer.GUI
@@ -20,6 +21,7 @@ namespace Platformer.GUI
     /// </summary>
     class Window : Form
     {
+        public AutoResetEvent gOver = new AutoResetEvent(false);
         public PictureBox screen;
 
         private State gameState = State.Running;
@@ -64,7 +66,7 @@ namespace Platformer.GUI
 
             Width = 1000;
             Height = 500;
-            
+
             CoordSheet = new CoordinateSheet(Width, Height);
 
             pict = new Bitmap(Width, Height);
@@ -72,7 +74,7 @@ namespace Platformer.GUI
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
 
-            screen = new PictureBox()
+            screen = new PictureBox
             {
                 Width = Width,
                 Height = Height,
@@ -89,17 +91,19 @@ namespace Platformer.GUI
             pause = new MenuPause(this);
             ChangeControls = new MenuChangeControls(this);
             gameOver = new MenuGameOver(this);
+
+            _gameoverTool.LocationChanged += (o, e) => RealGameOver();
+            Controls.Add(_gameoverTool);
         }
 
-        public void Pause()
-        {
-            game.Stop();
-            Thread.Sleep(10);
-            gameState = State.Pause;
-            pause.ReceiveControl();
-        }
+        private readonly PictureBox _gameoverTool = new PictureBox();
 
         public void GameOver()
+        {
+            _gameoverTool.Left++;
+        }
+
+        private void RealGameOver()
         {
             game.Stop();
             Thread.Sleep(10);
@@ -107,6 +111,19 @@ namespace Platformer.GUI
             gameOver.ReceiveControl();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            CheckForIllegalCrossThreadCalls = false;
+        }
+        
+        public void Pause()
+        {
+            game.Stop();
+            Thread.Sleep(10);
+            gameState = State.Pause;
+            pause.ReceiveControl();
+        }
+        
         public void Continue()
         {
             gameState = State.Running;
@@ -121,7 +138,7 @@ namespace Platformer.GUI
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (gameState != State.Running) return;
-
+            
             if (ControlActions.StopTime == GUI.Controls.ControlFromKey(e.KeyCode))
             {
                 Pause();

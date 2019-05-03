@@ -1,12 +1,29 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Platformer.GUI
 {
     internal class MenuGameOver : Menu
     {
+        private Button GameOverButton;
+
         public MenuGameOver(Window owner) : base(owner)
         {
-            Controls.Add(new Button(500, 100){Text = "Game Over", Left = 100, Top = 100});
+            GameOverButton = new Button(200, 50)
+            {
+                Location = new Point((owner.Width - 200) / 2, 20)
+            };
+            GameOverButton.Click += (o, e) => Console.WriteLine("FUCK");
+            GameOverButton.SetText("Exit");
+            Controls.Add(GameOverButton);
+            /*
+            GameOverButton = new Platformer.GUI.Button(500, 100)
+            {
+                Location = new Point(200, 50),
+            };
+            GameOverButton.SetText("Game Over");
+            Controls.Add(GameOverButton);
+            */
         }
     }
 }

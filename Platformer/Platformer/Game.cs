@@ -1,6 +1,8 @@
-﻿using Platformer.Files;
+﻿using System;
+using Platformer.Files;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Timers;
 using Platformer.Entities;
 using Platformer.GUI;
@@ -112,7 +114,7 @@ namespace Platformer
         {
             gameLoop.Stop();
         }
-
+        
         public void GameOver()
         {
             window.GameOver();
@@ -128,22 +130,16 @@ namespace Platformer
                 case ControlActions.Right:
                 {
                     Player.Run(Actor.Direction.Right);
-                    //foreach (var enemy in world.Enemies)
-                     //   enemy.Run(Actor.Direction.Right);
-                        break;
+                    break;
                 }
                 case ControlActions.Left:
                 {
                     Player.Run(Actor.Direction.Left);
-                    //foreach (var enemy in world.Enemies)
-                    //    enemy.Run(Actor.Direction.Left);
                     break;
                 }
                 case ControlActions.Jump:
                 {
                     Player.Jump();
-                    //foreach (var enemy in world.Enemies)
-                    //    enemy.Jump();
                     break;
                 }
                 case ControlActions.Stop:
@@ -170,7 +166,9 @@ namespace Platformer
                 }
                 case ControlActions.Fly:
                 {
-                    Player.Flight = !Player.Flight;
+                    Stop();
+                    GameOver();
+                    //Player.Flight = !Player.Flight;
                     break;
                 }
                 case ControlActions.ScaleMinus:
@@ -180,7 +178,7 @@ namespace Platformer
                 }
                 case ControlActions.ScalePlus:
                 {
-                    window.ChangeScale(10/9.0);
+                    window.ChangeScale(10 / 9.0);
                     break;
                 }
             }

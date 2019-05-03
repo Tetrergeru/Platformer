@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace Platformer
+namespace Platformer.GUI
 {
     /// <inheritdoc />
     /// <summary>
@@ -30,14 +30,13 @@ namespace Platformer
             g.DrawString(value, font, Brushes.Black, new Rectangle(0,0,Width, Height), stringFormat);
             Image = Image;
         }
-
-        private string _text;
-
-        public override string Text { get => _text;
+        
+        public override string Text {
+            get => base.Text;
             set
             {
-                _text = value;
-                SetText(_text);
+                base.Text = value;
+                SetText(base.Text);
             }
         }
 
