@@ -10,6 +10,8 @@ namespace Platformer.Physics
     {
         ICollider CollisionWith(ICollider collider);
         BoxCollider AxisAlignedBoundingBox();
+        void Move(Vector vector);
         double Volume();
+        Vector Center();
     }
 }
