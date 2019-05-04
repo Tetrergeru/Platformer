@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Math;
 
 namespace Platformer.Physics
 {
@@ -39,9 +40,30 @@ namespace Platformer.Physics
             collider.Move(vector);
         }
 
-        public void CollisionWith(Body body)
+        public BoxCollider AxisAlignedBoundingBox()
         {
-            throw new Exception();
+            return collider.AxisAlignedBoundingBox();
+        }
+
+        public void CollisionWith(Body target)
+        {
+            ICollider collision = collider.CollisionWith(target.collider);
+            if (collision is BoxCollider box)
+            {
+                Vector dist = Center() - target.Center();
+                dist.x = Sign(dist.x);
+                dist.y = Sign(dist.y);
+                Vector force = dist * new Vector { x = box.width, y = box.width };
+                Pull(force);
+                target.Pull(force * -1);
+            }
+            else
+                throw new NotImplementedException("Неизвестный коллайдер " + collider.GetType().ToString());
+        }
+
+        public Vector Center()
+        {
+            return collider.Center();
         }
 
         public void Tick(double deltaTime)
