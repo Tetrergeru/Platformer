@@ -36,7 +36,7 @@ namespace Platformer.GUI
 
         public void ChangeScale(double delta)
         {
-            CoordSheet.ChangeScale(CoordSheet.Scale * delta, game.Player.Hitbox);
+            CoordSheet.ChangeScale(CoordSheet.Scale * delta, game.Player.hitbox);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Platformer.GUI
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
             CoordSheet.SetSize(Width, Height);
-            CoordSheet.ChangeScale(Width / game.Player.Hitbox.Width / 50, game.Player.Hitbox);
+            CoordSheet.ChangeScale(Width / game.Player.Hitbox().Width / 50, game.Player.hitbox);
         }
 
         private Vector lastMouseCoords = Vector.Zero();
@@ -185,7 +185,7 @@ namespace Platformer.GUI
         /// </summary>
         /// <param name="image"></param>
         /// <param name="hitbox"></param>
-        public void Draw(Bitmap image, HitBox hitbox)
+        public void Draw(Bitmap image, System.Windows.Rect hitbox)
         {
             if (gameState == State.Running)
                 drawer.DrawImage(image, CoordSheet.Transform(hitbox));
@@ -196,14 +196,14 @@ namespace Platformer.GUI
         /// </summary>
         /// <param name="color"></param>
         /// <param name="hitbox"></param>
-        public void Draw(Color color, HitBox hitbox)
+        public void Draw(Color color, Rectangle rect)
         {
-            drawer.DrawRectangle(new Pen(color, 2), CoordSheet.Transform(hitbox));
+            drawer.DrawRectangle(new Pen(color, 2), rect);
         }
 
         public void Draw(Entity entity)
         {
-            Draw(entity.Texture.Image, entity.Hitbox);
+            Draw(entity.Texture.Image, entity.Hitbox());
         }
 
         public void Draw(IEnumerable<Entity> entities)
@@ -223,7 +223,7 @@ namespace Platformer.GUI
             screen.Image = pict;//(pict, 0, 0);
         }
 
-        public void AdjustBy(HitBox hitbox)
+        public void AdjustBy(System.Windows.Rect hitbox)
             => CoordSheet.AdjustBy(hitbox);
     }
 }

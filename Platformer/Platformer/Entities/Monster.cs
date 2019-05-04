@@ -12,7 +12,6 @@
         {
             MaxHealth = 50;
             Health = MaxHealth;
-            JumpHeight = 150 * 9.8;
             RunningSpeed = 150;
         }
 
@@ -24,7 +23,6 @@
         /// <param name="size"></param>
         public Monster(Vector size) : base(size)
         {
-            JumpHeight = 100 * 9.8;
         }
 
         /// <inheritdoc />
@@ -33,15 +31,14 @@
         /// </summary>
         public Monster()
         {
-            JumpHeight = 100 * 9.8;
         }
 
         public override void Tick(double deltaTime)
         {
-            if (Hitbox.Centre.DistanceTo(Context.Player.Hitbox.Centre) < 300)
+            if (hitbox.Centre.DistanceTo(Context.Player.hitbox.Centre) < 300)
             {
-                Run(Context.Player.Hitbox.Centre.x < Hitbox.Centre.x ? Direction.Left : Direction.Right);
-                if (Context.Player.Hitbox.Centre.y < Hitbox.Centre.y)
+                Run(Context.Player.hitbox.Centre.x < hitbox.Centre.x ? Direction.Left : Direction.Right);
+                if (Context.Player.hitbox.Centre.y < hitbox.Centre.y)
                 {
                     Jump();
                 }

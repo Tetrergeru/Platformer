@@ -18,12 +18,17 @@ namespace Platformer.Entities
         /// <summary>
         /// Область занимаемая сущностью
         /// </summary>
-        public HitBox Hitbox { get; set;  }
+        public HitBox hitbox { get; set;  }
         
         /// <summary>
         /// Мир, в котором эта сущность расположена
         /// </summary>
         public World Context { get; set; }
+        
+        public System.Windows.Rect Hitbox()
+        {
+            return new System.Windows.Rect(hitbox.X, hitbox.Y, hitbox.Width, hitbox.Height);
+        }
 
         public ITexture Texture { get; set; }
 
@@ -35,8 +40,8 @@ namespace Platformer.Entities
         public Entity(World context, HitBox hitbox)
         {
             Context = context;
-            Hitbox = hitbox;
-            Texture = new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
+            this.hitbox = hitbox;
+            Texture = new Texture((int)Math.Round(this.hitbox.Width), (int)Math.Round(this.hitbox.Height));
         }
 
         /// <summary>
@@ -46,8 +51,8 @@ namespace Platformer.Entities
         /// <param name="size"></param>
         public Entity(Vector size)
         {
-            Hitbox = new HitBox(0, 0, size.x, size.y);
-            Texture = new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
+            hitbox = new HitBox(0, 0, size.x, size.y);
+            Texture = new Texture((int)Math.Round(hitbox.Width), (int)Math.Round(hitbox.Height));
         }
 
         /// <summary>
@@ -61,7 +66,7 @@ namespace Platformer.Entities
         /// <param name="other">Другая сущность</param>
         /// <returns></returns>
         public bool Intersects(Entity other)
-            => Hitbox.Intersects(other.Hitbox);
+            => hitbox.Intersects(other.hitbox);
 
         /// <summary>
         /// Проверяет, пересекается ли эта сущность с заданной оластью
@@ -69,18 +74,27 @@ namespace Platformer.Entities
         /// <param name="other">Область</param>
         /// <returns></returns>
         public bool Intersects(HitBox other)
-            => Hitbox.Intersects(other);
+            => hitbox.Intersects(other);
 
         /// <summary>
         /// Перемещает сущность по направлению вектора
         /// </summary>
         /// <param name="velocity">Вектор скорости</param>
         public void Move(Vector velocity)
-            => Hitbox.Move(velocity);
+            => hitbox.Move(velocity);
 
         public virtual void Tick(double deltaTime)
         {
             Texture.Tick(deltaTime);
+        }
+        
+        /// <summary>
+        /// Перемещает объект в заданные координаты
+        /// </summary>
+        /// <param name="destination">Место, куда мы перемещаем объект</param>
+        public void MoveTo(Vector destination)
+        {
+            hitbox.MoveTo(destination);
         }
 
         public static Entity MakeEntity(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)

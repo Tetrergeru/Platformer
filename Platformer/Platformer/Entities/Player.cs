@@ -19,7 +19,6 @@ namespace Platformer.Entities
             game_ = game;
             MaxHealth = 50;
             Health = MaxHealth;
-            JumpHeight = 200 * 9.8;
         }
 
         /// <summary>
@@ -32,7 +31,6 @@ namespace Platformer.Entities
             game_ = game;
             MaxHealth = 50;
             Health = MaxHealth;
-            JumpHeight = 200 * 9.8;
         }
 
         /// <summary>
@@ -42,7 +40,6 @@ namespace Platformer.Entities
         {
             MaxHealth = 50;
             Health = MaxHealth;
-            JumpHeight = 200 * 9.8;
         }
 
         public void GameOver()

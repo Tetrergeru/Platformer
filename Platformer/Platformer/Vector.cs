@@ -56,7 +56,12 @@ namespace Platformer
                 x = first.x + second.x,
                 y = first.y + second.y,
             };
-
+        public static Vector operator *(Vector first, Vector second)
+            => new Vector
+            {
+                x = first.x * second.x,
+                y = first.y * second.y,
+            };
         /// <summary>
         /// Умножает вектор на число
         /// </summary>
@@ -69,6 +74,20 @@ namespace Platformer
                 x = vector.x * mutiplier,
                 y = vector.y * mutiplier,
             };
+
+        public static Vector operator /(Vector vector, double mutiplier)
+            => new Vector
+            {
+                x = vector.x / mutiplier,
+                y = vector.y / mutiplier,
+            };
+
+        public static Vector operator -(Vector vector1, Vector vector2)
+                => new Vector
+                {
+                    x = vector1.x - vector2.x,
+                    y = vector1.y - vector2.y,
+                };
 
         public void SetAxis(Axis axis, double value)
         {

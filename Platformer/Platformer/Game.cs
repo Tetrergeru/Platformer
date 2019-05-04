@@ -79,20 +79,11 @@ namespace Platformer
 
             world.Tick(TickTime / 1000.0);
 
-            window.AdjustBy(Player.Hitbox);
+            window.AdjustBy(Player.Hitbox());
 
             window.Clear(world.BackGroundColor);
 
             window.Draw(world.AllEntities);
-
-            if (DrawDebug)
-            {
-                foreach (var x in world.Decorations)
-                    window.Draw(Color.DarkGreen, x.Hitbox);
-                window.Draw(Color.Red, world.Player.Hitbox);
-                foreach (var x in world.Blocks)
-                    window.Draw(Color.Blue, x.Hitbox);
-            }
 
             window.Flush();
         }
@@ -164,7 +155,7 @@ namespace Platformer
                 }
                 case ControlActions.Debug:
                 {
-                    Player.Hitbox.MoveTo(new Vector {x = 0, y = 0});
+                    Player.MoveTo(new Vector {x = 0, y = 0});
                     DrawDebug = !DrawDebug;
                     break;
                 }

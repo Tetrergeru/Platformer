@@ -61,6 +61,12 @@ namespace Platformer.Entities
         public Vector velocity = Vector.Zero();
 
         /// <summary>
+        /// Сила, действующая на актора
+        /// (по умолчанию — нулевая)
+        /// </summary>
+        public Vector force = Vector.Zero();
+
+        /// <summary>
         /// Создаёт экземпляр актора по контексту и занимаемой области
         /// </summary>
         /// <param name="context">Контекст (мир, где находится актор)</param>
@@ -92,18 +98,18 @@ namespace Platformer.Entities
         /// <param name="force"></param>
         public void Pull(Vector force)
         {
-            velocity += force;
+            this.force += force;
         }
 
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double RunningSpeed = 200;
+        protected double RunningSpeed = 500;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        protected double JumpHeight = 200 * 9.8;
+        protected double JumpHeight = 400;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -140,7 +146,7 @@ namespace Platformer.Entities
         /// <returns></returns>
         private bool MovementIsPossble(Vector velocity)
         {
-            var tempHitbox = new HitBox(Hitbox.X + velocity.x, Hitbox.Y + velocity.y, Hitbox.Width, Hitbox.Height);
+            var tempHitbox = new HitBox(hitbox.X + velocity.x, hitbox.Y + velocity.y, hitbox.Width, hitbox.Height);
 
             return Context.SolidEntities.All(e => e == this || !e.Intersects(tempHitbox));
         }
@@ -151,12 +157,12 @@ namespace Platformer.Entities
             {
                 case Axis.Horizontal:
                     Move(new Vector
-                        { x = target.X - Hitbox.X + (distance > 0 ? -Hitbox.Width - 0.1 : target.Width + 0.1), y = 0 });
+                        { x = target.X - hitbox.X + (distance > 0 ? -hitbox.Width - 0.1 : target.Width + 0.1), y = 0 });
                     return;
 
                 case Axis.Vertical:
                     Move(new Vector
-                        { x = 0, y = target.Y - Hitbox.Y + (distance >= 0 ? -Hitbox.Height - 0.1 : target.Height + 0.1) });
+                        { x = 0, y = target.Y - hitbox.Y + (distance >= 0 ? -hitbox.Height - 0.1 : target.Height + 0.1) });
                     return;
 
                 default:
@@ -167,12 +173,12 @@ namespace Platformer.Entities
         private void MoveInAxis(double distance, Axis axis)
         {
             if (Math.Abs(distance) < 1e-10) return;
-            var tempHitbox = new HitBox(Hitbox,  axis, distance);
+            var tempHitbox = new HitBox(hitbox,  axis, distance);
 
             foreach (var e in Context.SolidEntities)
                 if (e != this && e.Intersects(tempHitbox))
                 {
-                    MoveTillIntersect(distance, axis, e.Hitbox);
+                    MoveTillIntersect(distance, axis, e.hitbox);
                     if (e is Actor actor)
                     {
                         var d = distance > 0 ? -500 : 500;
@@ -242,13 +248,15 @@ namespace Platformer.Entities
         {
             CutVelocity();
 
-            var direction = velocity * deltaTime;
+            force -= velocity * 3;
+            force += Context.Gravity;
+            velocity += force * deltaTime;
+            var direction = velocity * deltaTime * 10;
 
             MoveHorizontal(direction.x);
             MoveVertical(direction.y);
-
-            velocity += Context.Gravity * deltaTime;
-            velocity.x *= Math.Pow(1e-4, deltaTime);
+            
+            force = Vector.Zero();
         }
     }
 }

@@ -77,6 +77,10 @@
     </Compile>
     <Compile Include="Game.cs" />
     <Compile Include="HitBox.cs" />
+    <Compile Include="Physics\Body.cs" />
+    <Compile Include="Physics\BoxCollider.cs" />
+    <Compile Include="Physics\ICollider.cs" />
+    <Compile Include="Physics\Physics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector.cs" />

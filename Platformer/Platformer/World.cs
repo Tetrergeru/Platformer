@@ -64,7 +64,7 @@ namespace Platformer
         /// </summary>
         public World()
         {
-            Gravity = new Vector {x = 0, y = 1000 * 9.8};
+            Gravity = new Vector {x = 0, y = 100 * 9.8};
             var m = new Monster(this, new HitBox(1000, 100, 50, 50));
             m.Texture = TextureFile.GetTexture("Resources/TextureAssets/slime.texture",20,20);
             Enemies.Add(m);
@@ -79,7 +79,7 @@ namespace Platformer
         {
             Player = player;
             player.Context = this;
-            player.Hitbox.MoveTo(coords);
+            player.MoveTo(coords);
         }
 
         public void Tick(double deltaTime)

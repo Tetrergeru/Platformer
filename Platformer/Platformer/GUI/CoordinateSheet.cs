@@ -24,7 +24,7 @@ namespace Platformer.GUI
             Scale = 1;
         }
 
-        public Rectangle Transform(HitBox hitbox)
+        public Rectangle Transform(System.Windows.Rect hitbox)
         {
             return new Rectangle
             {
@@ -61,9 +61,9 @@ namespace Platformer.GUI
             AdjustCoordinate(ref coord, playerCoord, playerSize, lesserBorder, biggerBorder);
         }
 
-        public void AdjustBy(HitBox hitbox)
+        public void AdjustBy(System.Windows.Rect hitbox)
         {
-            var playerCoords = (Coordinates * (-1) + hitbox.Coordinates) * Scale;
+            var playerCoords = (Coordinates * (-1) + new Vector {x = hitbox.X, y = hitbox.Y }) * Scale;
             CounstBordersAndAdjustCoordinate(ref Coordinates.x, playerCoords.x, hitbox.Width * Scale, Width, HorizontalAdjustPersent);
             CounstBordersAndAdjustCoordinate(ref Coordinates.y, playerCoords.y, hitbox.Height * Scale,Height, VerticalalAdjustPersent);
         }
