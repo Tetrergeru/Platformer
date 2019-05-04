@@ -105,7 +105,7 @@ namespace Platformer.Physics
             if (k < 0)
                 velocity = Vector.Zero();
             else
-                velocity = velocity * Pow(k , deltaTime * 1000);
+                velocity = velocity * Pow(k , deltaTime * 100);
             Move(velocity * deltaTime);
 
             slowdown = 0;

@@ -89,7 +89,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        protected double JumpHeight = 400;
+        protected double JumpHeight = 30;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
