@@ -80,6 +80,8 @@
     <Compile Include="Game\Game.cs" />
     <Compile Include="HitBox.cs" />
     <Compile Include="Game\IGame.cs" />
+    <Compile Include="IIntrectangle.cs" />
+    <Compile Include="IRectangle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\SateSnapshot.cs" />

@@ -60,13 +60,14 @@ namespace Platformer.GUI
 
         private readonly System.Timers.Timer _timer;
 
+        /// <inheritdoc />
         /// <summary>
         /// Создаёт экземпляр окна, по переданной игре
         /// </summary>
         /// <param name="game"></param>
         public Window(IGame game)
         {
-            this._game = game;
+            _game = game;
 
             Width = 1000;
             Height = 500;
@@ -99,19 +100,22 @@ namespace Platformer.GUI
             _gameoverTool.LocationChanged += (o, e) => RealGameOver();
             Controls.Add(_gameoverTool);
 
-            _timer = new System.Timers.Timer(10);
+            _timer = new System.Timers.Timer(20);
             _timer.Elapsed += Draw;
             _timer.Start();
-        }
 
+            MouseWheel += (o,e) => ChangeScale(e.Delta < 0 ? 0.9 : 10.0 / 9);
+        }
+        
         private void Draw(object sender, ElapsedEventArgs e)
         {
             var snapshot = _game.GetStateSnapshot();
-
             if (snapshot.gameIsOver)
                 GameOver();
             else
             {
+                if (gameState != State.Running)
+                    return;
                 AdjustBy(snapshot.player.body);
                 Clear(snapshot.currentBackgroundColor);
                 Draw(snapshot.entities);
@@ -186,28 +190,28 @@ namespace Platformer.GUI
             CoordSheet.ChangeScale(Width / player.Width / 50, player);
         }
 
-        private Vector lastMouseCoords = Vector.Zero();
+        private Vector _lastMouseCoords = Vector.Zero();
 
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (gameState == State.Pause)
                 return;
 
-            if (e.Button == MouseButtons.Left && lastMouseCoords.IsZero())
+            if (e.Button == MouseButtons.Left && _lastMouseCoords.IsZero())
             {
-                lastMouseCoords.x = e.X;
-                lastMouseCoords.y = e.Y;
+                _lastMouseCoords.x = e.X;
+                _lastMouseCoords.y = e.Y;
             }
             else if (e.Button == MouseButtons.Left)
             {
-                CoordSheet.Move(lastMouseCoords + new Vector{x = e.X, y = e.Y} * (-1));
-                lastMouseCoords.x = e.X;
-                lastMouseCoords.y = e.Y;
+                CoordSheet.Move(_lastMouseCoords + new Vector{x = e.X, y = e.Y} * (-1));
+                _lastMouseCoords.x = e.X;
+                _lastMouseCoords.y = e.Y;
             }
             else
             {
-                lastMouseCoords.x = 0;
-                lastMouseCoords.y = 0;
+                _lastMouseCoords.x = 0;
+                _lastMouseCoords.y = 0;
             }
         }
 
@@ -223,11 +227,11 @@ namespace Platformer.GUI
         /// Рисует на картинке данное изображение в данном прямоугольнике
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="hitbox"></param>
-        public void Draw(Bitmap image, HitBox hitbox)
+        /// <param name="rectangle"></param>
+        public void Draw(Bitmap image, IRectangle rectangle)
         {
             if (gameState == State.Running)
-                drawer.DrawImage(image, CoordSheet.Transform(hitbox));
+                drawer.DrawImage(image, CoordSheet.Transform(rectangle));
         }
         
         public void Draw(GameObject entity)
@@ -252,7 +256,7 @@ namespace Platformer.GUI
             screen.Image = pict;//(pict, 0, 0);
         }
 
-        public void AdjustBy(HitBox hitbox)
-            => CoordSheet.AdjustBy(hitbox);
+        public void AdjustBy(IRectangle rectangle)
+            => CoordSheet.AdjustBy(rectangle);
     }
 }

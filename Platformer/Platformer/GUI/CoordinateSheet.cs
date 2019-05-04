@@ -11,7 +11,7 @@ namespace Platformer.GUI
 
         public double Scale { get; private set; }
 
-        public Vector Coordinates = Vector.Zero();
+        public Vector coordinates = Vector.Zero();
 
         private const double HorizontalAdjustPersent = 0.1;
 
@@ -24,12 +24,12 @@ namespace Platformer.GUI
             Scale = 1;
         }
 
-        public Rectangle Transform(HitBox hitbox)
+        public Rectangle Transform(IRectangle hitbox)
         {
             return new Rectangle
             {
-                X = (int)Math.Floor((hitbox.X - Coordinates.x) * Scale),
-                Y = (int)Math.Floor((hitbox.Y - Coordinates.y) * Scale),
+                X = (int)Math.Floor((hitbox.X - coordinates.x) * Scale),
+                Y = (int)Math.Floor((hitbox.Y - coordinates.y) * Scale),
                 Width = (int)Math.Ceiling(hitbox.Width * Scale),
                 Height = (int)Math.Ceiling(hitbox.Height * Scale),
             };
@@ -37,8 +37,8 @@ namespace Platformer.GUI
 
         public void ChangeScale(double newScale, HitBox playerLocation)
         {
-            var playerCoords = Coordinates * (-1) + playerLocation.Coordinates;
-            Coordinates = Coordinates + playerCoords * (newScale < Scale ? (1 - Scale / newScale) : Scale / newScale);
+            var playerCoords = coordinates * (-1) + playerLocation.Coordinates;
+            coordinates = coordinates + playerCoords * (newScale < Scale ? (1 - Scale / newScale) : Scale / newScale);
             Scale = newScale;
         }
 
@@ -61,16 +61,16 @@ namespace Platformer.GUI
             AdjustCoordinate(ref coord, playerCoord, playerSize, lesserBorder, biggerBorder);
         }
 
-        public void AdjustBy(HitBox hitbox)
+        public void AdjustBy(IRectangle hitbox)
         {
-            var playerCoords = (Coordinates * (-1) + hitbox.Coordinates) * Scale;
-            CounstBordersAndAdjustCoordinate(ref Coordinates.x, playerCoords.x, hitbox.Width * Scale, Width, HorizontalAdjustPersent);
-            CounstBordersAndAdjustCoordinate(ref Coordinates.y, playerCoords.y, hitbox.Height * Scale,Height, VerticalalAdjustPersent);
+            var playerCoords = (coordinates * (-1) + hitbox.Coordinates) * Scale;
+            CounstBordersAndAdjustCoordinate(ref coordinates.x, playerCoords.x, hitbox.Width * Scale, Width, HorizontalAdjustPersent);
+            CounstBordersAndAdjustCoordinate(ref coordinates.y, playerCoords.y, hitbox.Height * Scale,Height, VerticalalAdjustPersent);
         }
 
         public void Move(Vector delta)
         {
-            Coordinates += delta * (1 / Scale);
+            coordinates += delta * (1 / Scale);
         }
     }
 }

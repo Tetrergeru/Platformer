@@ -8,7 +8,7 @@ namespace Platformer
     /// <summary>
     /// Область, занимаемая игровой сущностью
     /// </summary>
-    public class HitBox
+    public class HitBox : IRectangle
     {
         /// <summary>
         /// Сама область в виде прямоугольника
@@ -24,6 +24,10 @@ namespace Platformer
         /// Координата Y хитбокса
         /// </summary>
         public double Y => rectangle.Y;
+
+        public double X2 => X + Width;
+
+        public double Y2 => Y + Height;
 
         /// <summary>
         /// Ширина хитбокса
@@ -51,12 +55,12 @@ namespace Platformer
             rectangle = new Rect(x, y, w, h);
         }
 
-        public HitBox(HitBox hitbox)
+        public HitBox(IRectangle hitbox)
         {
             rectangle = new Rect(hitbox.X, hitbox.Y, hitbox.Width, hitbox.Height);
         }
 
-        public HitBox(HitBox hitbox, Axis axis, double distance) : this(hitbox)
+        public HitBox(IRectangle hitbox, Axis axis, double distance) : this(hitbox)
         {
             if (axis == Axis.Horizontal)
             {
@@ -99,14 +103,7 @@ namespace Platformer
             rectangle.X = destination.x;
             rectangle.Y = destination.y;
         }
-
-        /// <summary>
-        /// Преобразует реальные координаты в экранные
-        /// </summary>
-        /// <returns></returns>
-        public Rectangle ToDrawing()
-            => new Rectangle((int)rectangle.X, (int)rectangle.Y, (int)rectangle.Width, (int)rectangle.Height);
-
+        
         /// <summary>
         /// Приводит хитбюокс к строковому представлению
         /// </summary>

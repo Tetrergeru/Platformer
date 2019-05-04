@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Net;
-using System.Windows.Forms.VisualStyles;
 using Platformer.Entities;
 using Platformer.Files;
 
-namespace Platformer
+namespace Platformer.Game
 {
     /// <summary>
     /// Представляет собой игровой мир
