@@ -13,6 +13,7 @@ namespace Platformer.Physics
 
         Vector force = Vector.Zero();
         Vector velocity = Vector.Zero();
+        double slowdown;
         private double density = 1;
         public bool Movable { get; set; }
 
@@ -52,12 +53,12 @@ namespace Platformer.Physics
 
         public void CollisionWith(Body target)
         {
+            if (!Movable && !target.Movable)
+                return;
             ICollider collision = collider.CollisionWith(target.collider);
             if (collision is BoxCollider box)
             {
-                if (box.Volume() > 0.000001 && (Movable || target.Movable))
-                    Console.WriteLine(box.width);
-                else
+                if (box.Volume() < 0.000001)
                     return;
                 Vector dist = Center() - target.Center();
                 dist.x = Sign(dist.x);
@@ -67,6 +68,10 @@ namespace Platformer.Physics
                     force = dist * new Vector { x = 0, y = box.height } * 10000000;
                 else
                     force = dist * new Vector { x = box.width, y = 0 } * 10000000;
+
+                slowdown += box.Volume() / collider.Volume();
+                target.slowdown += box.Volume() / target.collider.Volume();
+
                 Pull(force);
                 target.Pull(force * -1);
             }
@@ -90,12 +95,20 @@ namespace Platformer.Physics
         {
             if (!Movable)
             {
+                slowdown = 0;
                 force = Vector.Zero();
                 return;
             }
-            Accelerate(force* deltaTime / Mass);
+            
+            Accelerate(force * deltaTime / Mass);
+            double k = 1 - (slowdown + 0.0001);
+            if (k < 0)
+                velocity = Vector.Zero();
+            else
+                velocity = velocity * Pow(k , deltaTime * 1000);
             Move(velocity * deltaTime);
 
+            slowdown = 0;
             force = Vector.Zero();
         }
     }

@@ -84,7 +84,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double RunningSpeed = 500000;
+        protected double RunningSpeed = 1000000;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
@@ -98,9 +98,9 @@ namespace Platformer.Entities
         public void Run(Direction direction)
         {
             if (direction == Direction.Right)
-                Pull(new Vector {x = RunningSpeed, y = 0,});
+                body.Pull(new Vector {x = RunningSpeed, y = 0,});
             else
-                Pull(new Vector {x = -RunningSpeed, y = 0,});
+                body.Pull(new Vector {x = -RunningSpeed, y = 0,});
         }
 
         /// <summary>
