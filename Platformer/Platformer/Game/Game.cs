@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Platformer.Entities;
 using Platformer.Files;
+using Platformer.GUI;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
-using Platformer.Entities;
-using Platformer.GUI;
-using Timer = System.Timers.Timer;
 
 namespace Platformer.Game
 {
@@ -16,22 +13,18 @@ namespace Platformer.Game
     /// </summary>
     internal class Game : IGame
     {
-        public HashSet<ControlActions> KeysPressed { get; } = new HashSet<ControlActions>();
-        
+        private HashSet<ControlActions> KeysPressed { get; } = new HashSet<ControlActions>();
+
         /// <summary>
         /// Игровой мир
         /// (Впоследствие будет перепилено в сторону динамического подгружения миров из файликов)
         /// </summary>
-        public World world;
+        private World World { get; set; }
 
         /// <summary>
         /// Объект персонажа игрока
         /// </summary>
-        public Player Player
-        {
-            get;
-            private set;
-        }
+        private Player Player { get; }
 
         /// <summary>
         /// Конструктор, инициализирующий игру параметрами по умолчанию
@@ -45,8 +38,8 @@ namespace Platformer.Game
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
             Player.DrawPriority = 10;
 
-            world = WorldFile.GetWorld("Resources/Worlds/simple_world.world");
-            world.SetPlayer(Player, new Vector { x = 0, y = 0 });
+            World = WorldFile.GetWorld("Resources/Worlds/simple_world.world");
+            World.SetPlayer(Player, new Vector { x = 0, y = 0 });
             UpdateState();
         }
 
@@ -60,8 +53,6 @@ namespace Platformer.Game
         /// <summary>
         /// Игровой тик
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         /// <param name="deltaTime"></param>
         private void Tick(double deltaTime)
         {
@@ -70,7 +61,7 @@ namespace Platformer.Game
 
             UpdateState();
             
-            world.Tick(deltaTime);
+            World.Tick(deltaTime);
         }
 
         /// <summary>
@@ -91,7 +82,7 @@ namespace Platformer.Game
 
         private StateSnapshot _currentState;
 
-        public void UpdateState()
+        private void UpdateState()
         {
             _currentState = new StateSnapshot
                 {
@@ -101,12 +92,12 @@ namespace Platformer.Game
                         texture = Player.Texture,
                         drawPriority = Player.DrawPriority
                     },
-                    entities = world
+                    entities = World
                         .AllEntities
                         .Select(e => new GameObject{body = e.Hitbox, texture = e.Texture,drawPriority = e.DrawPriority})
                         .ToList(),
                     gameIsOver = Player.Health <= 0,
-                    currentBackgroundColor = world.BackGroundColor,
+                    currentBackgroundColor = World.BackGroundColor,
             };
             
         }

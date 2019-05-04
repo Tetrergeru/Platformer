@@ -24,7 +24,6 @@ namespace Platformer.GUI
     /// </summary>
     class Window : Form
     {
-        public AutoResetEvent gOver = new AutoResetEvent(false);
         public PictureBox screen;
 
         private State gameState = State.Running;
@@ -41,7 +40,7 @@ namespace Platformer.GUI
 
         public void ChangeScale(double delta)
         {
-            CoordSheet.ChangeScale(CoordSheet.Scale * delta, game.GetStateSnapshot().player.body);
+            CoordSheet.ChangeScale(CoordSheet.Scale * delta, _game.GetStateSnapshot().player.body);
         }
 
         /// <summary>
@@ -57,9 +56,9 @@ namespace Platformer.GUI
         /// <summary>
         /// Игра, привязанная к окну
         /// </summary>
-        private IGame game;
+        private readonly IGame _game;
 
-        private System.Timers.Timer _timer;
+        private readonly System.Timers.Timer _timer;
 
         /// <summary>
         /// Создаёт экземпляр окна, по переданной игре
@@ -67,7 +66,7 @@ namespace Platformer.GUI
         /// <param name="game"></param>
         public Window(IGame game)
         {
-            this.game = game;
+            this._game = game;
 
             Width = 1000;
             Height = 500;
@@ -107,7 +106,7 @@ namespace Platformer.GUI
 
         private void Draw(object sender, ElapsedEventArgs e)
         {
-            var snapshot = game.GetStateSnapshot();
+            var snapshot = _game.GetStateSnapshot();
 
             if (snapshot.gameIsOver)
                 GameOver();
@@ -122,14 +121,11 @@ namespace Platformer.GUI
 
         private readonly PictureBox _gameoverTool = new PictureBox();
 
-        public void GameOver()
-        {
-            _gameoverTool.Left++;
-        }
+        public void GameOver() => _gameoverTool.Left++;
 
         private void RealGameOver()
         {
-            game.Stop();
+            _game.Stop();
             _timer.Stop();
             Thread.Sleep(10);
             gameState = State.Pause;
@@ -143,7 +139,7 @@ namespace Platformer.GUI
         
         public void Pause()
         {
-            game.Stop();
+            _game.Stop();
             Thread.Sleep(10);
             gameState = State.Pause;
             pause.ReceiveControl();
@@ -152,7 +148,7 @@ namespace Platformer.GUI
         public void Continue()
         {
             gameState = State.Running;
-            game.Start();
+            _game.Start();
         }
 
         /// <summary>
@@ -169,13 +165,13 @@ namespace Platformer.GUI
                 Pause();
             }
             else
-                game.Action($"key_down {GUI.Controls.ControlFromKey(e.KeyCode)}");//.Add(GUI.Controls.ControlFromKey(e.KeyCode));
+                _game.Action($"key_down {GUI.Controls.ControlFromKey(e.KeyCode)}");//.Add(GUI.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (gameState == State.Running)
-                game.Action($"key_up {GUI.Controls.ControlFromKey(e.KeyCode)}");
+                _game.Action($"key_up {GUI.Controls.ControlFromKey(e.KeyCode)}");
         }
 
         private void OnSizeChanged(object sender, EventArgs e)
@@ -186,7 +182,7 @@ namespace Platformer.GUI
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
             CoordSheet.SetSize(Width, Height);
-            var player = game.GetStateSnapshot().player.body;
+            var player = _game.GetStateSnapshot().player.body;
             CoordSheet.ChangeScale(Width / player.Width / 50, player);
         }
 
@@ -233,17 +229,7 @@ namespace Platformer.GUI
             if (gameState == State.Running)
                 drawer.DrawImage(image, CoordSheet.Transform(hitbox));
         }
-
-        /// <summary>
-        /// рисует на кртинке прямоугольник данного цвета
-        /// </summary>
-        /// <param name="color"></param>
-        /// <param name="hitbox"></param>
-        public void Draw(Color color, HitBox hitbox)
-        {
-            drawer.DrawRectangle(new Pen(color, 2), CoordSheet.Transform(hitbox));
-        }
-
+        
         public void Draw(GameObject entity)
         {
             Draw(entity.texture.Image, entity.body);
