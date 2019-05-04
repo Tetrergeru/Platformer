@@ -1,5 +1,6 @@
 ﻿using Platformer.GUI;
 using System;
+using Platformer.Game;
 
 namespace Platformer.Entities
 {

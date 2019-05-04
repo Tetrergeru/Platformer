@@ -1,4 +1,6 @@
-﻿namespace Platformer.Entities
+﻿using Platformer.Game;
+
+namespace Platformer.Entities
 {
     internal class Monster : Actor
     {

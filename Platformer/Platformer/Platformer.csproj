@@ -86,7 +86,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\SateSnapshot.cs" />
     <Compile Include="Vector.cs" />
-    <Compile Include="World.cs" />
+    <Compile Include="Game\World.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
