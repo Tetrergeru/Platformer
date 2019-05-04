@@ -9,17 +9,18 @@ namespace Platformer.Physics
     class Physics
     {
         List<Body> Bodies = new List<Body>();
-        double Gravity = 9.8;
+        double Gravity = 9.8 * 100000;
 
-        void Tick(double deltaTime)
+        public void Tick(double deltaTime)
         {
             for (int i = 0; i < Bodies.Count; i++)
+            {
                 for (int j = i + 1; j < Bodies.Count; j++)
-                {
                     Bodies[i].CollisionWith(Bodies[j]);
-                    if (Bodies[i].Movable)
-                        Bodies[i].Pull(new Vector {x = 0, y = Gravity });
-                }
+               
+                if (Bodies[i].Movable)
+                    Bodies[i].Pull(new Vector { x = 0, y = Gravity });
+            }
 
             foreach (Body body in Bodies)
                 body.Tick(deltaTime);
@@ -30,7 +31,7 @@ namespace Platformer.Physics
             Bodies.Remove(body);
         }
 
-        public void Addbody(Body body)
+        public void AddBody(Body body)
         {
             if (Bodies.Contains(body))
                 return;

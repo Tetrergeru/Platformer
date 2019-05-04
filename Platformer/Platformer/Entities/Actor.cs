@@ -45,35 +45,13 @@ namespace Platformer.Entities
         };
 
         /// <summary>
-        /// Верхняя граница скорости перемещения по горизонтали
-        /// </summary>
-        protected double MaxHorizontalVelocity = 20 * 100;
-
-        /// <summary>
-        /// Верхняя граница скорости перемещения по вертикали
-        /// </summary>
-        protected double MaxVerticalVelocity = 20 * 100;
-
-        /// <summary>
-        /// Скорость перемещения
-        /// (по умолчанию — нулевая)
-        /// </summary>
-        public Vector velocity = Vector.Zero();
-
-        /// <summary>
-        /// Сила, действующая на актора
-        /// (по умолчанию — нулевая)
-        /// </summary>
-        public Vector force = Vector.Zero();
-
-        /// <summary>
         /// Создаёт экземпляр актора по контексту и занимаемой области
         /// </summary>
         /// <param name="context">Контекст (мир, где находится актор)</param>
         /// <param name="hitbox">Занимаемая область</param>
         public Actor(World context, HitBox hitbox) : base(context, hitbox)
         {
-
+            body.Movable = true;
         }
 
         /// <summary>
@@ -83,6 +61,7 @@ namespace Platformer.Entities
         /// <param name="size">Размер актора</param>
         public Actor(Vector size) : base(size)
         {
+            body.Movable = true;
         }
 
         /// <summary>
@@ -90,6 +69,7 @@ namespace Platformer.Entities
         /// </summary>
         public Actor()
         {
+            body.Movable = true;
         }
 
         /// <summary>
@@ -98,13 +78,13 @@ namespace Platformer.Entities
         /// <param name="force"></param>
         public void Pull(Vector force)
         {
-            this.force += force;
+            body.Pull(force);
         }
 
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double RunningSpeed = 500;
+        protected double RunningSpeed = 500000;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
@@ -124,114 +104,19 @@ namespace Platformer.Entities
         }
 
         /// <summary>
-        /// Ограничивает скорость перемещения заданными константами
-        /// </summary>
-        private void CutVelocity()
-        {
-            if (velocity.x > MaxHorizontalVelocity)
-                velocity.x = MaxHorizontalVelocity;
-            if (velocity.x < -MaxHorizontalVelocity)
-                velocity.x = -MaxHorizontalVelocity;
-
-            if (velocity.y > MaxVerticalVelocity)
-                velocity.y = MaxVerticalVelocity;
-            if (velocity.y < -MaxVerticalVelocity)
-                velocity.y = -MaxVerticalVelocity;
-        }
-
-        /// <summary>
-        /// Проверяет, возможно ли переместиться в указанном направлении
-        /// </summary>
-        /// <param name="velocity"></param>
-        /// <returns></returns>
-        private bool MovementIsPossble(Vector velocity)
-        {
-            var tempHitbox = new HitBox(hitbox.X + velocity.x, hitbox.Y + velocity.y, hitbox.Width, hitbox.Height);
-
-            return Context.SolidEntities.All(e => e == this || !e.Intersects(tempHitbox));
-        }
-
-        private void MoveTillIntersect(double distance, Axis axis, HitBox target)
-        {
-            switch (axis)
-            {
-                case Axis.Horizontal:
-                    Move(new Vector
-                        { x = target.X - hitbox.X + (distance > 0 ? -hitbox.Width - 0.1 : target.Width + 0.1), y = 0 });
-                    return;
-
-                case Axis.Vertical:
-                    Move(new Vector
-                        { x = 0, y = target.Y - hitbox.Y + (distance >= 0 ? -hitbox.Height - 0.1 : target.Height + 0.1) });
-                    return;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
-            }
-        }
-
-        private void MoveInAxis(double distance, Axis axis)
-        {
-            if (Math.Abs(distance) < 1e-10) return;
-            var tempHitbox = new HitBox(hitbox,  axis, distance);
-
-            foreach (var e in Context.SolidEntities)
-                if (e != this && e.Intersects(tempHitbox))
-                {
-                    MoveTillIntersect(distance, axis, e.hitbox);
-                    if (e is Actor actor)
-                    {
-                        var d = distance > 0 ? -500 : 500;
-                        if (axis == Axis.Horizontal)
-                            d *= 500;
-                        else if (d < 0)
-                        {
-                            actor.Health -= 10;
-                        }
-
-                        velocity.SetAxis(axis, d);
-                    }
-                    else
-                        velocity.SetAxis(axis, 0);
-                    return;
-                }
-
-            Move(Vector.InAxis(distance, axis));
-        }
-
-        private void MoveHorizontal(double x)
-        {
-            MoveInAxis(x, Axis.Horizontal);
-        }
-
-        private void MoveVertical(double y)
-        {
-            MoveInAxis(y, Axis.Vertical);
-        }
-
-        /// <summary>
-        /// Проверяет, стоит ли актор на замле
-        /// </summary>
-        /// <returns></returns>
-        private bool FreeFromDown()
-            => MovementIsPossble(new Vector { x = 0, y = 3});
-
-        /// <summary>
         /// Побуждает актора к прыжку
         /// </summary>
         public void Jump()
-        {
-            if (Flight || !FreeFromDown())
-                velocity += new Vector { x = 0, y = -JumpHeight };
+        {// TODO проверки в Jump
+            body.Accelerate(new Vector { x = 0, y = -JumpHeight });
         }
 
         /// <summary>
         /// Если актор стоит на земле — прекращает его горизонтальное движение
         /// </summary>
         public void TryToStop()
-        {
-            if (!FreeFromDown())
-                velocity.x = 0;
+        {// TODO tryToStop
+            body.Movable = false;
         }
 
         public override void Tick(double deltaTime)
@@ -246,17 +131,8 @@ namespace Platformer.Entities
         /// <param name="deltaTime">Время, прошедшее с предыдущего тика</param>
         public void Move(double deltaTime)
         {
-            CutVelocity();
-
-            force -= velocity * 3;
-            force += Context.Gravity;
-            velocity += force * deltaTime;
-            var direction = velocity * deltaTime * 10;
-
-            MoveHorizontal(direction.x);
-            MoveVertical(direction.y);
-            
-            force = Vector.Zero();
+            //TODO костыль, парный для tryToStop
+            body.Movable = true;
         }
     }
 }

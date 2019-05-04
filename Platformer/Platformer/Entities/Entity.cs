@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Platformer.GUI;
+using Platformer.Physics;
 
 namespace Platformer.Entities
 {
@@ -15,10 +16,7 @@ namespace Platformer.Entities
         /// </summary>
         public double DrawPriority { get; set; }
 
-        /// <summary>
-        /// Область занимаемая сущностью
-        /// </summary>
-        public HitBox hitbox { get; set;  }
+        public Body body;
         
         /// <summary>
         /// Мир, в котором эта сущность расположена
@@ -27,7 +25,8 @@ namespace Platformer.Entities
         
         public System.Windows.Rect Hitbox()
         {
-            return new System.Windows.Rect(hitbox.X, hitbox.Y, hitbox.Width, hitbox.Height);
+            var hitbox = body.Recrtangle();
+            return new System.Windows.Rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         }
 
         public ITexture Texture { get; set; }
@@ -40,8 +39,8 @@ namespace Platformer.Entities
         public Entity(World context, HitBox hitbox)
         {
             Context = context;
-            this.hitbox = hitbox;
-            Texture = new Texture((int)Math.Round(this.hitbox.Width), (int)Math.Round(this.hitbox.Height));
+            body = new Body(new BoxCollider {x = hitbox.X, y = hitbox.Y, height = hitbox.Height, width = hitbox.Width });
+            Texture = new Texture((int)Math.Round(hitbox.Width), (int)Math.Round(hitbox.Height));
         }
 
         /// <summary>
@@ -51,37 +50,22 @@ namespace Platformer.Entities
         /// <param name="size"></param>
         public Entity(Vector size)
         {
-            hitbox = new HitBox(0, 0, size.x, size.y);
-            Texture = new Texture((int)Math.Round(hitbox.Width), (int)Math.Round(hitbox.Height));
+            body = new Body(new BoxCollider { x = 0, y = 0, height = size.y, width = size.x});
+            var hitbox = body.Recrtangle();
+            Texture = new Texture((int)Math.Round(hitbox.width), (int)Math.Round(hitbox.height));
         }
 
         /// <summary>
         /// Конструктор сущности по умолчанию
         /// </summary>
         public Entity() { }
-
-        /// <summary>
-        /// Проверяет, пересекается ли эта сущность с другой
-        /// </summary>
-        /// <param name="other">Другая сущность</param>
-        /// <returns></returns>
-        public bool Intersects(Entity other)
-            => hitbox.Intersects(other.hitbox);
-
-        /// <summary>
-        /// Проверяет, пересекается ли эта сущность с заданной оластью
-        /// </summary>
-        /// <param name="other">Область</param>
-        /// <returns></returns>
-        public bool Intersects(HitBox other)
-            => hitbox.Intersects(other);
-
+        
         /// <summary>
         /// Перемещает сущность по направлению вектора
         /// </summary>
         /// <param name="velocity">Вектор скорости</param>
         public void Move(Vector velocity)
-            => hitbox.Move(velocity);
+            => body.Move(velocity);
 
         public virtual void Tick(double deltaTime)
         {
@@ -94,7 +78,7 @@ namespace Platformer.Entities
         /// <param name="destination">Место, куда мы перемещаем объект</param>
         public void MoveTo(Vector destination)
         {
-            hitbox.MoveTo(destination);
+            body.MoveTo(destination);
         }
 
         public static Entity MakeEntity(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)

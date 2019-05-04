@@ -28,7 +28,7 @@ namespace Platformer.Physics
                     x = Max(Min(x, x + width), Min(box.x, box.x + box.width)),
                     y = Max(Min(y, y + height), Min(box.y, box.y + box.height)),
                     width = IntersectLines(x, x + width, box.x, box.x + box.width),
-                    height = IntersectLines(x, x + width, box.x, box.x + box.width)
+                    height = IntersectLines(y, y + height, box.y, box.y + box.height)
                 };
             else
                 throw new NotImplementedException("Неизвестный коллайдер " + collider.GetType().ToString());

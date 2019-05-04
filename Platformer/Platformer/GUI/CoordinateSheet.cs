@@ -35,9 +35,9 @@ namespace Platformer.GUI
             };
         }
 
-        public void ChangeScale(double newScale, HitBox playerLocation)
+        public void ChangeScale(double newScale, Vector playerLocation)
         {
-            var playerCoords = Coordinates * (-1) + playerLocation.Coordinates;
+            var playerCoords = Coordinates * (-1) + playerLocation;
             Coordinates = Coordinates + playerCoords * (newScale < Scale ? (1 - Scale / newScale) : Scale / newScale);
             Scale = newScale;
         }

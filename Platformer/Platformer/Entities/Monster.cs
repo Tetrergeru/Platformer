@@ -34,7 +34,7 @@
         }
 
         public override void Tick(double deltaTime)
-        {
+        {/*
             if (hitbox.Centre.DistanceTo(Context.Player.hitbox.Centre) < 300)
             {
                 Run(Context.Player.hitbox.Centre.x < hitbox.Centre.x ? Direction.Left : Direction.Right);
@@ -42,7 +42,7 @@
                 {
                     Jump();
                 }
-            }
+            }*/
 
             base.Tick(deltaTime);
         }

@@ -12,6 +12,8 @@ namespace Platformer
     /// </summary>
     internal class World
     {
+        public Physics.Physics physics = new Physics.Physics();
+
         public Color BackGroundColor { get; set; }
 
         public Vector Gravity { get; }
@@ -80,12 +82,13 @@ namespace Platformer
             Player = player;
             player.Context = this;
             player.MoveTo(coords);
+            physics.AddBody(player.body);
         }
 
         public void Tick(double deltaTime)
         {
             //Player.Tick(deltaTime);
-
+            physics.Tick(deltaTime);
             foreach (var x in AllEntities)
                 x.Tick(deltaTime);
         }

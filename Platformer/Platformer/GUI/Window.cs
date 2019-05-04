@@ -36,7 +36,8 @@ namespace Platformer.GUI
 
         public void ChangeScale(double delta)
         {
-            CoordSheet.ChangeScale(CoordSheet.Scale * delta, game.Player.hitbox);
+            var prect = game.Player.Hitbox();
+            CoordSheet.ChangeScale(CoordSheet.Scale * delta, new Vector { x = prect.X, y = prect.Y });
         }
 
         /// <summary>
@@ -144,7 +145,9 @@ namespace Platformer.GUI
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
             CoordSheet.SetSize(Width, Height);
-            CoordSheet.ChangeScale(Width / game.Player.Hitbox().Width / 50, game.Player.hitbox);
+
+            var prect = game.Player.Hitbox();
+            CoordSheet.ChangeScale(Width / game.Player.Hitbox().Width / 50, new Vector { x = prect.X, y = prect.Y });
         }
 
         private Vector lastMouseCoords = Vector.Zero();
