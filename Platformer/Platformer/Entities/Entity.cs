@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Platformer.GUI;
+﻿using Platformer.GUI;
+using System;
 
 namespace Platformer.Entities
 {
@@ -81,34 +79,6 @@ namespace Platformer.Entities
         public virtual void Tick(double deltaTime)
         {
             Texture.Tick(deltaTime);
-        }
-
-        public static Entity MakeEntity(World context, HitBox hitbox, Bitmap texture, FillType ft, double scale = 1)
-        {
-            var result = new Entity(context, hitbox);
-            result.Texture.AddTexture(texture, ft, scale);
-            return result;
-        }
-
-        public static Entity MakeEntity(World context, HitBox hitbox, List<Bitmap> texture, FillType ft, double delay,
-            double afterDelay, double scale = 1)
-        {
-            var result = new Entity(context, hitbox)
-            {
-                Texture = new TextureAnimated((int) hitbox.Width, (int) hitbox.Height, delay, afterDelay)
-            };
-            foreach (var t in texture)
-                result.Texture.AddTexture(t, ft, scale);
-            return result;
-        }
-
-        public static Entity MakeEntity(World context, HitBox hitbox, ITexture texture)
-        {
-            var result = new Entity(context, hitbox)
-            {
-                Texture = texture
-            };
-            return result;
         }
     }
 }

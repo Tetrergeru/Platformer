@@ -54,13 +54,13 @@ namespace Platformer.GUI
         /// <summary>
         /// Игра, привязанная к окну
         /// </summary>
-        private Game game;
+        private Game.Game game;
 
         /// <summary>
         /// Создаёт экземпляр окна, по переданной игре
         /// </summary>
         /// <param name="game"></param>
-        public Window(Game game)
+        public Window(Game.Game game)
         {
             this.game = game;
 

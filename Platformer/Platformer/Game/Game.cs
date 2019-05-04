@@ -8,16 +8,14 @@ using Platformer.Entities;
 using Platformer.GUI;
 using Timer = System.Timers.Timer;
 
-namespace Platformer
+namespace Platformer.Game
 {
     /// <summary>
     /// основной класс, управляющий игровой механикой
     /// </summary>
-    class Game
+    internal class Game : IGame
     {
         public HashSet<ControlActions> KeysPressed = new HashSet<ControlActions>();
-
-        private bool DrawDebug = false;
         
         /// <summary>
         /// Графическое окно, в котором отрисовывается игра
@@ -42,10 +40,10 @@ namespace Platformer
         /// <summary>
         /// Конструктор, инициализирующий игру параметрами по умолчанию
         /// </summary>
-        public Game()
+        public Game(ITimer timer)
         {
-            gameLoop = new Timer(TickTime);
-            gameLoop.Elapsed += Tick;
+            gameLoop = timer;
+            gameLoop.AddEvent(Tick);
 
             Player = new Player(new Vector { x = 30, y = 60}, this);
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
@@ -67,36 +65,30 @@ namespace Platformer
         /// <summary>
         /// Основной цикл игры
         /// </summary>
-        private Timer gameLoop;
+        private readonly ITimer gameLoop;
 
         /// <summary>
         /// Игровой тик
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Tick(object sender, ElapsedEventArgs e)
+        /// <param name="deltaTime"></param>
+        private void Tick(double deltaTime)
         {
             foreach (var x in KeysPressed)
                 OnControlTrigger(x);
-
-            world.Tick(TickTime / 1000.0);
-
-            window.AdjustBy(Player.Hitbox);
-
-            window.Clear(world.BackGroundColor);
-
-            window.Draw(world.AllEntities);
-
-            if (DrawDebug)
+            try
             {
-                foreach (var x in world.Decorations)
-                    window.Draw(Color.DarkGreen, x.Hitbox);
-                window.Draw(Color.Red, world.Player.Hitbox);
-                foreach (var x in world.Blocks)
-                    window.Draw(Color.Blue, x.Hitbox);
+                world.Tick(deltaTime);
+                window.AdjustBy(Player.Hitbox);
+                window.Clear(world.BackGroundColor);
+                window.Draw(world.AllEntities);
+                window.Flush();
             }
-
-            window.Flush();
+            catch
+            {
+                Console.WriteLine("Error");
+            }
         }
 
         /// <summary>
@@ -105,6 +97,16 @@ namespace Platformer
         public void Start()
         {
             gameLoop.Start();
+        }
+
+        public StateSnapshot GetStateSnapshot()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Action(string actionData)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -121,8 +123,7 @@ namespace Platformer
         }
 
         //==========================<o@o>==========================
-
-
+        
         public void OnControlTrigger(ControlActions action)
         {
             switch (action)
@@ -161,7 +162,6 @@ namespace Platformer
                 case ControlActions.Debug:
                 {
                     Player.Hitbox.MoveTo(new Vector {x = 0, y = 0});
-                    DrawDebug = !DrawDebug;
                     break;
                 }
                 case ControlActions.Fly:

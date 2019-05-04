@@ -8,7 +8,7 @@ namespace Platformer
     {
         static void Main(string[] args)
         {
-            var game = new Game();
+            var game = new Game.Game(new Game.Timer(10));
             var gameWindow = new Window(game);
             game.window = gameWindow;
             game.Start();

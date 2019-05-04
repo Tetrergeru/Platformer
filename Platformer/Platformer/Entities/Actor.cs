@@ -14,7 +14,9 @@ namespace Platformer.Entities
     class Actor : Entity
     {
         public double MaxHealth { get; protected set; }
+
         private double health;
+
         public double Health {
             get => health;
             protected set
