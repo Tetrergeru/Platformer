@@ -4,9 +4,12 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
+using System.Timers;
 using System.Windows.Forms;
 using Microsoft.Win32.SafeHandles;
 using Platformer.Entities;
+using Platformer.Game;
+using Timer = Platformer.Game.Timer;
 
 namespace Platformer.GUI
 {
@@ -38,7 +41,7 @@ namespace Platformer.GUI
 
         public void ChangeScale(double delta)
         {
-            CoordSheet.ChangeScale(CoordSheet.Scale * delta, game.Player.Hitbox);
+            CoordSheet.ChangeScale(CoordSheet.Scale * delta, game.GetStateSnapshot().player.body);
         }
 
         /// <summary>
@@ -54,13 +57,15 @@ namespace Platformer.GUI
         /// <summary>
         /// Игра, привязанная к окну
         /// </summary>
-        private Game.Game game;
+        private IGame game;
+
+        private System.Timers.Timer _timer;
 
         /// <summary>
         /// Создаёт экземпляр окна, по переданной игре
         /// </summary>
         /// <param name="game"></param>
-        public Window(Game.Game game)
+        public Window(IGame game)
         {
             this.game = game;
 
@@ -94,6 +99,25 @@ namespace Platformer.GUI
 
             _gameoverTool.LocationChanged += (o, e) => RealGameOver();
             Controls.Add(_gameoverTool);
+
+            _timer = new System.Timers.Timer(10);
+            _timer.Elapsed += Draw;
+            _timer.Start();
+        }
+
+        private void Draw(object sender, ElapsedEventArgs e)
+        {
+            var snapshot = game.GetStateSnapshot();
+
+            if (snapshot.gameIsOver)
+                GameOver();
+            else
+            {
+                AdjustBy(snapshot.player.body);
+                Clear(snapshot.currentBackgroundColor);
+                Draw(snapshot.entities);
+                Flush();
+            }
         }
 
         private readonly PictureBox _gameoverTool = new PictureBox();
@@ -106,6 +130,7 @@ namespace Platformer.GUI
         private void RealGameOver()
         {
             game.Stop();
+            _timer.Stop();
             Thread.Sleep(10);
             gameState = State.Pause;
             gameOver.ReceiveControl();
@@ -144,13 +169,13 @@ namespace Platformer.GUI
                 Pause();
             }
             else
-                game.KeysPressed.Add(GUI.Controls.ControlFromKey(e.KeyCode));
+                game.Action($"key_down {GUI.Controls.ControlFromKey(e.KeyCode)}");//.Add(GUI.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (gameState == State.Running)
-                game.KeysPressed.Remove(GUI.Controls.ControlFromKey(e.KeyCode));
+                game.Action($"key_up {GUI.Controls.ControlFromKey(e.KeyCode)}");
         }
 
         private void OnSizeChanged(object sender, EventArgs e)
@@ -161,7 +186,8 @@ namespace Platformer.GUI
             drawer.InterpolationMode = InterpolationMode.NearestNeighbor;
             drawer.PixelOffsetMode = PixelOffsetMode.Half;
             CoordSheet.SetSize(Width, Height);
-            CoordSheet.ChangeScale(Width / game.Player.Hitbox.Width / 50, game.Player.Hitbox);
+            var player = game.GetStateSnapshot().player.body;
+            CoordSheet.ChangeScale(Width / player.Width / 50, player);
         }
 
         private Vector lastMouseCoords = Vector.Zero();
@@ -218,14 +244,14 @@ namespace Platformer.GUI
             drawer.DrawRectangle(new Pen(color, 2), CoordSheet.Transform(hitbox));
         }
 
-        public void Draw(Entity entity)
+        public void Draw(GameObject entity)
         {
-            Draw(entity.Texture.Image, entity.Hitbox);
+            Draw(entity.texture.Image, entity.body);
         }
 
-        public void Draw(IEnumerable<Entity> entities)
+        public void Draw(IEnumerable<GameObject> entities)
         {
-            foreach (var entity in entities.OrderBy(e => e.DrawPriority))
+            foreach (var entity in entities.OrderBy(e => e.drawPriority))
             {
                 Draw(entity);
             }

@@ -3,40 +3,38 @@ using System.Linq;
 
 namespace Platformer.Entities
 {
-    enum Axis
+    public enum Axis
     {
         Horizontal, Vertical
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// "Актёр", "Действующее лицо", живая сущность, населяющая миры игры
     /// </summary>
-    class Actor : Entity
+    internal class Actor : Entity
     {
         public double MaxHealth { get; protected set; }
 
-        private double health;
+        private double _health;
 
         public double Health {
-            get => health;
+            get => _health;
             protected set
             {
                 if (value > MaxHealth)
-                    health = MaxHealth;
-                else if (value <= 0)
+                    _health = MaxHealth;
+                else if (value <= 0 && this is Monster monster)
                 {
-                    if (this is Monster monster)
+                    if (this is Monster)
                         Context.Enemies.Remove(monster);
-                    else if (this is Player player)
-                        player.GameOver();
+                    _health = value;
                 }
                 else
-                    health = value;
+                    _health = value;
             }
         }
-
-        public bool Flight;
-
+        
         /// <summary>
         /// Направления перемещения
         /// </summary>
@@ -49,19 +47,20 @@ namespace Platformer.Entities
         /// <summary>
         /// Верхняя граница скорости перемещения по горизонтали
         /// </summary>
-        protected double MaxHorizontalVelocity = 20 * 100;
+        protected double maxHorizontalVelocity = 20 * 100;
 
         /// <summary>
         /// Верхняя граница скорости перемещения по вертикали
         /// </summary>
-        protected double MaxVerticalVelocity = 20 * 100;
+        protected double maxVerticalVelocity = 20 * 100;
 
         /// <summary>
         /// Скорость перемещения
         /// (по умолчанию — нулевая)
         /// </summary>
-        public Vector velocity = Vector.Zero();
+        protected Vector velocity = Vector.Zero();
 
+        /// <inheritdoc />
         /// <summary>
         /// Создаёт экземпляр актора по контексту и занимаемой области
         /// </summary>
@@ -72,6 +71,7 @@ namespace Platformer.Entities
 
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Конструктор, создающий экземпляр актора по его размеру
         /// (нужен для того, чтобы можно было заготорвить актора до его непосредственного размещения в том или ином мире)
@@ -81,6 +81,7 @@ namespace Platformer.Entities
         {
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Конструктор актора по умолчанию
         /// </summary>
@@ -100,12 +101,12 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double RunningSpeed = 200;
+        protected double runningSpeed = 200;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        protected double JumpHeight = 200 * 9.8;
+        protected double jumpHeight = 200 * 9.8;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -113,10 +114,9 @@ namespace Platformer.Entities
         /// <param name="direction"></param>
         public void Run(Direction direction)
         {
-            if (direction == Direction.Right)
-                Pull(new Vector {x = RunningSpeed, y = 0,});
-            else
-                Pull(new Vector {x = -RunningSpeed, y = 0,});
+            Pull(direction == Direction.Right
+                ? new Vector {x = runningSpeed, y = 0,}
+                : new Vector {x = -runningSpeed, y = 0,});
         }
 
         /// <summary>
@@ -124,25 +124,25 @@ namespace Platformer.Entities
         /// </summary>
         private void CutVelocity()
         {
-            if (velocity.x > MaxHorizontalVelocity)
-                velocity.x = MaxHorizontalVelocity;
-            if (velocity.x < -MaxHorizontalVelocity)
-                velocity.x = -MaxHorizontalVelocity;
+            if (velocity.x > maxHorizontalVelocity)
+                velocity.x = maxHorizontalVelocity;
+            if (velocity.x < -maxHorizontalVelocity)
+                velocity.x = -maxHorizontalVelocity;
 
-            if (velocity.y > MaxVerticalVelocity)
-                velocity.y = MaxVerticalVelocity;
-            if (velocity.y < -MaxVerticalVelocity)
-                velocity.y = -MaxVerticalVelocity;
+            if (velocity.y > maxVerticalVelocity)
+                velocity.y = maxVerticalVelocity;
+            if (velocity.y < -maxVerticalVelocity)
+                velocity.y = -maxVerticalVelocity;
         }
 
         /// <summary>
         /// Проверяет, возможно ли переместиться в указанном направлении
         /// </summary>
-        /// <param name="velocity"></param>
+        /// <param name="plannedVelocity"></param>
         /// <returns></returns>
-        private bool MovementIsPossble(Vector velocity)
+        private bool MovementIsPossble(Vector plannedVelocity)
         {
-            var tempHitbox = new HitBox(Hitbox.X + velocity.x, Hitbox.Y + velocity.y, Hitbox.Width, Hitbox.Height);
+            var tempHitbox = new HitBox(Hitbox.X + plannedVelocity.x, Hitbox.Y + plannedVelocity.y, Hitbox.Width, Hitbox.Height);
 
             return Context.SolidEntities.All(e => e == this || !e.Intersects(tempHitbox));
         }
@@ -217,8 +217,8 @@ namespace Platformer.Entities
         /// </summary>
         public void Jump()
         {
-            if (Flight || !FreeFromDown())
-                velocity += new Vector { x = 0, y = -JumpHeight };
+            if (!FreeFromDown())
+                velocity += new Vector { x = 0, y = -jumpHeight };
         }
 
         /// <summary>

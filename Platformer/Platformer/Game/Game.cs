@@ -2,6 +2,7 @@
 using Platformer.Files;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Platformer.Entities;
@@ -15,13 +16,8 @@ namespace Platformer.Game
     /// </summary>
     internal class Game : IGame
     {
-        public HashSet<ControlActions> KeysPressed = new HashSet<ControlActions>();
+        public HashSet<ControlActions> KeysPressed { get; } = new HashSet<ControlActions>();
         
-        /// <summary>
-        /// Графическое окно, в котором отрисовывается игра
-        /// </summary>
-        public Window window;
-
         /// <summary>
         /// Игровой мир
         /// (Впоследствие будет перепилено в сторону динамического подгружения миров из файликов)
@@ -42,30 +38,24 @@ namespace Platformer.Game
         /// </summary>
         public Game(ITimer timer)
         {
-            gameLoop = timer;
-            gameLoop.AddEvent(Tick);
+            _gameLoop = timer;
+            _gameLoop.AddEvent(Tick);
 
-            Player = new Player(new Vector { x = 30, y = 60}, this);
+            Player = new Player(new Vector { x = 30, y = 60});
             Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
             Player.DrawPriority = 10;
 
             world = WorldFile.GetWorld("Resources/Worlds/simple_world.world");
             world.SetPlayer(Player, new Vector { x = 0, y = 0 });
-            
-            //grassImg = ;
+            UpdateState();
         }
 
         //============    Работа с игровым временем    ============
-
-        /// <summary>
-        /// Интервал таймера, вызывающего тики игры
-        /// </summary>
-        private const int TickTime = 20;
-
+        
         /// <summary>
         /// Основной цикл игры
         /// </summary>
-        private readonly ITimer gameLoop;
+        private readonly ITimer _gameLoop;
 
         /// <summary>
         /// Игровой тик
@@ -77,53 +67,75 @@ namespace Platformer.Game
         {
             foreach (var x in KeysPressed)
                 OnControlTrigger(x);
-            try
-            {
-                world.Tick(deltaTime);
-                window.AdjustBy(Player.Hitbox);
-                window.Clear(world.BackGroundColor);
-                window.Draw(world.AllEntities);
-                window.Flush();
-            }
-            catch
-            {
-                Console.WriteLine("Error");
-            }
+
+            UpdateState();
+            
+            world.Tick(deltaTime);
         }
 
         /// <summary>
         /// Начинает основной цикл игры
         /// </summary>
         public void Start()
-        {
-            gameLoop.Start();
-        }
-
-        public StateSnapshot GetStateSnapshot()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Action(string actionData)
-        {
-            throw new NotImplementedException();
-        }
-
+            => _gameLoop.Start();
+        
         /// <summary>
         /// Останавливает основной цикл игры
         /// </summary>
         public void Stop()
         {
-            gameLoop.Stop();
+            _gameLoop.Stop();
         }
         
-        public void GameOver()
+        //==========================<o@o>==========================
+
+        private StateSnapshot _currentState;
+
+        public void UpdateState()
         {
-            window.GameOver();
+            _currentState = new StateSnapshot
+                {
+                    player = new GameObject
+                    {
+                        body = Player.Hitbox,
+                        texture = Player.Texture,
+                        drawPriority = Player.DrawPriority
+                    },
+                    entities = world
+                        .AllEntities
+                        .Select(e => new GameObject{body = e.Hitbox, texture = e.Texture,drawPriority = e.DrawPriority})
+                        .ToList(),
+                    gameIsOver = Player.Health <= 0,
+                    currentBackgroundColor = world.BackGroundColor,
+            };
+            
         }
 
-        //==========================<o@o>==========================
-        
+        public StateSnapshot GetStateSnapshot()
+        {
+            return _currentState;
+        }
+
+        public void Action(string action)
+        {
+            var actionData = action.Split(' ');
+            switch (actionData[0])
+            {
+                case "key_down":
+                {
+                    Enum.TryParse<ControlActions>(actionData[1], true, out var result);
+                    KeysPressed.Add(result);
+                    break;
+                }
+                case "key_up":
+                {
+                    Enum.TryParse<ControlActions>(actionData[1], true, out var result);
+                    KeysPressed.Remove(result);
+                    break;
+                }
+            }
+        }
+
         public void OnControlTrigger(ControlActions action)
         {
             switch (action)
@@ -151,7 +163,7 @@ namespace Platformer.Game
                 case ControlActions.StopTime:
                 {
                     Stop();
-                    window.Pause();
+                    //window.Pause();
                     break;
                 }
                 case ControlActions.RunTime:
@@ -167,18 +179,18 @@ namespace Platformer.Game
                 case ControlActions.Fly:
                 {
                     Stop();
-                    GameOver();
+                    //window.GameOver();
                     //Player.Flight = !Player.Flight;
                     break;
                 }
                 case ControlActions.ScaleMinus:
                 {
-                    window.ChangeScale(0.9);
+                    //window.ChangeScale(0.9);
                     break;
                 }
                 case ControlActions.ScalePlus:
                 {
-                    window.ChangeScale(10 / 9.0);
+                    //window.ChangeScale(10 / 9.0);
                     break;
                 }
             }

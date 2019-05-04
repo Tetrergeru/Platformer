@@ -8,7 +8,7 @@ namespace Platformer
     /// <summary>
     /// Область, занимаемая игровой сущностью
     /// </summary>
-    class HitBox
+    public class HitBox
     {
         /// <summary>
         /// Сама область в виде прямоугольника

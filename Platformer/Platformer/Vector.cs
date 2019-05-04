@@ -6,7 +6,7 @@ namespace Platformer
     /// <summary>
     /// Геометрический вектор двухмерного пространства
     /// </summary>
-    struct Vector
+    public struct Vector
     {
         /// <summary>
         /// Координата X

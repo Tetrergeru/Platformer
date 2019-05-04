@@ -12,8 +12,8 @@
         {
             MaxHealth = 50;
             Health = MaxHealth;
-            JumpHeight = 150 * 9.8;
-            RunningSpeed = 150;
+            jumpHeight = 150 * 9.8;
+            runningSpeed = 150;
         }
 
         /// <inheritdoc />
@@ -24,7 +24,7 @@
         /// <param name="size"></param>
         public Monster(Vector size) : base(size)
         {
-            JumpHeight = 100 * 9.8;
+            jumpHeight = 100 * 9.8;
         }
 
         /// <inheritdoc />
@@ -33,7 +33,7 @@
         /// </summary>
         public Monster()
         {
-            JumpHeight = 100 * 9.8;
+            jumpHeight = 100 * 9.8;
         }
 
         public override void Tick(double deltaTime)

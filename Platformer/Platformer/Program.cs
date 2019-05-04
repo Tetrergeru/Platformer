@@ -10,7 +10,6 @@ namespace Platformer
         {
             var game = new Game.Game(new Game.Timer(10));
             var gameWindow = new Window(game);
-            game.window = gameWindow;
             game.Start();
             Application.Run(gameWindow);
         }
