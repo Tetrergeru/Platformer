@@ -50,10 +50,9 @@ namespace Platformer.Files
             return result;
         }
 
-        public static ITexture GetTexture(string fname, int width = -1, int height = -1)
+        public static ITexture GetTexture(string fname)
         {
-            var data = Interpreter.Interpret(fname,
-                new Dictionary<string, object> {{"width", width}, {"height", height}});
+            var data = Interpreter.Interpret(fname);
 
             if (data.GetString("type") == "TextureAnimated")
                 return GetTextureAnimated(data);

@@ -14,7 +14,7 @@ namespace Platformer.Files
             var entity = new Entity(new Vector {x = width, y = height})
             {
                 Context = context,
-                Texture = TextureFile.GetTexture(data.GetString("texture"), width, height)
+                Texture = TextureFile.GetTexture(data.GetString("texture"))
             };
             return entity;
         }

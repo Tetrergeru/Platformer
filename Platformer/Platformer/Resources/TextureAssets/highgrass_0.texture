@@ -1,8 +1,7 @@
 ﻿type = 'TextureAnimated'
 
-w_h = width / height
 height = 10
-width = 10 * w_h
+width = 50
 
 delay = 0.5
 delay_after = 0

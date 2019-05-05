@@ -1,3 +1,7 @@
 ﻿type = 'Texture'
 
+
+width = 20
+height = 20
+
 sprite = ['Resources/Textures/slime_0.png', 'Stretch']
