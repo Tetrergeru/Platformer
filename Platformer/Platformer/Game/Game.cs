@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace Platformer.Game
 {
+    public enum ControlActions { None, Jump, Right, Left, Stop, StopTime, RunTime, Debug, Fly, ScalePlus, ScaleMinus };
+
     /// <summary>
     /// основной класс, управляющий игровой механикой
     /// </summary>

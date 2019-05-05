@@ -69,24 +69,7 @@ namespace Platformer
                 x = vector.x * mutiplier,
                 y = vector.y * mutiplier,
             };
-
-        public void SetAxis(Axis axis, double value)
-        {
-            switch (axis)
-            {
-                case Axis.Vertical:
-                    y = value;
-                    return;
-
-                case Axis.Horizontal:
-                    x = value;
-                    return;
-
-                default:
-                    return;
-            }
-        }
-
+        
         public bool IsZero()
         {
             return Math.Abs(x) < 1e-10 && Math.Abs(y) < 1e-10;
@@ -98,13 +81,5 @@ namespace Platformer
         /// <returns></returns>
         public static Vector Zero()
             => new Vector { x = 0, y = 0 };
-
-        public static Vector InAxis(double distance, Axis axis)
-        {
-            if (axis == Axis.Horizontal)
-                return new Vector{x = distance, y = 0};
-
-            return axis == Axis.Vertical ? new Vector {x = 0, y = distance} : new Vector();
-        }
     }
 }

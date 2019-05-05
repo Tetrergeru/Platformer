@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Platformer.Game;
 
 namespace Platformer.GUI
 {
-    public enum ControlActions { None, Jump, Right, Left, Stop, StopTime, RunTime, Debug, Fly, ScalePlus, ScaleMinus };
-
     public static class Controls
     {
         public static readonly Dictionary<Keys, ControlActions> KeyToControl = new Dictionary<Keys, ControlActions>

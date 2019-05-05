@@ -176,24 +176,25 @@ namespace Platformer.Entities
                 if (e != this && e.Intersects(tempHitbox))
                 {
                     MoveTillIntersect(distance, axis, e.Hitbox);
+                    var d = 0;
                     if (e is Actor actor)
                     {
-                        var d = distance > 0 ? -500 : 500;
+                         d = distance > 0 ? -500 : 500;
                         if (axis == Axis.Horizontal)
                             d *= 500;
                         else if (d < 0)
-                        {
                             actor.Health -= 10;
-                        }
-
-                        velocity.SetAxis(axis, d);
                     }
+
+                    if (axis == Axis.Horizontal)
+                        velocity.x = d;
                     else
-                        velocity.SetAxis(axis, 0);
+                        velocity.y = d;
+                    
                     return;
                 }
 
-            Move(Vector.InAxis(distance, axis));
+            Move(axis == Axis.Horizontal ? new Vector {x = distance} : new Vector {y = distance});
         }
 
         private void MoveHorizontal(double x)
