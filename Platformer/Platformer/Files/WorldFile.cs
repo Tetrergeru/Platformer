@@ -31,10 +31,6 @@ namespace Platformer.Files
             foreach (var entity in data.GetList("decorations"))
                 world.Decorations.Add(GetEntity(entity, world));
 			
-			foreach (var entity in world.SolidEntities)
-                if(entity != world.Player)
-                    world.physics.AddBody(entity.body);
-			
             return world;
         }
     }

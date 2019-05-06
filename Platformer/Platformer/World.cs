@@ -12,7 +12,7 @@ namespace Platformer
     /// </summary>
     internal class World
     {
-        public Physics.Physics physics = new Physics.Physics();
+        public Physics.IPhysics physics = new Physics.Physics();
 
         public Color BackGroundColor { get; set; }
 
@@ -82,7 +82,6 @@ namespace Platformer
             Player = player;
             player.Context = this;
             player.MoveTo(coords);
-            physics.AddBody(player.body);
         }
 
         public void Tick(double deltaTime)

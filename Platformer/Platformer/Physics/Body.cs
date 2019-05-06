@@ -7,7 +7,7 @@ using static System.Math;
 
 namespace Platformer.Physics
 {
-    class Body
+    class Body : IBody
     {
         ICollider collider;
 

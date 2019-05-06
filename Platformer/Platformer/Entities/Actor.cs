@@ -51,6 +51,7 @@ namespace Platformer.Entities
         /// <param name="hitbox">Занимаемая область</param>
         public Actor(World context, HitBox hitbox) : base(context, hitbox)
         {
+            movable = true;
             body.Movable = true;
         }
 
@@ -61,7 +62,7 @@ namespace Platformer.Entities
         /// <param name="size">Размер актора</param>
         public Actor(Vector size) : base(size)
         {
-            body.Movable = true;
+            movable = true;
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace Platformer.Entities
         /// </summary>
         public Actor()
         {
-            body.Movable = true;
+            movable = true;
         }
 
         /// <summary>

@@ -16,13 +16,27 @@ namespace Platformer.Entities
         /// </summary>
         public double DrawPriority { get; set; }
 
-        public Body body;
-        
+        public IBody body;
+        public ICollider collider;
+        protected bool movable = false;
+
         /// <summary>
         /// Мир, в котором эта сущность расположена
         /// </summary>
-        public World Context { get; set; }
-        
+        private World _context;
+        public World Context
+        {
+            get { return _context; }
+            set
+            {
+                if (body != null && _context != null)
+                    _context.physics.RemoveBody(body);
+                _context = value;
+                body = _context.physics.CreateBody(collider, movable);
+                var hitbox = body.Recrtangle();
+            }
+        }
+
         public System.Windows.Rect Hitbox()
         {
             var hitbox = body.Recrtangle();
@@ -38,8 +52,8 @@ namespace Platformer.Entities
         /// <param name="hitbox"></param>
         public Entity(World context, HitBox hitbox)
         {
+            collider = new BoxCollider {x = hitbox.X, y = hitbox.Y, height = hitbox.Height, width = hitbox.Width };
             Context = context;
-            body = new Body(new BoxCollider {x = hitbox.X, y = hitbox.Y, height = hitbox.Height, width = hitbox.Width });
             Texture = new Texture((int)Math.Round(hitbox.Width), (int)Math.Round(hitbox.Height));
         }
 
@@ -50,9 +64,8 @@ namespace Platformer.Entities
         /// <param name="size"></param>
         public Entity(Vector size)
         {
-            body = new Body(new BoxCollider { x = 0, y = 0, height = size.y, width = size.x});
-            var hitbox = body.Recrtangle();
-            Texture = new Texture((int)Math.Round(hitbox.width), (int)Math.Round(hitbox.height));
+            collider = new BoxCollider { x = 0, y = 0, height = size.y, width = size.x};
+            Texture = new Texture((int)Math.Round(size.x), (int)Math.Round(size.y));
         }
 
         /// <summary>

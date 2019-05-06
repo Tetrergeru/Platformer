@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Platformer.Physics
 {
-    class Physics
+    class Physics : IPhysics
     {
         List<Body> Bodies = new List<Body>();
         double Gravity = 9.8 * 100000;
@@ -26,16 +26,18 @@ namespace Platformer.Physics
                 body.Tick(deltaTime);
         }
 
-        public void RemoveBody(Body body)
+        public IBody CreateBody(ICollider collider, bool movable = false)
         {
-            Bodies.Remove(body);
+            Body body = new Body(collider, movable);
+            Bodies.Add(body);
+            return body;
         }
 
-        public void AddBody(Body body)
+        public bool RemoveBody(IBody body)
         {
-            if (Bodies.Contains(body))
-                return;
-            Bodies.Add(body);
+            if (body is Body b)
+                return Bodies.Remove(b);
+            return false;
         }
     }
 }
