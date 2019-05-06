@@ -129,7 +129,7 @@ namespace Platformer.Game
             }
         }
 
-        public void OnControlTrigger(ControlActions action)
+        private void OnControlTrigger(ControlActions action)
         {
             switch (action)
             {

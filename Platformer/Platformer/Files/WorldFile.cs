@@ -27,10 +27,10 @@ namespace Platformer.Files
             world.BackGroundColor = Color.FromArgb(color[0].GetInt(), color[1].GetInt(), color[2].GetInt());
 
             foreach (var entity in data.GetList("blocks"))
-                world.Blocks.Add(GetEntity(entity, world));
+                world.AddSolidEntity(GetEntity(entity, world));
 
             foreach (var entity in data.GetList("decorations"))
-                world.Decorations.Add(GetEntity(entity, world));
+                world.AddDecoration(GetEntity(entity, world));
 
             return world;
         }

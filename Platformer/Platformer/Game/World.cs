@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom;
+using System.Collections.Generic;
 using System.Drawing;
 using Platformer.Entities;
 using Platformer.Files;
@@ -22,11 +23,11 @@ namespace Platformer.Game
         /// <summary>
         /// Твёрдые объекты, структура мира...
         /// </summary>
-        public List<Entity> Blocks { get; } = new List<Entity>();
+        private List<Entity> Blocks { get; } = new List<Entity>();
 
-        public List<Entity> Decorations { get; } = new List<Entity>();
+        private List<Entity> Decorations { get; } = new List<Entity>();
 
-        public HashSet<Monster> Enemies { get; } = new HashSet<Monster>();
+        private HashSet<Monster> Enemies { get; } = new HashSet<Monster>();
 
         public IEnumerable<Entity> AllEntities
         {
@@ -78,6 +79,30 @@ namespace Platformer.Game
             Player = player;
             player.Context = this;
             player.Hitbox.MoveTo(coords);
+        }
+
+        public void AddSolidEntity(Entity entity)
+        {
+            Blocks.Add(entity);
+        }
+
+        public void AddDecoration(Entity entity)
+        {
+            Decorations.Add(entity);
+        }
+
+        public void AddMonster(Monster monster)
+        {
+            Enemies.Add(monster);
+        }
+
+        public void RemoveEntity(Entity entity)
+        {
+            if (entity is Monster monster)
+                Enemies.Remove(monster);
+            if (Blocks.Contains(entity))
+                Blocks.Remove(entity);
+            Decorations.Remove(entity);
         }
 
         public void Tick(double deltaTime)

@@ -28,7 +28,7 @@ namespace Platformer.Entities
                 else if (value <= 0 && this is Monster monster)
                 {
                     if (this is Monster)
-                        Context.Enemies.Remove(monster);
+                        Context.RemoveEntity(monster);
                     _health = value;
                 }
                 else
