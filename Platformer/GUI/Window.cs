@@ -11,59 +11,51 @@ using GUI.Textures;
 using Platformer;
 using Platformer.Game;
 using Menu = GUI.Menus.Menu;
+using Timer = System.Timers.Timer;
 
 namespace GUI
 {
     public enum State
     {
         Running,
-        Pause,
+        Pause
     }
 
     /// <summary>
-    /// Форма, на кторой происходит отрисовка игрового мира
+    ///     Форма, на кторой происходит отрисовка игрового мира
     /// </summary>
-    class Window : Form
+    internal class Window : Form
     {
-        public PictureBox screen;
-
-        private State gameState = State.Running;
-
-        public Stack<Menu> MenuStack { get; } = new Stack<Menu>();
-
-        public MenuPause pause { get; }
-
-        public MenuChangeControls ChangeControls { get; }
-
-        public MenuGameOver gameOver { get; }
-
-        private CoordinateSheet CoordSheet { get; }
-
-        public void ChangeScale(double delta)
-        {
-            CoordSheet.ChangeScale(CoordSheet.Scale * delta, _game.GetStateSnapshot().player.body);
-        }
-
         /// <summary>
-        /// Картинка, куда мы будем рисовать все необходимые изображения, перед тем, как отобразить всё на экране
-        /// </summary>
-        private Bitmap pict;
-
-        /// <summary>
-        /// Поверхность для рисование на картинке
-        /// </summary>
-        private Graphics drawer;
-
-        /// <summary>
-        /// Игра, привязанная к окну
+        ///     Игра, привязанная к окну
         /// </summary>
         private readonly IGame _game;
 
-        private readonly System.Timers.Timer _timer;
+        private readonly PictureBox _gameoverTool = new PictureBox();
+
+        private readonly Dictionary<string, ITexture> _textures = new Dictionary<string, ITexture>();
+
+        private readonly Timer _timer;
+
+        private Vector _lastMouseCoords = Vector.Zero();
+
+        /// <summary>
+        ///     Поверхность для рисование на картинке
+        /// </summary>
+        private Graphics drawer;
+
+        private State gameState = State.Running;
+
+        /// <summary>
+        ///     Картинка, куда мы будем рисовать все необходимые изображения, перед тем, как отобразить всё на экране
+        /// </summary>
+        private Bitmap pict;
+
+        public PictureBox screen;
 
         /// <inheritdoc />
         /// <summary>
-        /// Создаёт экземпляр окна, по переданной игре
+        ///     Создаёт экземпляр окна, по переданной игре
         /// </summary>
         /// <param name="game"></param>
         public Window(IGame game)
@@ -85,7 +77,7 @@ namespace GUI
                 Width = Width,
                 Height = Height,
                 Left = 0,
-                Top = 0,
+                Top = 0
             };
             Controls.Add(screen);
 
@@ -101,7 +93,7 @@ namespace GUI
             _gameoverTool.LocationChanged += (o, e) => RealGameOver();
             Controls.Add(_gameoverTool);
 
-            _timer = new System.Timers.Timer(20);
+            _timer = new Timer(20);
             _timer.Elapsed += (o, e) =>
             {
                 foreach (var texture in _textures)
@@ -110,14 +102,31 @@ namespace GUI
             _timer.Elapsed += Draw;
             _timer.Start();
 
-            MouseWheel += (o,e) => ChangeScale(e.Delta < 0 ? 0.9 : 10.0 / 9);
+            MouseWheel += (o, e) => ChangeScale(e.Delta < 0 ? 0.9 : 10.0 / 9);
         }
-        
+
+        public Stack<Menu> MenuStack { get; } = new Stack<Menu>();
+
+        public MenuPause pause { get; }
+
+        public MenuChangeControls ChangeControls { get; }
+
+        public MenuGameOver gameOver { get; }
+
+        private CoordinateSheet CoordSheet { get; }
+
+        public void ChangeScale(double delta)
+        {
+            CoordSheet.ChangeScale(CoordSheet.Scale * delta, _game.GetStateSnapshot().player.body);
+        }
+
         private void Draw(object sender, ElapsedEventArgs e)
         {
             var snapshot = _game.GetStateSnapshot();
             if (snapshot.gameIsOver)
+            {
                 GameOver();
+            }
             else
             {
                 if (gameState != State.Running)
@@ -129,9 +138,10 @@ namespace GUI
             }
         }
 
-        private readonly PictureBox _gameoverTool = new PictureBox();
-
-        public void GameOver() => _gameoverTool.Left++;
+        public void GameOver()
+        {
+            _gameoverTool.Left++;
+        }
 
         private void RealGameOver()
         {
@@ -146,7 +156,7 @@ namespace GUI
         {
             CheckForIllegalCrossThreadCalls = false;
         }
-        
+
         public void Pause()
         {
             _game.Stop();
@@ -154,7 +164,7 @@ namespace GUI
             gameState = State.Pause;
             pause.ReceiveControl();
         }
-        
+
         public void Continue()
         {
             gameState = State.Running;
@@ -162,20 +172,19 @@ namespace GUI
         }
 
         /// <summary>
-        /// Обрабатывает нажатие клавиши на клавиатуре
+        ///     Обрабатывает нажатие клавиши на клавиатуре
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (gameState != State.Running) return;
-            
-            if (ControlActions.StopTime == global::GUI.Controls.ControlFromKey(e.KeyCode))
-            {
+
+            if (ControlActions.StopTime == GUI.Controls.ControlFromKey(e.KeyCode))
                 Pause();
-            }
             else
-                _game.Action($"key_down {GUI.Controls.ControlFromKey(e.KeyCode)}");//.Add(GUI.Controls.ControlFromKey(e.KeyCode));
+                _game.Action(
+                    $"key_down {GUI.Controls.ControlFromKey(e.KeyCode)}"); //.Add(GUI.Controls.ControlFromKey(e.KeyCode));
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
@@ -196,8 +205,6 @@ namespace GUI
             CoordSheet.ChangeScale(Width / player.Width / 50, player);
         }
 
-        private Vector _lastMouseCoords = Vector.Zero();
-
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (gameState == State.Pause)
@@ -210,7 +217,7 @@ namespace GUI
             }
             else if (e.Button == MouseButtons.Left)
             {
-                CoordSheet.Move(_lastMouseCoords + new Vector{x = e.X, y = e.Y} * (-1));
+                CoordSheet.Move(_lastMouseCoords + new Vector {x = e.X, y = e.Y} * -1);
                 _lastMouseCoords.x = e.X;
                 _lastMouseCoords.y = e.Y;
             }
@@ -222,7 +229,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// Очищает картинку
+        ///     Очищает картинку
         /// </summary>
         public void Clear(Color color)
         {
@@ -230,7 +237,7 @@ namespace GUI
         }
 
         /// <summary>
-        /// Рисует на картинке данное изображение в данном прямоугольнике
+        ///     Рисует на картинке данное изображение в данном прямоугольнике
         /// </summary>
         /// <param name="image"></param>
         /// <param name="rectangle"></param>
@@ -239,8 +246,6 @@ namespace GUI
             if (gameState == State.Running)
                 drawer.DrawImage(image, CoordSheet.Transform(rectangle));
         }
-
-        private readonly Dictionary<string, global::GUI.Textures.ITexture> _textures = new Dictionary<string, global::GUI.Textures.ITexture>();
 
         public void Draw(GameObject entity)
         {
@@ -256,22 +261,24 @@ namespace GUI
         {
             foreach (var entity in entities.OrderBy(e => e.drawPriority))
             {
-                if(!_textures.ContainsKey(entity.texture))
+                if (!_textures.ContainsKey(entity.texture))
                     LoadTexture(entity.texture);
                 Draw(entity);
             }
         }
 
         /// <summary>
-        /// Переносит содержимое картинки на экран
+        ///     Переносит содержимое картинки на экран
         /// </summary>
         public void Flush()
         {
             //var screen = CreateGraphics();
-            screen.Image = pict;//(pict, 0, 0);
+            screen.Image = pict; //(pict, 0, 0);
         }
 
         public void AdjustBy(IRectangle rectangle)
-            => CoordSheet.AdjustBy(rectangle);
+        {
+            CoordSheet.AdjustBy(rectangle);
+        }
     }
 }

@@ -4,11 +4,20 @@ using System.Drawing;
 
 namespace GUI.Textures
 {
-    public class TextureAnimated : global::GUI.Textures.ITexture
+    public class TextureAnimated : ITexture
     {
         private double _timer;
 
         public double timerDelay, afterAnimationDelay;
+
+        public TextureAnimated(int w, int h, double delay, double afterDelay)
+        {
+            Images = new List<Bitmap>();
+            Width = w;
+            Height = h;
+            timerDelay = delay;
+            afterAnimationDelay = afterDelay;
+        }
 
         private List<Bitmap> Images { get; }
 
@@ -17,7 +26,7 @@ namespace GUI.Textures
             get
             {
                 if (Images.Count * timerDelay > _timer)
-                    return Images[(int)Math.Ceiling(_timer / timerDelay) % Images.Count];
+                    return Images[(int) Math.Ceiling(_timer / timerDelay) % Images.Count];
 
                 if (Images.Count * timerDelay + afterAnimationDelay < _timer)
                     _timer = 0;
@@ -30,21 +39,12 @@ namespace GUI.Textures
 
         public int Height { get; }
 
-        public TextureAnimated(int w, int h, double delay, double afterDelay)
-        {
-            Images = new List<Bitmap>();
-            Width = w;
-            Height = h;
-            timerDelay = delay;
-            afterAnimationDelay = afterDelay;
-        }
-
         public void Tick(double deltaTime)
         {
             _timer += deltaTime;
         }
 
-        public void AddTexture(Bitmap picture, global::GUI.Textures.FillType ft, double scale = 1)
+        public void AddTexture(Bitmap picture, FillType ft, double scale = 1)
         {
             var image = new Bitmap(Width, Height);
             Texture.DrawTexture(image, picture, ft, scale);

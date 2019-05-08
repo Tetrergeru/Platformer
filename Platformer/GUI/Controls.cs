@@ -9,20 +9,20 @@ namespace GUI
     {
         public static readonly Dictionary<Keys, ControlActions> KeyToControl = new Dictionary<Keys, ControlActions>
         {
-            { Keys.W, ControlActions.Jump },
+            {Keys.W, ControlActions.Jump},
 
-            { Keys.D, ControlActions.Right },
+            {Keys.D, ControlActions.Right},
 
-            { Keys.A, ControlActions.Left },
+            {Keys.A, ControlActions.Left},
 
-            { Keys.S, ControlActions.Stop },
+            {Keys.S, ControlActions.Stop},
 
-            { Keys.Z, ControlActions.StopTime },
-            { Keys.X, ControlActions.RunTime },
-            { Keys.P, ControlActions.Debug },
-            { Keys.F, ControlActions.Fly },
-            { Keys.I, ControlActions.ScalePlus },
-            { Keys.K, ControlActions.ScaleMinus },
+            {Keys.Z, ControlActions.StopTime},
+            {Keys.X, ControlActions.RunTime},
+            {Keys.P, ControlActions.Debug},
+            {Keys.F, ControlActions.Fly},
+            {Keys.I, ControlActions.ScalePlus},
+            {Keys.K, ControlActions.ScaleMinus}
         };
 
         public static ControlActions ControlFromKey(Keys key)

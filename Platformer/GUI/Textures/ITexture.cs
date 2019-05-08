@@ -2,7 +2,12 @@
 
 namespace GUI.Textures
 {
-    public enum FillType { Repeat, Stretch, StretchDown };
+    public enum FillType
+    {
+        Repeat,
+        Stretch,
+        StretchDown
+    }
 
     public interface ITexture
     {

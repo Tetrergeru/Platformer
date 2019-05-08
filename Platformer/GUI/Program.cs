@@ -2,9 +2,9 @@
 
 namespace GUI
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var game = Platformer.Platformer.CreateGame();
             var gameWindow = new Window(game);

@@ -13,12 +13,12 @@ namespace GUI.Textures
             var h = data.GetInt("height");
             var delay = data.GetDouble("delay");
             var delayAfter = data.GetDouble("delay_after");
-            var result = new TextureAnimated(w,h,delay, delayAfter);
+            var result = new TextureAnimated(w, h, delay, delayAfter);
             foreach (var sprite in data.GetList("sprites"))
             {
                 var s = sprite.GetList();
                 var picture = new Bitmap(s[0].GetString());
-                var ft = (FillType)Enum.Parse(typeof(FillType), s[1].GetString());
+                var ft = (FillType) Enum.Parse(typeof(FillType), s[1].GetString());
                 var scale = s.Count > 2 ? s[2].GetDouble() : 1;
                 result.AddTexture(picture, ft, scale);
             }

@@ -5,11 +5,11 @@ namespace GUI.Menus
 {
     internal class MenuGameOver : Menu
     {
-        private global::GUI.Button GameOverButton;
+        private global::GUI.Menus.Button GameOverButton;
 
         public MenuGameOver(Window owner) : base(owner)
         {
-            GameOverButton = new global::GUI.Button(200, 50)
+            GameOverButton = new global::GUI.Menus.Button(200, 50)
             {
                 Location = new Point((owner.Width - 200) / 2, 20)
             };
