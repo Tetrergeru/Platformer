@@ -85,7 +85,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double RunningSpeed = 1000000;
+        protected double RunningSpeed = 100000000;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке

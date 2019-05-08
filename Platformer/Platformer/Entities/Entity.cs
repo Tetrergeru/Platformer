@@ -33,7 +33,6 @@ namespace Platformer.Entities
                     _context.physics.RemoveBody(body);
                 _context = value;
                 body = _context.physics.CreateBody(collider, movable);
-                var hitbox = body.Recrtangle();
             }
         }
 

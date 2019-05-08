@@ -9,7 +9,7 @@ namespace Platformer.Physics
     class Physics : IPhysics
     {
         List<Body> Bodies = new List<Body>();
-        double Gravity = 9.8 * 100000;
+        double Gravity = 9.8 * 100;
 
         public void Tick(double deltaTime)
         {
@@ -19,7 +19,7 @@ namespace Platformer.Physics
                     Bodies[i].CollisionWith(Bodies[j]);
                
                 if (Bodies[i].Movable)
-                    Bodies[i].Pull(new Vector { x = 0, y = Gravity });
+                    Bodies[i].Pull(new Vector { x = 0, y = Gravity } * Bodies[i].Mass);
             }
 
             foreach (Body body in Bodies)

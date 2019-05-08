@@ -14,7 +14,7 @@ namespace Platformer.Physics
         Vector force = Vector.Zero();
         Vector velocity = Vector.Zero();
         double slowdown;
-        private double density = 1;
+        private double density = 100;
         public bool Movable { get; set; }
 
         public Body(ICollider collider, bool movable = false)
@@ -65,9 +65,9 @@ namespace Platformer.Physics
                 dist.y = Sign(dist.y);
                 Vector force;
                 if(box.width > box.height)
-                    force = dist * new Vector { x = 0, y = box.height } * 10000000;
+                    force = dist * new Vector { x = 0, y = box.height } * 1000000000;
                 else
-                    force = dist * new Vector { x = box.width, y = 0 } * 10000000;
+                    force = dist * new Vector { x = box.width, y = 0 } * 1000000000;
 
                 slowdown += box.Volume() / collider.Volume();
                 target.slowdown += box.Volume() / target.collider.Volume();
@@ -105,7 +105,7 @@ namespace Platformer.Physics
             if (k < 0)
                 velocity = Vector.Zero();
             else
-                velocity = velocity * Pow(k , deltaTime * 100);
+                velocity = velocity * Pow(k , deltaTime * 1000);
             Move(velocity * deltaTime);
 
             slowdown = 0;
