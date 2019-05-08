@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace GUI
+namespace GUI.Textures
 {
     public enum FillType { Repeat, Stretch, StretchDown };
 

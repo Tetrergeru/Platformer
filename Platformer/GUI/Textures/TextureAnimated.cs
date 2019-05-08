@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace GUI
+namespace GUI.Textures
 {
-    public class TextureAnimated : global::GUI.ITexture
+    public class TextureAnimated : global::GUI.Textures.ITexture
     {
         private double _timer;
 
@@ -44,7 +44,7 @@ namespace GUI
             _timer += deltaTime;
         }
 
-        public void AddTexture(Bitmap picture, global::GUI.FillType ft, double scale = 1)
+        public void AddTexture(Bitmap picture, global::GUI.Textures.FillType ft, double scale = 1)
         {
             var image = new Bitmap(Width, Height);
             Texture.DrawTexture(image, picture, ft, scale);

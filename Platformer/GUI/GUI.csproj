@@ -50,16 +50,16 @@
     </Compile>
     <Compile Include="Controls.cs" />
     <Compile Include="CoordinateSheet.cs" />
-    <Compile Include="ITexture.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="MenuChangeControls.cs" />
-    <Compile Include="MenuGameOver.cs" />
-    <Compile Include="MenuPause.cs" />
+    <Compile Include="Textures\ITexture.cs" />
+    <Compile Include="Menus\Menu.cs" />
+    <Compile Include="Menus\MenuChangeControls.cs" />
+    <Compile Include="Menus\MenuGameOver.cs" />
+    <Compile Include="Menus\MenuPause.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Texture.cs" />
-    <Compile Include="TextureAnimated.cs" />
-    <Compile Include="TextureFile.cs" />
+    <Compile Include="Textures\Texture.cs" />
+    <Compile Include="Textures\TextureAnimated.cs" />
+    <Compile Include="Textures\TextureFile.cs" />
     <Compile Include="Window.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using viper_script;
 
-namespace GUI
+namespace GUI.Textures
 {
     public class TextureFile
     {

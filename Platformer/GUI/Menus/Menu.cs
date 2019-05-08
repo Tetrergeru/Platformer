@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace GUI
+namespace GUI.Menus
 {
     /// <summary>
     /// Базовый класс для создания игровых меню и графических интерфейсов

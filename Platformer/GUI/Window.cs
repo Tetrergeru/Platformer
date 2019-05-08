@@ -6,8 +6,11 @@ using System.Linq;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using GUI.Menus;
+using GUI.Textures;
 using Platformer;
 using Platformer.Game;
+using Menu = GUI.Menus.Menu;
 
 namespace GUI
 {
@@ -237,7 +240,7 @@ namespace GUI
                 drawer.DrawImage(image, CoordSheet.Transform(rectangle));
         }
 
-        private readonly Dictionary<string, global::GUI.ITexture> _textures = new Dictionary<string, global::GUI.ITexture>();
+        private readonly Dictionary<string, global::GUI.Textures.ITexture> _textures = new Dictionary<string, global::GUI.Textures.ITexture>();
 
         public void Draw(GameObject entity)
         {

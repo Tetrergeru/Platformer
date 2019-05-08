@@ -1,10 +1,10 @@
-﻿using Platformer.Game;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Platformer.Game;
 
-namespace GUI
+namespace GUI.Menus
 {
     /// <inheritdoc />
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace GUI
+namespace GUI.Menus
 {
     internal class MenuGameOver : Menu
     {
