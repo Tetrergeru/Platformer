@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Button.cs">
+    <Compile Include="Menus\Button.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls.cs" />
