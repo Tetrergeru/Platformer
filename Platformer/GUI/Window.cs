@@ -6,13 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
-using Microsoft.Win32.SafeHandles;
-using Platformer.Entities;
-using Platformer.Files;
+using Platformer;
 using Platformer.Game;
-using Timer = Platformer.Game.Timer;
 
-namespace Platformer.GUI
+namespace GUI
 {
     public enum State
     {
@@ -170,7 +167,7 @@ namespace Platformer.GUI
         {
             if (gameState != State.Running) return;
             
-            if (ControlActions.StopTime == GUI.Controls.ControlFromKey(e.KeyCode))
+            if (ControlActions.StopTime == global::GUI.Controls.ControlFromKey(e.KeyCode))
             {
                 Pause();
             }
@@ -240,7 +237,7 @@ namespace Platformer.GUI
                 drawer.DrawImage(image, CoordSheet.Transform(rectangle));
         }
 
-        private readonly Dictionary<string, ITexture> _textures = new Dictionary<string, ITexture>();
+        private readonly Dictionary<string, global::GUI.ITexture> _textures = new Dictionary<string, global::GUI.ITexture>();
 
         public void Draw(GameObject entity)
         {

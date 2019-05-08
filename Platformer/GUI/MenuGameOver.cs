@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Platformer.GUI
+namespace GUI
 {
     internal class MenuGameOver : Menu
     {
-        private Button GameOverButton;
+        private global::GUI.Button GameOverButton;
 
         public MenuGameOver(Window owner) : base(owner)
         {
-            GameOverButton = new Button(200, 50)
+            GameOverButton = new global::GUI.Button(200, 50)
             {
                 Location = new Point((owner.Width - 200) / 2, 20)
             };

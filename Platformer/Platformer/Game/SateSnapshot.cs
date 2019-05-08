@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using Platformer.GUI;
 
 namespace Platformer.Game
 {

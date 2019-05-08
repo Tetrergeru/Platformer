@@ -1,9 +1,7 @@
 ﻿using Platformer.Entities;
 using Platformer.Files;
-using Platformer.GUI;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace Platformer.Game

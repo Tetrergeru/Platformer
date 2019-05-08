@@ -1,17 +1,13 @@
-﻿using System;
+﻿using Platformer.Game;
 using System.Windows.Forms;
-using Platformer.GUI;
 
 namespace Platformer
 {
-    class Program
+    public static class Platformer
     {
-        static void Main(string[] args)
+        public static IGame CreateGame()
         {
-            var game = new Game.Game(new Game.Timer(10));
-            var gameWindow = new Window(game);
-            game.Start();
-            Application.Run(gameWindow);
+            return new Game.Game(new Game.Timer(10));
         }
     }
 }

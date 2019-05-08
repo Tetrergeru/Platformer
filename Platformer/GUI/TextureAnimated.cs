@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Platformer.GUI
+namespace GUI
 {
-    public class TextureAnimated : ITexture
+    public class TextureAnimated : global::GUI.ITexture
     {
         private double _timer;
 
@@ -44,7 +44,7 @@ namespace Platformer.GUI
             _timer += deltaTime;
         }
 
-        public void AddTexture(Bitmap picture, FillType ft, double scale = 1)
+        public void AddTexture(Bitmap picture, global::GUI.FillType ft, double scale = 1)
         {
             var image = new Bitmap(Width, Height);
             Texture.DrawTexture(image, picture, ft, scale);

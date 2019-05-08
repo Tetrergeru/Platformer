@@ -6,7 +6,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{64C1D8FD-17A8-4F7E-AAFB-C60203EFD8A1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>Platformer</RootNamespace>
     <AssemblyName>Platformer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
@@ -55,28 +58,12 @@
   <ItemGroup>
     <Compile Include="Game\ITimer.cs" />
     <Compile Include="Game\Timer.cs" />
-    <Compile Include="GUI\Button.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Entities\Actor.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Monster.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Files\EntityFile.cs" />
-    <Compile Include="Files\TextureFile.cs" />
     <Compile Include="Files\WorldFile.cs" />
-    <Compile Include="GUI\Controls.cs" />
-    <Compile Include="GUI\CoordinateSheet.cs" />
-    <Compile Include="GUI\ITexture.cs" />
-    <Compile Include="GUI\Menu.cs" />
-    <Compile Include="GUI\MenuChangeControls.cs" />
-    <Compile Include="GUI\MenuGameOver.cs" />
-    <Compile Include="GUI\MenuPause.cs" />
-    <Compile Include="GUI\Texture.cs" />
-    <Compile Include="GUI\TextureAnimated.cs" />
-    <Compile Include="GUI\Window.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Game\Game.cs" />
     <Compile Include="HitBox.cs" />
     <Compile Include="Game\IGame.cs" />

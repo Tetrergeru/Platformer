@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Platformer.Game;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Platformer.Game;
 
-namespace Platformer.GUI
+namespace GUI
 {
     /// <inheritdoc />
     /// <summary>
@@ -21,12 +21,12 @@ namespace Platformer.GUI
         /// Кнопки смены управления. Создаётся по кнопке для каждого игрового действия (Кроме ControlActions.None).
         /// При нажатии на кнопку начинается замена клавиши управления соответствующего действия.
         /// </summary>
-        private Dictionary<ControlActions, Button> ChoiseButtons { get; } = new Dictionary<ControlActions, Button>();
+        private Dictionary<ControlActions, global::GUI.Button> ChoiseButtons { get; } = new Dictionary<ControlActions, global::GUI.Button>();
 
         /// <summary>
         /// Кнопка выхода из меню
         /// </summary>
-        private Button ExitButton { get; }
+        private global::GUI.Button ExitButton { get; }
 
         /// <summary>
         /// Игровое действие, клавишу управления для которого мы меняем в данный момент (если такого нет — ControlActions.None)
@@ -41,7 +41,7 @@ namespace Platformer.GUI
         public MenuChangeControls(Window owner) : base(owner)
         {
             //Создаём кнопку выхода
-            ExitButton = new Button(200, 50)
+            ExitButton = new global::GUI.Button(200, 50)
                 {Location = new Point((owner.Width - 200) / 2, 20)};
             ExitButton.Click += Exit;
             ExitButton.SetText("Exit");
@@ -63,13 +63,13 @@ namespace Platformer.GUI
             {
                 if (k == ControlActions.None) continue;
 
-                var b = new Button(150, 30) {Location = new Point(0, 50 * count)};
+                var b = new global::GUI.Button(150, 30) {Location = new Point(0, 50 * count)};
                 b.SetText(k.ToString());
                 ControlsPanel.Controls.Add(b);
 
-                ChoiseButtons[k] = new Button(100, 30) {Location = new Point(200, 50 * count)};
+                ChoiseButtons[k] = new global::GUI.Button(100, 30) {Location = new Point(200, 50 * count)};
                 ChoiseButtons[k].Click += (o, e) => ChangeControls(k);
-                ChoiseButtons[k].SetText(GUI.Controls.KeyFromControl(k).ToString());
+                ChoiseButtons[k].SetText(global::GUI.Controls.KeyFromControl(k).ToString());
                 ControlsPanel.Controls.Add(ChoiseButtons[k]);
 
                 count++;
@@ -86,7 +86,7 @@ namespace Platformer.GUI
         {
             Choise = ca;
             foreach (var b in ChoiseButtons)
-                ChoiseButtons[b.Key].SetText(GUI.Controls.KeyFromControl(b.Key).ToString());
+                ChoiseButtons[b.Key].SetText(global::GUI.Controls.KeyFromControl(b.Key).ToString());
             ChoiseButtons[ca].SetText("<choose>");
         }
 
@@ -100,9 +100,9 @@ namespace Platformer.GUI
         {
             if (Choise == ControlActions.None) return;
             
-            GUI.Controls.SetControl(Choise, e.KeyCode);
+            global::GUI.Controls.SetControl(Choise, e.KeyCode);
             foreach (var b in ChoiseButtons)
-                ChoiseButtons[b.Key].SetText(GUI.Controls.KeyFromControl(b.Key).ToString());
+                ChoiseButtons[b.Key].SetText(global::GUI.Controls.KeyFromControl(b.Key).ToString());
 
             Choise = ControlActions.None;
         }

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Platformer.Game;
 
-namespace Platformer.GUI
+namespace GUI
 {
     public static class Controls
     {

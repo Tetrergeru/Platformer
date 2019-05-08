@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Platformer.GUI
+namespace GUI
 {
     /// <summary>
     /// Базовый класс для создания игровых меню и графических интерфейсов

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Platformer.GUI
+namespace GUI
 {
     public enum FillType { Repeat, Stretch, StretchDown };
 

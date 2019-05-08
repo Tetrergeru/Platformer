@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace Platformer.GUI
+namespace GUI
 {
     /// <inheritdoc />
     /// <summary>

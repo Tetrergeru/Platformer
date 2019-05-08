@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using Platformer;
 
-namespace Platformer.GUI
+namespace GUI
 {
     class CoordinateSheet
     {
