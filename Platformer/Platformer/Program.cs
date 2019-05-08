@@ -1,5 +1,4 @@
 ﻿using Platformer.Game;
-using System.Windows.Forms;
 
 namespace Platformer
 {

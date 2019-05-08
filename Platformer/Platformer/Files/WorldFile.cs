@@ -24,7 +24,7 @@ namespace Platformer.Files
             var world = new World();
 
             var color = data.GetList("background_color");
-            world.BackGroundColor = Color.FromArgb(color[0].GetInt(), color[1].GetInt(), color[2].GetInt());
+            //world.BackGroundColor = Color.FromArgb(color[0].GetInt(), color[1].GetInt(), color[2].GetInt());
 
             foreach (var entity in data.GetList("blocks"))
                 world.AddSolidEntity(GetEntity(entity, world));

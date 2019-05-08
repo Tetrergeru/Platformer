@@ -11,7 +11,7 @@ namespace Platformer.Game
     /// </summary>
     internal class World
     {
-        public Color BackGroundColor { get; set; }
+        //public Color BackGroundColor { get; set; }
 
         public Vector Gravity { get; }
 

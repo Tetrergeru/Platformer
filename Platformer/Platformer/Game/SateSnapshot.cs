@@ -15,6 +15,6 @@ namespace Platformer.Game
         public GameObject player;
         public List<GameObject> entities;
         public bool gameIsOver;
-        public Color currentBackgroundColor;
+        //public Color currentBackgroundColor;
     }
 }

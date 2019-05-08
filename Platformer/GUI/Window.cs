@@ -132,7 +132,7 @@ namespace GUI
                 if (gameState != State.Running)
                     return;
                 AdjustBy(snapshot.player.body);
-                Clear(snapshot.currentBackgroundColor);
+                Clear(Color.SkyBlue/*snapshot.currentBackgroundColor*/);
                 Draw(snapshot.entities);
                 Flush();
             }

@@ -99,7 +99,7 @@ namespace Platformer.Game
                         .Select(e => new GameObject{body = e.Hitbox, texture = e.Texture,drawPriority = e.DrawPriority})
                         .ToList(),
                     gameIsOver = Player.Health <= 0,
-                    currentBackgroundColor = World.BackGroundColor,
+                    //currentBackgroundColor = World.BackGroundColor,
             };
             
         }
