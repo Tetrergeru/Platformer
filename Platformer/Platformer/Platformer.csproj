@@ -153,6 +153,9 @@
     <Content Include="Resources\Textures\HighGrass_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\TextureAssets\player.texture">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\Textures\Player_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

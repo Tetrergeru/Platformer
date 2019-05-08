@@ -8,6 +8,7 @@ using System.Timers;
 using System.Windows.Forms;
 using Microsoft.Win32.SafeHandles;
 using Platformer.Entities;
+using Platformer.Files;
 using Platformer.Game;
 using Timer = Platformer.Game.Timer;
 
@@ -101,6 +102,11 @@ namespace Platformer.GUI
             Controls.Add(_gameoverTool);
 
             _timer = new System.Timers.Timer(20);
+            _timer.Elapsed += (o, e) =>
+            {
+                foreach (var texture in _textures)
+                    texture.Value.Tick(20 * 0.001);
+            };
             _timer.Elapsed += Draw;
             _timer.Start();
 
@@ -233,16 +239,25 @@ namespace Platformer.GUI
             if (gameState == State.Running)
                 drawer.DrawImage(image, CoordSheet.Transform(rectangle));
         }
-        
+
+        private readonly Dictionary<string, ITexture> _textures = new Dictionary<string, ITexture>();
+
         public void Draw(GameObject entity)
         {
-            Draw(entity.texture.Image, entity.body);
+            Draw(_textures[entity.texture].Image, entity.body);
+        }
+
+        private void LoadTexture(string fname)
+        {
+            _textures[fname] = TextureFile.GetTexture(fname);
         }
 
         public void Draw(IEnumerable<GameObject> entities)
         {
             foreach (var entity in entities.OrderBy(e => e.drawPriority))
             {
+                if(!_textures.ContainsKey(entity.texture))
+                    LoadTexture(entity.texture);
                 Draw(entity);
             }
         }

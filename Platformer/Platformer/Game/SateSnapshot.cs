@@ -7,7 +7,7 @@ namespace Platformer.Game
     public struct GameObject
     {
         public HitBox body;
-        public ITexture texture;
+        public string texture;
         public double drawPriority;
     }
     

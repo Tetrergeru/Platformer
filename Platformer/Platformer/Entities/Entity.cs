@@ -24,7 +24,7 @@ namespace Platformer.Entities
         /// </summary>
         public World Context { get; set; }
 
-        public ITexture Texture { get; set; }
+        public string Texture { get; set; }
 
         /// <summary>
         /// Конструктор, создающий экземпляр сущности по её миру и расположению
@@ -35,7 +35,7 @@ namespace Platformer.Entities
         {
             Context = context;
             Hitbox = hitbox;
-            Texture = new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
+            Texture = "";//new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Platformer.Entities
         public Entity(Vector size)
         {
             Hitbox = new HitBox(0, 0, size.x, size.y);
-            Texture = new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
+            Texture = ""; //new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Platformer.Entities
 
         public virtual void Tick(double deltaTime)
         {
-            Texture.Tick(deltaTime);
+            //Texture.Tick(deltaTime);
         }
     }
 }

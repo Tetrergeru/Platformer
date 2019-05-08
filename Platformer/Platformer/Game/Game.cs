@@ -36,9 +36,11 @@ namespace Platformer.Game
             _gameLoop = timer;
             _gameLoop.AddEvent(Tick);
 
-            Player = new Player(new Vector { x = 30, y = 60});
-            Player.Texture.AddTexture(new Bitmap("Resources/Textures/Player_1.png"), FillType.Stretch);
-            Player.DrawPriority = 10;
+            Player = new Player(new Vector {x = 30, y = 60})
+            {
+                Texture = "Resources/TextureAssets/player.texture",
+                DrawPriority = 10
+            };
 
             World = WorldFile.GetWorld("Resources/Worlds/simple_world.world");
             World.SetPlayer(Player, new Vector { x = 0, y = 0 });

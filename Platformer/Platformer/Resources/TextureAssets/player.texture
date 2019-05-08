@@ -1,0 +1,6 @@
+﻿type = 'Texture'
+
+height = 20
+width = 10
+
+sprite = ['Resources/Textures/Player_1.png', 'Stretch']

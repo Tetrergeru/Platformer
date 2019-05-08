@@ -65,7 +65,7 @@ namespace Platformer.Game
         {
             Gravity = new Vector {x = 0, y = 1000 * 9.8};
             var m = new Monster(this, new HitBox(1000, 100, 50, 50));
-            m.Texture = TextureFile.GetTexture("Resources/TextureAssets/slime.texture");
+            m.Texture = "Resources/TextureAssets/slime.texture";
             Enemies.Add(m);
         }
 
