@@ -68,7 +68,7 @@ namespace Platformer.Game
             for (int i = 0; i < 10; i++)
                 for (int j = 0; j < 10; j++)
                 {
-                var m = CreateMonster(new HitBox(i * 52 - 700, j * 52 - 1000, 50, 50));
+                var m = CreateMonster(new HitBox(i * 52 - 700, j * 52 - 1000, 55, 50));
                 m.Texture = "Resources/TextureAssets/slime.texture";
             }
         }

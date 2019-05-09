@@ -152,6 +152,9 @@
     <Content Include="Resources\Textures\slime_0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Textures\slime_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Textures\Stone_1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
