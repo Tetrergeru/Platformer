@@ -65,10 +65,10 @@ namespace Platformer.Game
         public World()
         {
             _physics = new Physics.Physics();
-            for (int i = 0; i < 10; i++)
-                for (int j = 0; j < 10; j++)
+            for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 5; j++)
                 {
-                var m = CreateMonster(new HitBox(i * 52 - 700, j * 52 - 1000, 50, 50));
+                var m = CreateMonster(new HitBox(i * 100 + 1000, j * 100 - 100, 50, 50));
                 m.Texture = "Resources/TextureAssets/slime.texture";
             }
         }
@@ -117,8 +117,15 @@ namespace Platformer.Game
             return entity;
         }
 
+        public void RemoveBody(IBody body)
+        {
+            _physics.RemoveBody(body);
+        }
+
         public void RemoveEntity(Entity entity)
         {
+            entity.RemoveBody();
+
             if (entity is Monster monster)
                 Enemies.Remove(monster);
             if (Blocks.Contains(entity))

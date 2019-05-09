@@ -17,6 +17,8 @@ namespace Platformer.Physics
         private double density = 100;
         public bool Movable { get; set; }
 
+        Action<object, Direction> CollisionEvents = (o, d) => { };
+
         public Body(ICollider collider, bool movable = false)
         {
             this.collider = collider;
@@ -25,6 +27,8 @@ namespace Platformer.Physics
 
         public double Mass
         { get { return collider.Volume() * density; } }
+
+        public object Tag { get; set; }
 
         public void Pull(Vector vector)
         {
@@ -64,13 +68,43 @@ namespace Platformer.Physics
                 dist.x = Sign(dist.x);
                 dist.y = Sign(dist.y);
                 Vector force;
-                if(box.Width > box.Height)
-                    force = dist * new Vector { x = 0, y = box.Height } * 1000000000;
-                else
-                    force = dist * new Vector { x = box.Width, y = 0 } * 1000000000;
 
+                Direction myDirection;
+                Direction targetDirection;
+
+                if (box.Width > box.Height)
+                {
+                    if(dist.y > 0)
+                    {
+                        myDirection = Direction.Up;
+                        targetDirection = Direction.Down;
+                    }
+                    else
+                    {
+                        targetDirection = Direction.Up;
+                        myDirection = Direction.Down;
+                    }
+                    force = dist * new Vector { x = 0, y = box.Height } * 1000000000;
+                }
+                else
+                {
+                    if (dist.x > 0)
+                    {
+                        myDirection = Direction.Left;
+                        targetDirection = Direction.Right;
+                    }
+                    else
+                    {
+                        targetDirection = Direction.Left;
+                        myDirection = Direction.Right;
+                    }
+                    force = dist * new Vector { x = box.Width, y = 0 } * 1000000000;
+                }
                 slowdown += box.Volume() / collider.Volume();
                 target.slowdown += box.Volume() / target.collider.Volume();
+
+                CollisionEvents(target.Tag, myDirection);
+                target.CollisionEvents(Tag, targetDirection);
 
                 Pull(force);
                 target.Pull(force * -1);
@@ -110,6 +144,11 @@ namespace Platformer.Physics
 
             slowdown = 0;
             force = Vector.Zero();
+        }
+
+        public void AddCollisionEvent(Action<object, Direction> action)
+        {
+            CollisionEvents += action;
         }
     }
 }
