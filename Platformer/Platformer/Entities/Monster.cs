@@ -15,6 +15,7 @@ namespace Platformer.Entities
         {
             MaxHealth = 50;
             Health = MaxHealth;
+            jumpHeight = 30;
         }
 
         public override void Tick(double deltaTime)

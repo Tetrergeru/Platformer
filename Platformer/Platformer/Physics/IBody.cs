@@ -13,11 +13,19 @@ namespace Platformer.Physics
         /// </summary>
         bool Movable { get; set; }
 
+        object Tag { get; set; }
+
         /// <summary>
         /// Воздействует заданной силой на тело
         /// </summary>
         /// <param name="vector">сила</param>
         void Pull(Vector vector);
+        
+        /// <summary>
+        /// Добавляет событие коллизи
+        /// </summary>
+        /// <param name="action">событие</param>
+        void AddCollisionEvent(Action<object, Direction> action);
 
         /// <summary>
         /// Меняет скорость тела на заданную величину

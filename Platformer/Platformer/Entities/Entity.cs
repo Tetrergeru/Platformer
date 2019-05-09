@@ -8,7 +8,7 @@ namespace Platformer.Entities
     /// </summary>
     internal class Entity
     {
-        protected IBody _body;
+        public IBody _body;
         /// <summary>
         /// Приоритет отрисовки
         /// </summary>
@@ -35,6 +35,7 @@ namespace Platformer.Entities
         {
             Context = context;
             _body = body;
+            _body.Tag = this;
             Texture = "";//new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
         }
 
@@ -47,6 +48,11 @@ namespace Platformer.Entities
 
         public void MoveTo(Vector location)
             => _body.MoveTo(location);
+
+        public void RemoveBody()
+        {
+            Context.RemoveBody(_body);
+        }
 
         public virtual void Tick(double deltaTime)
         {

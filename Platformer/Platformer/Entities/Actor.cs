@@ -49,6 +49,9 @@ namespace Platformer.Entities
         /// </summary>
         protected Vector velocity = Vector.Zero();
 
+        bool canJump = false;
+        Entity jumpEntitie;
+
         /// <inheritdoc />
         /// <summary>
         /// Создаёт экземпляр актора по контексту и занимаемой области
@@ -57,7 +60,7 @@ namespace Platformer.Entities
         /// <param name="hitbox">Занимаемая область</param>
         public Actor(World context, IBody body) : base(context, body)
         {
-
+            _body.AddCollisionEvent((o, d) => {if(d == Direction.Down) canJump = true; jumpEntitie = o as Entity; });
         }
 
         /// <summary>
@@ -77,7 +80,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        protected double jumpHeight = 30;
+        protected double jumpHeight = 300;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -98,7 +101,12 @@ namespace Platformer.Entities
         /// </summary>
         public void Jump()
         {
-            _body.Accelerate(new Vector { x = 0, y = -jumpHeight});
+            if (canJump)
+            {
+                _body.Accelerate(new Vector { x = 0, y = -jumpHeight });
+                jumpEntitie._body.Accelerate(new Vector { x = 0, y = jumpHeight });
+            }
+            canJump = false;
         }
 
         /// <summary>
