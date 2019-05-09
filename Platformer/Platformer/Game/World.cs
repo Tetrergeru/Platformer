@@ -4,6 +4,7 @@ using System.Drawing;
 using Platformer.Entities;
 using Platformer.Files;
 using Platformer.Physics;
+using System.Linq;
 
 namespace Platformer.Game
 {
@@ -122,6 +123,11 @@ namespace Platformer.Game
             _physics.RemoveBody(body);
         }
 
+        public IBody CreateMonsterBody(IRectangle hitBox)
+        {
+            return _physics.CreateBody(new BoxCollider(hitBox), true);
+        }
+
         public void RemoveEntity(Entity entity)
         {
             entity.RemoveBody();
@@ -136,10 +142,15 @@ namespace Platformer.Game
         public void Tick(double deltaTime)
         {
             //Player.Tick(deltaTime);
-            _physics.Tick(deltaTime);
 
             foreach (var x in AllEntities)
                 x.Tick(deltaTime);
+
+            _physics.Tick(deltaTime);
+
+            List<Actor> buf = Enemies.Where(e => e.Health <= 0).ToList();
+            foreach (var e in buf)
+                RemoveEntity(e);
         }
     }
 }

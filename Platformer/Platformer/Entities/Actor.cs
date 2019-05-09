@@ -18,16 +18,10 @@ namespace Platformer.Entities
 
         public double Health {
             get => _health;
-            protected set
+            internal set
             {
                 if (value > MaxHealth)
                     _health = MaxHealth;
-                else if (value <= 0 && this is Monster monster)
-                {
-                    if (this is Monster)
-                        Context.RemoveEntity(monster);
-                    _health = value;
-                }
                 else
                     _health = value;
             }
@@ -49,8 +43,8 @@ namespace Platformer.Entities
         /// </summary>
         protected Vector velocity = Vector.Zero();
 
-        bool canJump = false;
-        Entity jumpEntitie;
+        protected bool canJump = false;
+        protected Entity jumpEntity;
 
         /// <inheritdoc />
         /// <summary>
@@ -60,7 +54,7 @@ namespace Platformer.Entities
         /// <param name="hitbox">Занимаемая область</param>
         public Actor(World context, IBody body) : base(context, body)
         {
-            _body.AddCollisionEvent((o, d) => {if(d == Direction.Down) canJump = true; jumpEntitie = o as Entity; });
+            _body.AddCollisionEvent((o, d) => { if (d == Direction.Down) { canJump = true; jumpEntity = o as Entity; } });
         }
 
         /// <summary>
@@ -75,7 +69,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double runningSpeed = 200000000;
+        protected double runningSpeed = 10;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
@@ -88,23 +82,25 @@ namespace Platformer.Entities
         /// <param name="direction"></param>
         public void RunRight()
         {
-            _body.Pull(new Vector {x = runningSpeed, y = 0});
+            _body.Accelerate(new Vector {x = runningSpeed, y = 0});
         }
 
         public void RunLeft()
         {
-            _body.Pull(new Vector { x = -runningSpeed, y = 0});
+            _body.Accelerate(new Vector { x = -runningSpeed, y = 0});
         }
 
         /// <summary>
         /// Побуждает актора к прыжку
         /// </summary>
-        public void Jump()
+        public virtual void Jump()
         {
             if (canJump)
             {
                 _body.Accelerate(new Vector { x = 0, y = -jumpHeight });
-                jumpEntitie._body.Accelerate(new Vector { x = 0, y = jumpHeight });
+                jumpEntity._body.Accelerate(new Vector { x = 0, y = jumpHeight });
+                if (jumpEntity is Actor actor)
+                    actor.Health -= 30;
             }
             canJump = false;
         }
@@ -120,6 +116,7 @@ namespace Platformer.Entities
         public override void Tick(double deltaTime)
         {
             base.Tick(deltaTime);
+            canJump = false;
         }
     }
 }

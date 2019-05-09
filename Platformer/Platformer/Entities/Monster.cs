@@ -1,5 +1,6 @@
 ﻿using Platformer.Game;
 using Platformer.Physics;
+using static System.Math;
 
 namespace Platformer.Entities
 {
@@ -15,7 +16,40 @@ namespace Platformer.Entities
         {
             MaxHealth = 50;
             Health = MaxHealth;
-            jumpHeight = 30;
+            jumpHeight = 100;
+        }
+
+        public override void Jump()
+        {
+            if (canJump)
+            {
+                _body.Accelerate(new Vector { x = 0, y = -jumpHeight });
+
+                if (jumpEntity == null)
+                {
+                    canJump = false;
+                    return;
+                }
+
+                jumpEntity._body.Accelerate(new Vector { x = 0, y = jumpHeight });
+                if (jumpEntity is Actor actor)
+                {
+                    actor.Health -= 300;
+                    if (actor.Health <= 0)
+                    {
+                        IRectangle rectangle = Hitbox;
+                        Context.RemoveBody(_body);
+                        double x = rectangle.Width;
+                        double y = rectangle.Height;
+                        double vol = actor.Hitbox.Width * actor.Hitbox.Height + x * y;
+
+                        _body = Context.CreateMonsterBody(new HitBox(rectangle.X, rectangle.Y, Sqrt(vol * x / y), Sqrt(vol * y / x)));
+                        _body.Tag = this;
+                        _body.AddCollisionEvent((o, d) => { if (d == Direction.Down) { canJump = true; jumpEntity = o as Entity; } });
+                    }
+                }
+            }
+            canJump = false;
         }
 
         public override void Tick(double deltaTime)
