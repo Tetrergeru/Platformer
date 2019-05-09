@@ -57,6 +57,20 @@ namespace Platformer
                 y = first.y + second.y,
             };
 
+        public static Vector operator -(Vector first, Vector second)
+            => new Vector
+            {
+                x = first.x - second.x,
+                y = first.y - second.y,
+            };
+
+        public static Vector operator *(Vector first, Vector second)
+            => new Vector
+            {
+                x = first.x * second.x,
+                y = first.y * second.y,
+            };
+
         /// <summary>
         /// Умножает вектор на число
         /// </summary>
@@ -69,7 +83,13 @@ namespace Platformer
                 x = vector.x * mutiplier,
                 y = vector.y * mutiplier,
             };
-        
+
+        public static Vector operator /(Vector vector, double mutiplier)
+            => new Vector
+            {
+                x = vector.x / mutiplier,
+                y = vector.y / mutiplier,
+            };
         public bool IsZero()
         {
             return Math.Abs(x) < 1e-10 && Math.Abs(y) < 1e-10;

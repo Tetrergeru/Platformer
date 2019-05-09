@@ -8,10 +8,20 @@ namespace Platformer.Files
 {
     internal class WorldFile
     {
-        public static Entity GetEntity(Container e, World context)
+        public static Entity GetSolidEntity(Container e, World context)
         {
             var ent = e.GetList();
-            var entity = EntityFile.GetEntity(ent[0].GetString(), context);
+            var entity = EntityFile.GetSolidEntity(ent[0].GetString(), context);
+            entity.Move(new Vector { x = ent[1].GetDouble(), y = ent[2].GetDouble() });
+            if (ent.Count > 3)
+                entity.DrawPriority = ent[3].GetDouble();
+            return entity;
+        }
+
+        public static Entity GetDecoration(Container e, World context)
+        {
+            var ent = e.GetList();
+            var entity = EntityFile.GetDecoration(ent[0].GetString(), context);
             entity.Move(new Vector { x = ent[1].GetDouble(), y = ent[2].GetDouble() });
             if (ent.Count > 3)
                 entity.DrawPriority = ent[3].GetDouble();
@@ -27,10 +37,10 @@ namespace Platformer.Files
             //world.BackGroundColor = Color.FromArgb(color[0].GetInt(), color[1].GetInt(), color[2].GetInt());
 
             foreach (var entity in data.GetList("blocks"))
-                world.AddSolidEntity(GetEntity(entity, world));
+                GetSolidEntity(entity, world);
 
             foreach (var entity in data.GetList("decorations"))
-                world.AddDecoration(GetEntity(entity, world));
+                GetDecoration(entity, world);
 
             return world;
         }

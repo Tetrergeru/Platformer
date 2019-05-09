@@ -34,14 +34,12 @@ namespace Platformer.Game
             _gameLoop = timer;
             _gameLoop.AddEvent(Tick);
 
-            Player = new Player(new Vector {x = 30, y = 60})
-            {
-                Texture = "Resources/TextureAssets/player.texture",
-                DrawPriority = 10
-            };
-
-            World = WorldFile.GetWorld("Resources/Worlds/simple_world.world");
-            World.SetPlayer(Player, new Vector { x = 0, y = 0 });
+            World = WorldFile.GetWorld("Resources/Worlds/test.world");
+            
+            Player = World.CreatePlayer(new HitBox(0, 0, 30, 50));
+            
+            Player.Texture = "Resources/TextureAssets/player.texture";
+            Player.DrawPriority = 10;
             UpdateState();
         }
 
@@ -58,11 +56,18 @@ namespace Platformer.Game
         /// <param name="deltaTime"></param>
         private void Tick(double deltaTime)
         {
-            foreach (var x in KeysPressed)
-                OnControlTrigger(x);
+            try
+            {
+                foreach (var x in KeysPressed)
+                    OnControlTrigger(x);
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             UpdateState();
-            
+
             World.Tick(deltaTime);
         }
 
@@ -135,12 +140,12 @@ namespace Platformer.Game
             {
                 case ControlActions.Right:
                 {
-                    Player.Run(Actor.Direction.Right);
+                    Player.RunRight();
                     break;
                 }
                 case ControlActions.Left:
                 {
-                    Player.Run(Actor.Direction.Left);
+                    Player.RunLeft();
                     break;
                 }
                 case ControlActions.Jump:
@@ -166,7 +171,7 @@ namespace Platformer.Game
                 }
                 case ControlActions.Debug:
                 {
-                    Player.Hitbox.MoveTo(new Vector {x = 0, y = 0});
+                    Player.MoveTo(new Vector {x = 0, y = 0});
                     break;
                 }
                 case ControlActions.Fly:

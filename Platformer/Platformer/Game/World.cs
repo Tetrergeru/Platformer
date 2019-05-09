@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Platformer.Entities;
 using Platformer.Files;
+using Platformer.Physics;
 
 namespace Platformer.Game
 {
@@ -13,7 +14,7 @@ namespace Platformer.Game
     {
         //public Color BackGroundColor { get; set; }
 
-        public Vector Gravity { get; }
+        private IPhysics _physics;
 
         /// <summary>
         /// Ссылка на игрока
@@ -27,7 +28,7 @@ namespace Platformer.Game
 
         private List<Entity> Decorations { get; } = new List<Entity>();
 
-        private HashSet<Monster> Enemies { get; } = new HashSet<Monster>();
+        private HashSet<Actor> Enemies { get; } = new HashSet<Actor>();
 
         public IEnumerable<Entity> AllEntities
         {
@@ -63,10 +64,13 @@ namespace Platformer.Game
         /// </summary>
         public World()
         {
-            Gravity = new Vector {x = 0, y = 1000 * 9.8};
-            var m = new Monster(this, new HitBox(1000, 100, 50, 50));
-            m.Texture = "Resources/TextureAssets/slime.texture";
-            Enemies.Add(m);
+            _physics = new Physics.Physics();
+            for (int i = 0; i < 10; i++)
+                for (int j = 0; j < 10; j++)
+                {
+                var m = CreateMonster(new HitBox(i * 52 - 700, j * 52 - 1000, 50, 50));
+                m.Texture = "Resources/TextureAssets/slime.texture";
+            }
         }
 
         /// <summary>
@@ -78,22 +82,39 @@ namespace Platformer.Game
         {
             Player = player;
             player.Context = this;
-            player.Hitbox.MoveTo(coords);
+            player.MoveTo(coords);
         }
 
-        public void AddSolidEntity(Entity entity)
+        public Entity CreateSolidEntity(IRectangle hitBox)
         {
+            var body = _physics.CreateBody(new BoxCollider(hitBox));
+            var entity = new Entity(this, body);
             Blocks.Add(entity);
+            return entity;
         }
 
-        public void AddDecoration(Entity entity)
+        public Entity CreateDecoration(IRectangle hitBox)
         {
+            var body = _physics.CreateBody(new BoxCollider(hitBox));
+            var entity = new Entity(this, body);
             Decorations.Add(entity);
+            return entity;
         }
 
-        public void AddMonster(Monster monster)
+        public Monster CreateMonster(IRectangle hitBox)
         {
-            Enemies.Add(monster);
+            var body = _physics.CreateBody(new BoxCollider(hitBox), true);
+            var entity = new Monster(this, body);
+            Enemies.Add(entity);
+            return entity;
+        }
+        
+        public Player CreatePlayer(IRectangle hitBox)
+        {
+            var body = _physics.CreateBody(new BoxCollider(hitBox), true);
+            var entity = new Player(this, body);
+            Player = entity;
+            return entity;
         }
 
         public void RemoveEntity(Entity entity)
@@ -108,6 +129,7 @@ namespace Platformer.Game
         public void Tick(double deltaTime)
         {
             //Player.Tick(deltaTime);
+            _physics.Tick(deltaTime);
 
             foreach (var x in AllEntities)
                 x.Tick(deltaTime);

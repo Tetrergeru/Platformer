@@ -1,4 +1,5 @@
 ﻿using Platformer.Game;
+using Platformer.Physics;
 
 namespace Platformer.Entities
 {
@@ -7,6 +8,7 @@ namespace Platformer.Entities
     /// </summary>
     internal class Entity
     {
+        protected IBody _body;
         /// <summary>
         /// Приоритет отрисовки
         /// </summary>
@@ -15,7 +17,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Область занимаемая сущностью
         /// </summary>
-        public HitBox Hitbox { get; set;  }
+        public IRectangle Hitbox => _body.Recrtangle();
         
         /// <summary>
         /// Мир, в котором эта сущность расположена
@@ -29,51 +31,22 @@ namespace Platformer.Entities
         /// </summary>
         /// <param name="context"></param>
         /// <param name="hitbox"></param>
-        public Entity(World context, HitBox hitbox)
+        public Entity(World context, IBody body)
         {
             Context = context;
-            Hitbox = hitbox;
+            _body = body;
             Texture = "";//new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
         }
-
-        /// <summary>
-        /// Конструктор, создающий экземпляр сущности по её размеру
-        /// (нужен для того, чтобы можно было заготорвить сущность до её непосредственного размещения в том или ином мире)
-        /// </summary>
-        /// <param name="size"></param>
-        public Entity(Vector size)
-        {
-            Hitbox = new HitBox(0, 0, size.x, size.y);
-            Texture = ""; //new Texture((int)Math.Round(Hitbox.Width), (int)Math.Round(Hitbox.Height));
-        }
-
-        /// <summary>
-        /// Конструктор сущности по умолчанию
-        /// </summary>
-        public Entity() { }
-
-        /// <summary>
-        /// Проверяет, пересекается ли эта сущность с другой
-        /// </summary>
-        /// <param name="other">Другая сущность</param>
-        /// <returns></returns>
-        public bool Intersects(Entity other)
-            => Hitbox.Intersects(other.Hitbox);
-
-        /// <summary>
-        /// Проверяет, пересекается ли эта сущность с заданной оластью
-        /// </summary>
-        /// <param name="other">Область</param>
-        /// <returns></returns>
-        public bool Intersects(HitBox other)
-            => Hitbox.Intersects(other);
 
         /// <summary>
         /// Перемещает сущность по направлению вектора
         /// </summary>
         /// <param name="velocity">Вектор скорости</param>
         public void Move(Vector velocity)
-            => Hitbox.Move(velocity);
+            => _body.Move(velocity);
+
+        public void MoveTo(Vector location)
+            => _body.MoveTo(location);
 
         public virtual void Tick(double deltaTime)
         {

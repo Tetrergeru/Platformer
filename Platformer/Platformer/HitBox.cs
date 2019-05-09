@@ -60,22 +60,6 @@ namespace Platformer
             rectangle = new Rect(hitbox.X, hitbox.Y, hitbox.Width, hitbox.Height);
         }
 
-        public HitBox(IRectangle hitbox, Axis axis, double distance) : this(hitbox)
-        {
-            if (axis == Axis.Horizontal)
-            {
-                rectangle.Width += Math.Abs(distance);
-                if (distance < 0)
-                    rectangle.X += distance;
-            }
-            else if (axis == Axis.Vertical)
-            {
-                rectangle.Height += Math.Abs(distance);
-                if (distance < 0)
-                    rectangle.Y += distance;
-            }
-        }
-
         /// <summary>
         /// Проверяет, пересекается ли хитбокс с другим хитбоксом
         /// </summary>

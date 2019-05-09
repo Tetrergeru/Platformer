@@ -36,7 +36,7 @@ namespace GUI
             };
         }
 
-        public void ChangeScale(double newScale, HitBox playerLocation)
+        public void ChangeScale(double newScale, IRectangle playerLocation)
         {
             var playerCoords = coordinates * -1 + playerLocation.Coordinates;
             coordinates = coordinates + playerCoords * (newScale < Scale ? 1 - Scale / newScale : Scale / newScale);

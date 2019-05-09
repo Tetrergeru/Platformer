@@ -1,4 +1,5 @@
 ﻿using Platformer.Game;
+using Platformer.Physics;
 
 namespace Platformer.Entities
 {
@@ -10,43 +11,25 @@ namespace Platformer.Entities
         /// </summary>
         /// <param name="context"></param>
         /// <param name="hitbox"></param>
-        public Monster(World context, HitBox hitbox) : base(context, hitbox)
+        public Monster(World context, IBody body) : base(context, body)
         {
             MaxHealth = 50;
             Health = MaxHealth;
-            jumpHeight = 150 * 9.8;
-            runningSpeed = 150;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Конструктор, создающий экземпляр монстра по его размеру
-        /// (нужен для того, чтобы можно было заготорвить игорка до его непосредственного размещения в мире)
-        /// </summary>
-        /// <param name="size"></param>
-        public Monster(Vector size) : base(size)
-        {
-            jumpHeight = 100 * 9.8;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Конструктор монстра по умолчанию
-        /// </summary>
-        public Monster()
-        {
-            jumpHeight = 100 * 9.8;
         }
 
         public override void Tick(double deltaTime)
         {
-            if (Hitbox.Centre.DistanceTo(Context.Player.Hitbox.Centre) < 300)
+            
+            if (Hitbox.Coordinates.DistanceTo(Context.Player.Hitbox.Coordinates) < 500000)
             {
-                Run(Context.Player.Hitbox.Centre.x < Hitbox.Centre.x ? Direction.Left : Direction.Right);
-                if (Context.Player.Hitbox.Centre.y < Hitbox.Centre.y)
-                {
+                if (Context.Player.Hitbox.X < Hitbox.X)
+                    RunLeft();
+                else
+                    RunRight();
+
+                if (Context.Player.Hitbox.Y < Hitbox.Y)
                     Jump();
-                }
+                
             }
 
             base.Tick(deltaTime);
