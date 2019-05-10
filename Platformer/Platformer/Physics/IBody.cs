@@ -36,6 +36,18 @@ namespace Platformer.Physics
         void AddCollisionEvent(Action<object, Direction> action);
 
         /// <summary>
+        /// Добавляет событие начала коллизи
+        /// </summary>
+        /// <param name="action">событие</param>
+        void AddStartCollisionEvent(Action<object, Direction> action);
+
+        /// <summary>
+        /// Добавляет событие конца коллизи
+        /// </summary>
+        /// <param name="action">событие</param>
+        void AddEndCollisionEvent(Action<object, Direction> action);
+
+        /// <summary>
         /// Меняет скорость тела на заданную величину
         /// </summary>
         /// <param name="vector">значение изменения скорости</param>

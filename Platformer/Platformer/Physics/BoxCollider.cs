@@ -9,7 +9,7 @@ namespace Platformer.Physics
 {
     class BoxCollider : ICollider, IRectangle
     {
-        public double X { get; set; }
+        public double X { get; set;} 
         public double Y { get; set; }
         public double X2 => X + Width;
         public double Y2 => Y + Height;

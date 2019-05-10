@@ -21,7 +21,7 @@ namespace Platformer.Physics
                 if (Bodies[i].MovementRecipient)
                     Bodies[i].Pull(new Vector { x = 0, y = Gravity } * Bodies[i].Mass);
             }
-            //System.Threading.Thread.Sleep(10);
+            //System.Threading.Thread.Sleep(30);
             foreach (Body body in Bodies)
                 body.Tick(deltaTime);
         }

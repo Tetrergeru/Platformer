@@ -156,7 +156,7 @@ namespace Platformer.Game
 
         public void RemoveMonstor(Entity entity)
         {
-            int count = 5;
+            int count = 3;
             Random rnd = new Random();
             Vector size = new Vector { x = entity.Hitbox.Width / count, y = entity.Hitbox.Height / count };
             for (int i = 0; i < count; i++)
@@ -164,7 +164,7 @@ namespace Platformer.Game
                 {
                     var p = CreateParticle(new HitBox(entity.Hitbox.X + size.x * i, entity.Hitbox.Y + size.y * j, size.x, size.y));
                     p.Texture = "Resources/TextureAssets/slime.texture";
-                    p.Pull(new Vector {x = (i - count / 2) * 1000 / count + rnd.Next(-100, 100), y = (j / count) * 1000 / count + rnd.Next(-100, 100) });
+                    p.Pull(new Vector {x = (i - count / 2) * 10 / count + rnd.Next(-100, 100), y = (j / count) * 10 / count + rnd.Next(-100, 100) });
                 }
             RemoveEntity(entity);
         }

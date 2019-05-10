@@ -19,7 +19,9 @@ namespace Platformer.Entities
 
         public void Pull(Vector force)
         {
-            _body.Accelerate(force);
+            if (double.IsNaN(force.x) || double.IsNaN(force.x))
+                Console.WriteLine("NuN force");
+            _body.Pull(force);
         }
 
         public override void Tick(double deltaTime)

@@ -44,7 +44,11 @@ namespace Platformer.Entities
         /// <param name="hitbox">Занимаемая область</param>
         public Actor(World context, IBody body) : base(context, body)
         {
-            _body.AddCollisionEvent((o, d) => { if (d == Direction.Down) { canJump = true; jumpEntity = o as Entity; } });
+            _body.AddStartCollisionEvent((o, d) => { if (d == Direction.Down) { canJump = true; jumpEntity = o as Entity; } });
+            _body.AddEndCollisionEvent((o, d) => {
+                if (d == Direction.Down && jumpEntity == o)
+                    canJump = false;
+            });
         }
 
         /// <summary>
@@ -59,12 +63,12 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double runningSpeed = 1;
+        protected double runningSpeed = 200000000;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        protected double jumpHeight = 500;
+        protected double jumpHeight = 1000;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -72,12 +76,12 @@ namespace Platformer.Entities
         /// <param name="direction"></param>
         public void RunRight()
         {
-            _body.Accelerate(new Vector {x = runningSpeed, y = 0});
+            _body.Pull(new Vector {x = runningSpeed, y = 0});
         }
 
         public void RunLeft()
         {
-            _body.Accelerate(new Vector { x = -runningSpeed, y = 0});
+            _body.Pull(new Vector { x = -runningSpeed, y = 0});
         }
 
         /// <summary>
@@ -104,7 +108,6 @@ namespace Platformer.Entities
         public override void Tick(double deltaTime)
         {
             base.Tick(deltaTime);
-            canJump = false;
         }
     }
 }

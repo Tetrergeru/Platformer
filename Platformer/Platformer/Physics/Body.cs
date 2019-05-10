@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Math;
+using static System.ValueType;
 
 namespace Platformer.Physics
 {
@@ -24,10 +25,17 @@ namespace Platformer.Physics
         { get { return collider.Volume() * density; } }
 
         Action<object, Direction> CollisionEvents = (o, d) => { };
+        Action<object, Direction> StartCollisionEvents = (o, d) => { };
+        Action<object, Direction> EndCollisionEvents = (o, d) => { };
+        
+        List<(object tag, Direction direction)> LastCollisionList = new List<(object, Direction)>();
+        List<(object tag, Direction direction)> CollisionList = new List<(object, Direction)>();
 
         public Body(ICollider collider)
         {
             this.collider = collider;
+            Force = Vector.Zero();
+            Velocity = Vector.Zero();
         }
 
         public void Pull(Vector vector)
@@ -55,11 +63,6 @@ namespace Platformer.Physics
             return collider.AxisAlignedBoundingBox();
         }
 
-        public void CollisionWith(IBody body, Direction direction)
-        {
-            CollisionEvents(body.Tag, direction);
-        }
-
         public Vector Center()
         {
             return collider.Center();
@@ -68,6 +71,7 @@ namespace Platformer.Physics
         public void MoveTo(Vector vector)
         {
             var box = Recrtangle(); 
+
             Vector location = new Vector { x = box.X, y = box.Y };
             Move(vector - location);
         }
@@ -81,21 +85,47 @@ namespace Platformer.Physics
                 return;
             }
 
-            Accelerate(Velocity * -1 / 1000);
+            Pull(Velocity * -100000);
             Accelerate(Force * deltaTime / Mass);
             Move(Velocity * deltaTime);
-            
+
+            foreach (var t in LastCollisionList)
+                EndCollisionEvents(t.tag, t.direction);
+            LastCollisionList = CollisionList;
+            CollisionList = new List<(object, Direction direction)>();
+
             Force = Vector.Zero();
         }
         
-        public void AddCollisionEvent(Action<object, Direction> action)
+        public void CollisionWith(IBody body, Direction direction)
         {
-            CollisionEvents += action;
+            CollisionEvents(body.Tag, direction);
+            CollisionList.Add((body.Tag, direction));
+
+            if (LastCollisionList.Contains((body.Tag, direction)))
+                LastCollisionList.Remove((body.Tag, direction));
+            else
+                StartCollisionEvents(body.Tag, direction);
         }
 
         public void Resize(Vector ratio)
         {
             collider.Resize(ratio);
+        }
+
+        public void AddCollisionEvent(Action<object, Direction> action)
+        {
+            CollisionEvents += action;
+        }
+        
+        public void AddStartCollisionEvent(Action<object, Direction> action)
+        {
+            StartCollisionEvents += action;
+        }
+
+        public void AddEndCollisionEvent(Action<object, Direction> action)
+        {
+            EndCollisionEvents += action;
         }
     }
 }

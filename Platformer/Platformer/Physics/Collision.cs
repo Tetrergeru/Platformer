@@ -58,8 +58,8 @@ namespace Platformer.Physics
             Vector absDirection = new Vector { x = Abs(directionVector.x), y = Abs(directionVector.y) };
             Vector absDirectionRotate = new Vector { x = absDirection.y, y = absDirection.x};
             body.Pull(force);
-            body.Accelerate(absDirection * deltaVelocity * -1 / 20);
-            body.Accelerate(absDirectionRotate * deltaVelocity * -1 / 1000);
+            body.Pull(absDirection * deltaVelocity * -10000000);
+            body.Pull(absDirectionRotate * deltaVelocity * -200000);
 
             body.CollisionWith(target, direction);
         }

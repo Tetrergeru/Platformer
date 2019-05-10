@@ -21,7 +21,7 @@ namespace Platformer.Entities
             MaxHealth = 50000;
             Health = defHealth;
             defRect = new HitBox(Hitbox);
-            jumpHeight = 100;
+            jumpHeight = 700;
         }
 
         public override void Jump()
@@ -35,8 +35,7 @@ namespace Platformer.Entities
                     canJump = false;
                     return;
                 }
-
-                jumpEntity._body.Accelerate(new Vector { x = 0, y = jumpHeight });
+                
                 if (jumpEntity is Actor actor)
                 {
                     double damage = 30;
