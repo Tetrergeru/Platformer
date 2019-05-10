@@ -28,10 +28,9 @@ namespace Platformer.Files
             return entity;
         }
 
-        public static  World GetWorld(string fname)
+        public static void FillWorld(World world, string fname)
         {
             var data = Interpreter.Interpret(fname);
-            var world = new World();
 
             var color = data.GetList("background_color");
             //world.BackGroundColor = Color.FromArgb(color[0].GetInt(), color[1].GetInt(), color[2].GetInt());
@@ -41,8 +40,6 @@ namespace Platformer.Files
 
             foreach (var entity in data.GetList("decorations"))
                 GetDecoration(entity, world);
-
-            return world;
         }
     }
 }

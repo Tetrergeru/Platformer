@@ -10,10 +10,15 @@ namespace Platformer.Physics
     class BoxCollider : ICollider, IRectangle
     {
         public double X { get; set;} 
+
         public double Y { get; set; }
+
         public double X2 => X + Width;
+
         public double Y2 => Y + Height;
+
         public double Width { get; set; }
+
         public double Height { get; set; }
 
         public Vector Coordinates => new Vector { x = X, y = Y };
@@ -48,7 +53,7 @@ namespace Platformer.Physics
                 throw new NotImplementedException("Неизвестный коллайдер " + collider.GetType().ToString());
         }
 
-        BoxCollider ICollider.AxisAlignedBoundingBox()
+        IRectangle ICollider.AxisAlignedBoundingBox()
         {
             return this;
         }

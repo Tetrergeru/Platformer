@@ -53,12 +53,12 @@ namespace Platformer.Physics
             collider.Move(vector);
         }
 
-        public BoxCollider AxisAlignedBoundingBox()
+        public IRectangle AxisAlignedBoundingBox()
         {
             return collider.AxisAlignedBoundingBox();
         }
 
-        public IRectangle Recrtangle()
+        public IRectangle Rectangle()
         {
             return collider.AxisAlignedBoundingBox();
         }
@@ -70,7 +70,7 @@ namespace Platformer.Physics
 
         public void MoveTo(Vector vector)
         {
-            var box = Recrtangle(); 
+            var box = Rectangle(); 
 
             Vector location = new Vector { x = box.X, y = box.Y };
             Move(vector - location);

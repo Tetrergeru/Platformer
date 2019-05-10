@@ -8,7 +8,7 @@ namespace GUI
     {
         private const double HorizontalAdjustPersent = 0.1;
 
-        private const double VerticalAdjustPersent = 0.1;
+        private const double VerticalAdjustPersent = 0.3;
 
         public Vector coordinates = Vector.Zero();
 

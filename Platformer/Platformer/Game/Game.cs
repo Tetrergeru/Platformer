@@ -3,6 +3,7 @@ using Platformer.Files;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Platformer.Physics;
 
 namespace Platformer.Game
 {
@@ -29,12 +30,13 @@ namespace Platformer.Game
         /// <summary>
         /// Конструктор, инициализирующий игру параметрами по умолчанию
         /// </summary>
-        public Game(ITimer timer)
+        public Game(ITimer timer, IPhysics physics)
         {
             _gameLoop = timer;
             _gameLoop.AddEvent(Tick);
 
-            World = WorldFile.GetWorld("Resources/Worlds/test.world");
+            World = new World(physics);
+            WorldFile.FillWorld(World, "Resources/Worlds/test.world");
             
             Player = World.CreatePlayer(new HitBox(0, -10, 0.25, 0.5));
             

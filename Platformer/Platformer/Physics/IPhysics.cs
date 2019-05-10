@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Platformer.Physics
 {
-    interface IPhysics
+    public interface IPhysics
     {
         /// <summary>
         /// Создаёт новое физическое тело внутри движка

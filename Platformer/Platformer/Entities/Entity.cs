@@ -17,7 +17,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Область занимаемая сущностью
         /// </summary>
-        public IRectangle Hitbox => _body.Recrtangle();
+        public IRectangle Hitbox => _body.Rectangle();
         
         /// <summary>
         /// Мир, в котором эта сущность расположена

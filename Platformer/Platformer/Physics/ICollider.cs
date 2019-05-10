@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace Platformer.Physics
 {
-    interface ICollider
+    public interface ICollider
     {
         ICollider CollisionWith(ICollider collider);
-        BoxCollider AxisAlignedBoundingBox();
+
+        IRectangle AxisAlignedBoundingBox();
+
         void Move(Vector vector);
+
         double Volume();
+
         Vector Center();
+
         void Resize(Vector ratio);
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Platformer.Physics
 {
-    interface IBody
+    public interface IBody
     {
         /// <summary>
         /// Определяет, упрявляется ли перемещение данного тела физическим движком
@@ -69,7 +69,7 @@ namespace Platformer.Physics
         /// Возвращает прямоугольную область, занимаемую данным телом
         /// </summary>
         /// <returns></returns>
-        IRectangle Recrtangle();
+        IRectangle Rectangle();
 
         /// <summary>
         /// Меняет каждую координату в соответствующее число раз

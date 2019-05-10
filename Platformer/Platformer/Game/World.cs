@@ -68,9 +68,9 @@ namespace Platformer.Game
         /// <summary>
         /// Инициализирует мир значениями по умолчанию
         /// </summary>
-        public World()
+        public World(IPhysics physics)
         {
-            _physics = new Physics.Physics();
+            _physics = physics;
             for (int i = 0; i < 20; i++)
                 for (int j = 0; j < 1; j++)
                 {
