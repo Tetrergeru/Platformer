@@ -1,4 +1,5 @@
-﻿using Platformer.Game;
+﻿using System.ComponentModel.Design;
+using Platformer.Game;
 using Platformer.Physics;
 
 namespace Platformer.Entities
@@ -9,6 +10,12 @@ namespace Platformer.Entities
     /// </summary>
     internal class Player : Actor
     {
+        public override double Health
+        {
+            get => health;
+            internal set { health = 100; }
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// Конструктор, создающий экземпляр игорка по его миру и расположению

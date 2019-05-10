@@ -131,6 +131,7 @@ namespace GUI
             {
                 if (gameState != State.Running)
                     return;
+                Console.WriteLine($"Drawn");
                 AdjustBy(snapshot.player.body);
                 Clear(Color.SkyBlue/*snapshot.currentBackgroundColor*/);
                 Draw(snapshot.entities);

@@ -9,8 +9,8 @@ namespace Platformer.Files
     {
         private static Entity GetSolidEntity(Data data, World context)
         {
-            var width = data.GetInt("width");
-            var height = data.GetInt("height");
+            var width = data.GetDouble("width");
+            var height = data.GetDouble("height");
 
             var entity = context.CreateSolidEntity(new HitBox(0, 0, width, height));
             entity.Texture = data.GetString("texture");
@@ -19,8 +19,8 @@ namespace Platformer.Files
 
         private static Entity GetDecoration(Data data, World context)
         {
-            var width = data.GetInt("width");
-            var height = data.GetInt("height");
+            var width = data.GetDouble("width");
+            var height = data.GetDouble("height");
 
             var entity = context.CreateDecoration(new HitBox(0, 0, width, height));
             entity.Texture = data.GetString("texture");

@@ -38,6 +38,7 @@ namespace GUI
 
         public void ChangeScale(double newScale, IRectangle playerLocation)
         {
+            Console.WriteLine($"Scale = {newScale}");
             var playerCoords = coordinates * -1 + playerLocation.Coordinates;
             coordinates = coordinates + playerCoords * (1 - Scale / newScale);
             Scale = newScale;
@@ -67,10 +68,16 @@ namespace GUI
         public void AdjustBy(IRectangle hitbox)
         {
             var playerCoords = (coordinates * -1 + hitbox.Coordinates) * Scale;
+
+            /*
+            if (playerCoords.x < Width * HorizontalAdjustPersent)
+                coordinates.x -= player
+
             CounstBordersAndAdjustCoordinate(ref coordinates.x, playerCoords.x, hitbox.Width * Scale, Width,
                 HorizontalAdjustPersent);
             CounstBordersAndAdjustCoordinate(ref coordinates.y, playerCoords.y, hitbox.Height * Scale, Height,
                 VerticalalAdjustPersent);
+                */
         }
 
         public void Move(Vector delta)

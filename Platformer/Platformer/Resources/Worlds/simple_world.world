@@ -5,9 +5,9 @@ grass_name = res + 'grass_block_0.entity'
 blocks = []
 
 //adding some grass
-blocks += [[grass_name, 0, 400]]
-blocks += [[grass_name, 700, 400]]
-blocks += [[grass_name, 280, 350]]
-blocks += [[res + 'stone_1.entity', 450, 430]]
+blocks += [[grass_name, 0, 4]]
+blocks += [[grass_name, 7, 4]]
+blocks += [[grass_name, 2.8, 3.50]]
+blocks += [[res + 'stone_1.entity', 4.5, 4.3]]
 
-decorations = [[res + 'tree_0.entity', 350, 50]]
+decorations = [[res + 'tree_0.entity', 3.5, 0.5]]

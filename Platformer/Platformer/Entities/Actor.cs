@@ -14,16 +14,16 @@ namespace Platformer.Entities
         public double MaxHealth { get; protected set; }
 
 
-        private double _health;
+        protected double health;
 
-        public double Health {
-            get => _health;
+        public virtual double Health {
+            get => health;
             internal set
             {
                 if (value > MaxHealth)
-                    _health = MaxHealth;
+                    health = MaxHealth;
                 else
-                    _health = value;
+                    health = value;
             }
         }
         
