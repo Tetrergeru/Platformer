@@ -125,7 +125,7 @@ namespace Platformer.Game
         
         public Player CreatePlayer(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), true, true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox), false, true);
             var entity = new Player(this, body);
             Player = entity;
             return entity;

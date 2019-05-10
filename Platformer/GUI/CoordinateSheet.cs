@@ -8,7 +8,7 @@ namespace GUI
     {
         private const double HorizontalAdjustPersent = 0.1;
 
-        private const double VerticalalAdjustPersent = 0.1;
+        private const double VerticalAdjustPersent = 0.1;
 
         public Vector coordinates = Vector.Zero();
 
@@ -16,7 +16,7 @@ namespace GUI
         {
             Width = w;
             Height = h;
-            Scale = 1;
+            Scale = 100;
         }
 
         public double Width { get; set; }
@@ -49,35 +49,20 @@ namespace GUI
             Width = w;
             Height = h;
         }
-
-        private void AdjustCoordinate(ref double coord, double playerCoord, double playerSize, double lesserBorder,
-            double biggerBorder)
-        {
-            if (playerCoord < lesserBorder || playerCoord + playerSize > biggerBorder)
-                coord += playerCoord - (playerCoord < lesserBorder ? lesserBorder : biggerBorder - playerSize);
-        }
-
-        private void CounstBordersAndAdjustCoordinate(ref double coord, double playerCoord, double playerSize,
-            double dimension, double dimensionAdjustPersent)
-        {
-            var lesserBorder = dimension * dimensionAdjustPersent;
-            var biggerBorder = dimension - lesserBorder;
-            AdjustCoordinate(ref coord, playerCoord, playerSize, lesserBorder, biggerBorder);
-        }
-
+        
         public void AdjustBy(IRectangle hitbox)
         {
             var playerCoords = (coordinates * -1 + hitbox.Coordinates) * Scale;
 
-            /*
             if (playerCoords.x < Width * HorizontalAdjustPersent)
-                coordinates.x -= player
+                coordinates.x = hitbox.X - Width * HorizontalAdjustPersent / Scale;
+            else if (playerCoords.x > Width * (1 - HorizontalAdjustPersent))
+                coordinates.x = hitbox.X - Width * (1 - HorizontalAdjustPersent) / Scale;
 
-            CounstBordersAndAdjustCoordinate(ref coordinates.x, playerCoords.x, hitbox.Width * Scale, Width,
-                HorizontalAdjustPersent);
-            CounstBordersAndAdjustCoordinate(ref coordinates.y, playerCoords.y, hitbox.Height * Scale, Height,
-                VerticalalAdjustPersent);
-                */
+            if (playerCoords.y < Height * VerticalAdjustPersent)
+                coordinates.y = hitbox.Y - Height * VerticalAdjustPersent / Scale;
+            else if (playerCoords.y > Height * (1 - VerticalAdjustPersent))
+                coordinates.y = hitbox.Y - Height * (1 - VerticalAdjustPersent) / Scale;
         }
 
         public void Move(Vector delta)
