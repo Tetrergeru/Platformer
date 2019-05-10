@@ -9,11 +9,10 @@ namespace Platformer.Physics
 {
     class Body : IBody
     {
-        ICollider collider;
+        public ICollider collider;
 
-        Vector force = Vector.Zero();
-        Vector velocity = Vector.Zero();
-        double slowdown;
+        public Vector Force { get; private set; }
+        public Vector Velocity { get; private set; }
         private double density = 100;
         
 
@@ -33,12 +32,12 @@ namespace Platformer.Physics
 
         public void Pull(Vector vector)
         {
-            force += vector;
+            Force += vector;
         }
 
         public void Accelerate(Vector vector)
         {
-            velocity += vector;
+            Velocity += vector;
         }
 
         public void Move(Vector vector)
@@ -56,73 +55,9 @@ namespace Platformer.Physics
             return collider.AxisAlignedBoundingBox();
         }
 
-        public void CollisionWith(Body target)
+        public void CollisionWith(IBody body, Direction direction)
         {
-            if (!MovementRecipient && !target.MovementRecipient)
-                return;
-            if (!MovementEmitter && !target.MovementEmitter)
-                return;
-            ICollider collision = collider.CollisionWith(target.collider);
-            if (collision is BoxCollider box)
-            {
-                if (box.Volume() < 0.000001)
-                    return;
-                Vector dist = Center() - target.Center();
-                dist.x = Sign(dist.x);
-                dist.y = Sign(dist.y);
-                Vector force;
-
-                Direction myDirection;
-                Direction targetDirection;
-
-                if (box.Width > box.Height)
-                {
-                    if(dist.y > 0)
-                    {
-                        myDirection = Direction.Up;
-                        targetDirection = Direction.Down;
-                    }
-                    else
-                    {
-                        targetDirection = Direction.Up;
-                        myDirection = Direction.Down;
-                    }
-                    force = dist * new Vector { x = 0, y = box.Height } * 1000000000;
-                }
-                else
-                {
-                    if (dist.x > 0)
-                    {
-                        myDirection = Direction.Left;
-                        targetDirection = Direction.Right;
-                    }
-                    else
-                    {
-                        targetDirection = Direction.Left;
-                        myDirection = Direction.Right;
-                    }
-                    force = dist * new Vector { x = box.Width, y = 0 } * 1000000000;
-                }
-
-                if (MovementRecipient && target.MovementEmitter)
-                {
-                    slowdown += box.Volume() / collider.Volume();
-                    CollisionEvents(target.Tag, myDirection);
-                    slowdown += box.Volume() / collider.Volume();
-                    Pull(force);
-                }
-
-                if (target.MovementRecipient && MovementEmitter)
-                {
-                    target.slowdown += box.Volume() / target.collider.Volume();
-                    target.slowdown += box.Volume() / target.collider.Volume();
-                    target.CollisionEvents(Tag, targetDirection);
-                    target.Pull(force * -1);
-                }
-
-            }
-            else
-                throw new NotImplementedException("Неизвестный коллайдер " + collider.GetType().ToString());
+            CollisionEvents(body.Tag, direction);
         }
 
         public Vector Center()
@@ -141,23 +76,18 @@ namespace Platformer.Physics
         {
             if (!MovementRecipient)
             {
-                slowdown = 0;
-                force = Vector.Zero();
+                Force = Vector.Zero();
+                Velocity = Vector.Zero();
                 return;
             }
+
+            Accelerate(Velocity * -1 / 1000);
+            Accelerate(Force * deltaTime / Mass);
+            Move(Velocity * deltaTime);
             
-            Accelerate(force * deltaTime / Mass);
-            double k = 1 - (slowdown + 0.0001);
-            if (k < 0)
-                velocity = Vector.Zero();
-            else
-                velocity = velocity * Pow(k , deltaTime * 1000);
-            Move(velocity * deltaTime);
-
-            slowdown = 0;
-            force = Vector.Zero();
+            Force = Vector.Zero();
         }
-
+        
         public void AddCollisionEvent(Action<object, Direction> action)
         {
             CollisionEvents += action;

@@ -69,6 +69,7 @@
     <Compile Include="IRectangle.cs" />
     <Compile Include="Physics\Body.cs" />
     <Compile Include="Physics\BoxCollider.cs" />
+    <Compile Include="Physics\Collision.cs" />
     <Compile Include="Physics\Direction.cs" />
     <Compile Include="Physics\IBody.cs" />
     <Compile Include="Physics\ICollider.cs" />

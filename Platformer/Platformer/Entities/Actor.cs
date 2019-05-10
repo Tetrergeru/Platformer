@@ -26,16 +26,6 @@ namespace Platformer.Entities
                     _health = value;
             }
         }
-        
-        /// <summary>
-        /// Верхняя граница скорости перемещения по горизонтали
-        /// </summary>
-        protected double maxHorizontalVelocity = 200;
-
-        /// <summary>
-        /// Верхняя граница скорости перемещения по вертикали
-        /// </summary>
-        protected double maxVerticalVelocity = 20 * 100;
 
         /// <summary>
         /// Скорость перемещения
@@ -69,12 +59,12 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double runningSpeed = 10;
+        protected double runningSpeed = 1;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        protected double jumpHeight = 300;
+        protected double jumpHeight = 500;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении
@@ -99,8 +89,6 @@ namespace Platformer.Entities
             {
                 _body.Accelerate(new Vector { x = 0, y = -jumpHeight });
                 jumpEntity._body.Accelerate(new Vector { x = 0, y = jumpHeight });
-                if (jumpEntity is Actor actor)
-                    actor.Health -= 100;
             }
             canJump = false;
         }

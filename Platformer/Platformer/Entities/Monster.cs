@@ -28,7 +28,7 @@ namespace Platformer.Entities
         {
             if (canJump)
             {
-                _body.Accelerate(new Vector { x = 0, y = -jumpHeight });
+                base.Jump();
 
                 if (jumpEntity == null)
                 {
@@ -51,7 +51,6 @@ namespace Platformer.Entities
                     }
                 }
             }
-            canJump = false;
         }
 
         public override void Tick(double deltaTime)
