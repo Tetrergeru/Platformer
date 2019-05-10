@@ -13,5 +13,6 @@ namespace Platformer.Physics
         void Move(Vector vector);
         double Volume();
         Vector Center();
+        void Resize(Vector ratio);
     }
 }

@@ -68,5 +68,15 @@ namespace Platformer.Physics
             X += vector.x;
             Y += vector.y;
         }
+
+        public void Resize(Vector ratio)
+        {
+            double newWidth = Width * ratio.x;
+            double newHeight = Height * ratio.y;
+            X -= (newWidth - Width) / 2;
+            Y -= (newHeight- Height) / 2;
+            Height = newHeight;
+            Width = newWidth;
+        }
     }
 }

@@ -6,6 +6,10 @@ namespace Platformer.Entities
 {
     internal class Monster : Actor
     {
+
+        double defHealth = 100;
+        IRectangle defRect;
+
         /// <inheritdoc />
         /// <summary>
         /// Конструктор, создающий экземпляр монстра по его миру и расположению
@@ -14,8 +18,9 @@ namespace Platformer.Entities
         /// <param name="hitbox"></param>
         public Monster(World context, IBody body) : base(context, body)
         {
-            MaxHealth = 50;
-            Health = MaxHealth;
+            MaxHealth = 50000;
+            Health = defHealth;
+            defRect = new HitBox(Hitbox);
             jumpHeight = 100;
         }
 
@@ -34,18 +39,15 @@ namespace Platformer.Entities
                 jumpEntity._body.Accelerate(new Vector { x = 0, y = jumpHeight });
                 if (jumpEntity is Actor actor)
                 {
-                    actor.Health -= 300;
+                    double damage = 30;
+                    double profit = Min(damage, actor.Health);
+                    actor.Health -= damage;
+                    Health += profit;
                     if (actor.Health <= 0)
                     {
                         IRectangle rectangle = Hitbox;
-                        Context.RemoveBody(_body);
-                        double x = rectangle.Width;
-                        double y = rectangle.Height;
-                        double vol = actor.Hitbox.Width * actor.Hitbox.Height + x * y;
-
-                        _body = Context.CreateMonsterBody(new HitBox(rectangle.X, rectangle.Y, Sqrt(vol * x / y), Sqrt(vol * y / x)));
-                        _body.Tag = this;
-                        _body.AddCollisionEvent((o, d) => { if (d == Direction.Down) { canJump = true; jumpEntity = o as Entity; } });
+                        double k = Sqrt(1 + actor.Hitbox.Width * actor.Hitbox.Height / Hitbox.Width / Hitbox.Height);
+                        _body.Resize(new Vector {x = k, y = k });
                     }
                 }
             }
@@ -54,7 +56,14 @@ namespace Platformer.Entities
 
         public override void Tick(double deltaTime)
         {
-            
+            double rectK = Hitbox.Width / defRect.Width;
+            double HealthK = Health / defHealth;
+            if (Abs(rectK - HealthK) > 0.0001)
+            {
+                double ratio = (HealthK / rectK - 1) / 10;
+                _body.Resize(new Vector {x = ratio + 1, y = ratio  + 1});
+            }
+
             if (Hitbox.Coordinates.DistanceTo(Context.Player.Hitbox.Coordinates) < 500000)
             {
                 if (Context.Player.Hitbox.X < Hitbox.X)

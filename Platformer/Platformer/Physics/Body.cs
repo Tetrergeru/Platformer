@@ -150,5 +150,10 @@ namespace Platformer.Physics
         {
             CollisionEvents += action;
         }
+
+        public void Resize(Vector ratio)
+        {
+            collider.Resize(ratio);
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace Platformer.Physics
         /// </summary>
         bool Movable { get; set; }
 
+        /// <summary>
+        /// Тэг для передачи параметром в событии
+        /// </summary>
         object Tag { get; set; }
 
         /// <summary>
@@ -50,5 +53,11 @@ namespace Platformer.Physics
         /// </summary>
         /// <returns></returns>
         IRectangle Recrtangle();
+
+        /// <summary>
+        /// Меняет каждую координату в соответствующее число раз
+        /// </summary>
+        /// <param name="ratio"></param>
+        void Resize(Vector ratio);
     }
 }
