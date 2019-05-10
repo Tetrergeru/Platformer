@@ -28,5 +28,15 @@ namespace Platformer.Entities
             MaxHealth = 50;
             Health = MaxHealth;
         }
+
+        public override void Jump()
+        {
+            if (canJump)
+            {
+                base.Jump();
+                if (jumpEntity is Actor actor)
+                    actor.Health -= 100;
+            }
+        }
     }
 }

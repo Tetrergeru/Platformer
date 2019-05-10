@@ -16,12 +16,12 @@ namespace Platformer.Physics
             for (int i = 0; i < Bodies.Count; i++)
             {
                 for (int j = i + 1; j < Bodies.Count; j++)
-                    Bodies[i].CollisionWith(Bodies[j]);
+                    Collision.Interaction(Bodies[i], Bodies[j], deltaTime);
                
                 if (Bodies[i].MovementRecipient)
                     Bodies[i].Pull(new Vector { x = 0, y = Gravity } * Bodies[i].Mass);
             }
-
+            //System.Threading.Thread.Sleep(10);
             foreach (Body body in Bodies)
                 body.Tick(deltaTime);
         }
