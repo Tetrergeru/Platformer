@@ -14,28 +14,27 @@ namespace Platformer.Physics
 
         public Vector Force { get; private set; }
         public Vector Velocity { get; private set; }
-        private double density = 2200;
-        
+        public PhysicalMaterial material { get; set; }
+        public bool MovementRecipient { get => material.MovementRecipient; }
+        public bool MovementEmitter { get => material.MovementEmitter; }
 
         public object Tag { get; set; }
-        public bool MovementRecipient { get; set; }
-        public bool MovementEmitter { get; set; }
 
-        public double Mass
-        { get { return collider.Volume() * density; } }
+        public double Mass { get { return collider.Volume() * material.Density; } }
 
-        Action<object, Direction> CollisionEvents = (o, d) => { };
-        Action<object, Direction> StartCollisionEvents = (o, d) => { };
-        Action<object, Direction> EndCollisionEvents = (o, d) => { };
-        
-        List<(object tag, Direction direction)> LastCollisionList = new List<(object, Direction)>();
-        List<(object tag, Direction direction)> CollisionList = new List<(object, Direction)>();
+        private Action<object, Direction> CollisionEvents = (o, d) => { };
+        private Action<object, Direction> StartCollisionEvents = (o, d) => { };
+        private Action<object, Direction> EndCollisionEvents = (o, d) => { };
 
-        public Body(ICollider collider)
+        private List<(object tag, Direction direction)> LastCollisionList = new List<(object, Direction)>();
+        private List<(object tag, Direction direction)> CollisionList = new List<(object, Direction)>();
+
+        public Body(ICollider collider, PhysicalMaterial material)
         {
             this.collider = collider;
             Force = Vector.Zero();
             Velocity = Vector.Zero();
+            this.material = material;
         }
 
         public void Pull(Vector vector)

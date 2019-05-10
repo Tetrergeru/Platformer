@@ -17,7 +17,7 @@ namespace Platformer.Physics
             {
                 for (int j = i + 1; j < Bodies.Count; j++)
                     Collision.Interaction(Bodies[i], Bodies[j], deltaTime);
-               
+                
                 if (Bodies[i].MovementRecipient)
                     Bodies[i].Pull(new Vector { x = 0, y = Gravity } * Bodies[i].Mass);
             }
@@ -26,11 +26,9 @@ namespace Platformer.Physics
                 body.Tick(deltaTime);
         }
 
-        public IBody CreateBody(ICollider collider, bool MovementRecipient = false, bool MovementEmitter = false)
+        public IBody CreateBody(ICollider collider, PhysicalMaterial material)
         {
-            Body body = new Body(collider);
-            body.MovementRecipient = MovementRecipient;
-            body.MovementEmitter = MovementEmitter;
+            Body body = new Body(collider, material);
             Bodies.Add(body);
             return body;
         }

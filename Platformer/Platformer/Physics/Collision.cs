@@ -53,13 +53,14 @@ namespace Platformer.Physics
         public static void InteractionWith(Body body, Body target, ICollider collision, Direction direction, Vector deltaVelocity, double deltaTime)
         {
             Vector directionVector = ToVector(Reverse(direction));
-            Vector force = directionVector * collision.Volume() * 2000000;
+            Vector force = directionVector * collision.Volume() * Pow(100000000, Sqrt(body.material.Restoring * target.material.Restoring));
 
             Vector absDirection = new Vector { x = Abs(directionVector.x), y = Abs(directionVector.y) };
             Vector absDirectionRotate = new Vector { x = absDirection.y, y = absDirection.x};
             body.Pull(force);
-            body.Pull(absDirection * deltaVelocity * -10000);
-            body.Pull(absDirectionRotate * deltaVelocity * -200);
+            body.Pull(absDirection * deltaVelocity *        -Pow(100000, Sqrt(body.material.Absorption * target.material.Absorption)));
+            body.Pull(absDirectionRotate * deltaVelocity *  -Pow(10000, Sqrt(body.material.Friction * target.material.Friction)));
+            body.Pull(deltaVelocity *                       -Pow(10000, Sqrt(body.material.Viscosity * target.material.Viscosity)));
 
             body.CollisionWith(target, direction);
         }

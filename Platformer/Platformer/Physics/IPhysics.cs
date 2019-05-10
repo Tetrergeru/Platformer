@@ -12,10 +12,9 @@ namespace Platformer.Physics
         /// Создаёт новое физическое тело внутри движка
         /// </summary>
         /// <param name="collider">коллайдер</param>
-        /// <param name="MovementRecipient">возможность физики управлять движением телои</param>
-        /// <param name="MovementEmitter">Возможность тела влиять на физическое движение</param>
+        /// <param name="material">физический материал</param>
         /// <returns></returns>
-        IBody CreateBody(ICollider collider, bool MovementRecipient = false, bool MovementEmitter = false);
+        IBody CreateBody(ICollider collider, PhysicalMaterial material);
 
         /// <summary>
         /// Удаляет физическое тело из пространства движка

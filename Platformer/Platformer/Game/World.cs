@@ -93,7 +93,17 @@ namespace Platformer.Game
 
         public Entity CreateSolidEntity(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), false, true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox),
+                new PhysicalMaterial
+                {
+                    Absorption = 0.8,
+                    Restoring = 0.8,
+                    Viscosity = 0.3,
+                    Density = 2740,
+                    Friction = 0.8,
+                    MovementEmitter = true,
+                    MovementRecipient = false,
+                });
             var entity = new Entity(this, body);
             Blocks.Add(entity);
             return entity;
@@ -101,7 +111,17 @@ namespace Platformer.Game
 
         public Entity CreateDecoration(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), false, false);
+            var body = _physics.CreateBody(new BoxCollider(hitBox),
+                new PhysicalMaterial
+                {
+                    Absorption = 0.1,
+                    Restoring = 0.5,
+                    Viscosity = 0.1,
+                    Density = 690,
+                    Friction = 0.1,
+                    MovementEmitter = false,
+                    MovementRecipient = false,
+                });
             var entity = new Entity(this, body);
             Decorations.Add(entity);
             return entity;
@@ -109,7 +129,17 @@ namespace Platformer.Game
 
         public Monster CreateMonster(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), true, true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox),
+                new PhysicalMaterial
+                {
+                    Absorption = 0.9,
+                    Restoring = 0.6,
+                    Viscosity = 0.9,
+                    Density = 1000,
+                    Friction = 0.7,
+                    MovementEmitter = true,
+                    MovementRecipient = true,
+                });
             var entity = new Monster(this, body);
             Enemies.Add(entity);
             return entity;
@@ -117,7 +147,17 @@ namespace Platformer.Game
 
         public Particle CreateParticle(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), true, false);
+            var body = _physics.CreateBody(new BoxCollider(hitBox),
+                new PhysicalMaterial
+                {
+                    Absorption = 0.01,
+                    Restoring = 0.01,
+                    Viscosity = 1.0,
+                    Density = 1000,
+                    Friction = 0.2,
+                    MovementEmitter = false,
+                    MovementRecipient = true,
+                });
             var entity = new Particle(this, body);
             Particles.Add(entity);
             return entity;
@@ -125,7 +165,17 @@ namespace Platformer.Game
         
         public Player CreatePlayer(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), true, true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox),
+                new PhysicalMaterial
+                {
+                    Absorption = 0.9,
+                    Restoring = 0.8,
+                    Viscosity = 0.0,
+                    Density = 2200,
+                    Friction = 0.6,
+                    MovementEmitter = true,
+                    MovementRecipient = true,
+                });
             var entity = new Player(this, body);
             Player = entity;
             return entity;
@@ -134,11 +184,6 @@ namespace Platformer.Game
         public void RemoveBody(IBody body)
         {
             _physics.RemoveBody(body);
-        }
-
-        public IBody CreateMonsterBody(IRectangle hitBox)
-        {
-            return _physics.CreateBody(new BoxCollider(hitBox), true, true);
         }
 
         public void RemoveEntity(Entity entity)
