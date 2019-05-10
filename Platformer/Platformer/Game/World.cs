@@ -125,7 +125,7 @@ namespace Platformer.Game
         
         public Player CreatePlayer(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), false, true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox), true, true);
             var entity = new Player(this, body);
             Player = entity;
             return entity;
@@ -159,12 +159,13 @@ namespace Platformer.Game
             int count = 3;
             Random rnd = new Random();
             Vector size = new Vector { x = entity.Hitbox.Width / count, y = entity.Hitbox.Height / count };
+            double vol = size.x * size.y;
             for (int i = 0; i < count; i++)
                 for (int j = 0; j < count; j++)
                 {
                     var p = CreateParticle(new HitBox(entity.Hitbox.X + size.x * i, entity.Hitbox.Y + size.y * j, size.x, size.y));
                     p.Texture = "Resources/TextureAssets/slime.texture";
-                    p.Pull(new Vector {x = (i - count / 2) * 10 / count + rnd.Next(-100, 100), y = (j / count) * 10 / count + rnd.Next(-100, 100) });
+                    p.Pull(new Vector {x = ((i - count / 2) * 1000000 / count + rnd.Next(-10000, 10000)) * vol, y = ((j / count) * 1000000 / count + rnd.Next(-10000, 10000)) * vol });
                 }
             RemoveEntity(entity);
         }

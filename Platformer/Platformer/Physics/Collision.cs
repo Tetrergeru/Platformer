@@ -20,7 +20,7 @@ namespace Platformer.Physics
             ICollider collision = body1.collider.CollisionWith(body2.collider);
             if (collision is BoxCollider box)
             {
-                if (box.Volume() < 0.000001)
+                if (box.Volume() < 1e-10)
                     return;
                 Vector dist = body1.Center() - body2.Center();
                 Vector deltaVelocity = body1.Velocity - body2.Velocity;
@@ -53,13 +53,13 @@ namespace Platformer.Physics
         public static void InteractionWith(Body body, Body target, ICollider collision, Direction direction, Vector deltaVelocity, double deltaTime)
         {
             Vector directionVector = ToVector(Reverse(direction));
-            Vector force = directionVector * collision.Volume() * 100000000;
+            Vector force = directionVector * collision.Volume() * 2000000;
 
             Vector absDirection = new Vector { x = Abs(directionVector.x), y = Abs(directionVector.y) };
             Vector absDirectionRotate = new Vector { x = absDirection.y, y = absDirection.x};
             body.Pull(force);
-            body.Pull(absDirection * deltaVelocity * -10000000);
-            body.Pull(absDirectionRotate * deltaVelocity * -200000);
+            body.Pull(absDirection * deltaVelocity * -10000);
+            body.Pull(absDirectionRotate * deltaVelocity * -200);
 
             body.CollisionWith(target, direction);
         }

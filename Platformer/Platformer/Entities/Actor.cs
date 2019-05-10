@@ -45,10 +45,7 @@ namespace Platformer.Entities
         public Actor(World context, IBody body) : base(context, body)
         {
             _body.AddStartCollisionEvent((o, d) => { if (d == Direction.Down) { canJump = true; jumpEntity = o as Entity; } });
-            _body.AddEndCollisionEvent((o, d) => {
-                if (d == Direction.Down && jumpEntity == o)
-                    canJump = false;
-            });
+            _body.AddEndCollisionEvent((o, d) => { if (d == Direction.Down && jumpEntity == o) canJump = false; });
         }
 
         /// <summary>
@@ -63,12 +60,12 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double runningSpeed = 200000000;
+        protected double runningSpeed = 2000;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
         /// </summary>
-        protected double jumpHeight = 1000;
+        protected double jumpHeight = 10;
 
         /// <summary>
         /// Побуждает актора бежать в указанном направлении

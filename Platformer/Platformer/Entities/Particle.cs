@@ -19,8 +19,6 @@ namespace Platformer.Entities
 
         public void Pull(Vector force)
         {
-            if (double.IsNaN(force.x) || double.IsNaN(force.x))
-                Console.WriteLine("NuN force");
             _body.Pull(force);
         }
 

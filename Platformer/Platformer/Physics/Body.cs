@@ -14,7 +14,7 @@ namespace Platformer.Physics
 
         public Vector Force { get; private set; }
         public Vector Velocity { get; private set; }
-        private double density = 100;
+        private double density = 2200;
         
 
         public object Tag { get; set; }
@@ -85,7 +85,7 @@ namespace Platformer.Physics
                 return;
             }
 
-            Pull(Velocity * -100000);
+            Pull(Velocity * -50);
             Accelerate(Force * deltaTime / Mass);
             Move(Velocity * deltaTime);
 
