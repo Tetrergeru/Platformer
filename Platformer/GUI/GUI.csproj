@@ -60,6 +60,7 @@
     <Compile Include="Textures\Texture.cs" />
     <Compile Include="Textures\TextureAnimated.cs" />
     <Compile Include="Textures\TextureFile.cs" />
+    <Compile Include="GameTimer.cs" />
     <Compile Include="Window.cs">
       <SubType>Form</SubType>
     </Compile>
