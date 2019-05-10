@@ -20,7 +20,7 @@ namespace Platformer.Physics
 
         public object Tag { get; set; }
 
-        public double Mass { get { return collider.Volume() * material.Density; } }
+        public double Mass => collider.Area * material.Density;
 
         private Action<object, Direction> CollisionEvents = (o, d) => { };
         private Action<object, Direction> StartCollisionEvents = (o, d) => { };
@@ -57,19 +57,13 @@ namespace Platformer.Physics
             return collider.AxisAlignedBoundingBox();
         }
 
-        public IRectangle Rectangle()
-        {
-            return collider.AxisAlignedBoundingBox();
-        }
+        public IRectangle Rectangle => collider.AxisAlignedBoundingBox();
 
-        public Vector Center()
-        {
-            return collider.Center();
-        }
+        public Vector Center => collider.Center;
 
         public void MoveTo(Vector vector)
         {
-            var box = Rectangle(); 
+            var box = Rectangle; 
 
             Vector location = new Vector { x = box.X, y = box.Y };
             Move(vector - location);

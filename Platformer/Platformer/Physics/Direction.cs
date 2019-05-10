@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static System.Math;
 
 namespace Platformer.Physics
@@ -17,7 +13,7 @@ namespace Platformer.Physics
 
     public static class DirectionAttributes
     {
-        public static Direction Reverse(Direction direction)
+        public static Direction Reverse(this Direction direction)
         {
             switch (direction)
             {
@@ -30,24 +26,18 @@ namespace Platformer.Physics
                 case Direction.Right:
                     return Direction.Left;
                 default:
-                    throw new InvalidProgramException("Поворот отсутствует");
+                    throw new ArgumentException("Поворот отсутствует");
             }
         }
 
         public static Direction FromVector(Vector vector)
         {
             if (Abs(vector.x) > Abs(vector.y))
-            {
-                if (vector.x < 0)
-                    return Direction.Left;
-                return Direction.Right;
-            }
-            if (vector.y < 0)
-                return Direction.Up;
-            return Direction.Down;
+                return vector.x < 0 ? Direction.Left : Direction.Right;
+            return vector.y < 0 ? Direction.Up : Direction.Down;
         }
 
-        public static Vector ToVector(Direction direction)
+        public static Vector ToVector(this Direction direction)
         {
             switch (direction)
             {
@@ -60,7 +50,7 @@ namespace Platformer.Physics
                 case Direction.Right:
                     return new Vector { x = 1, y = 0 };
                 default:
-                    throw new InvalidProgramException("Поворот отсутствует");
+                    throw new ArgumentException("Поворот отсутствует");
             }
         }
     }

@@ -1,42 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Platformer.Physics
 {
-    class Physics : IPhysics
+    internal class Physics : IPhysics
     {
-        List<Body> Bodies = new List<Body>();
-        double Gravity = 9.8;
+        private readonly List<Body> _bodies = new List<Body>();
+
+        private readonly double _gravity;
+
+        public Physics(double gravity = 9.8)
+        {
+            _gravity = gravity;
+        }
 
         public void Tick(double deltaTime)
         {
-            for (int i = 0; i < Bodies.Count; i++)
+            for (var i = 0; i < _bodies.Count; i++)
             {
-                for (int j = i + 1; j < Bodies.Count; j++)
-                    Collision.Interaction(Bodies[i], Bodies[j], deltaTime);
+                for (var j = i + 1; j < _bodies.Count; j++)
+                    Collision.Interaction(_bodies[i], _bodies[j], deltaTime);
                 
-                if (Bodies[i].MovementRecipient)
-                    Bodies[i].Pull(new Vector { x = 0, y = Gravity } * Bodies[i].Mass);
+                if (_bodies[i].MovementRecipient)
+                    _bodies[i].Pull(new Vector { x = 0, y = _gravity } * _bodies[i].Mass);
             }
             //System.Threading.Thread.Sleep(10);
-            foreach (Body body in Bodies)
+            foreach (var body in _bodies)
                 body.Tick(deltaTime);
         }
 
         public IBody CreateBody(ICollider collider, PhysicalMaterial material)
         {
-            Body body = new Body(collider, material);
-            Bodies.Add(body);
+            var body = new Body(collider, material);
+            _bodies.Add(body);
             return body;
         }
 
         public bool RemoveBody(IBody body)
         {
             if (body is Body b)
-                return Bodies.Remove(b);
+                return _bodies.Remove(b);
             return false;
         }
     }

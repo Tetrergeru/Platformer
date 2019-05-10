@@ -54,12 +54,12 @@ namespace Platformer.Physics
         /// </summary>
         /// <param name="vector">коодината точки</param>
         void MoveTo(Vector vector);
-        
+
         /// <summary>
         /// Возвращает прямоугольную область, занимаемую данным телом
         /// </summary>
         /// <returns></returns>
-        IRectangle Rectangle();
+        IRectangle Rectangle { get; }
 
         /// <summary>
         /// Меняет каждую координату в соответствующее число раз
