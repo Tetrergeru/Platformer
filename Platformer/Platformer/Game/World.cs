@@ -5,6 +5,7 @@ using Platformer.Entities;
 using Platformer.Files;
 using Platformer.Physics;
 using System.Linq;
+using System;
 
 namespace Platformer.Game
 {
@@ -31,6 +32,8 @@ namespace Platformer.Game
 
         private HashSet<Actor> Enemies { get; } = new HashSet<Actor>();
 
+        private List<Particle> Particles { get; } = new List<Particle>();
+
         public IEnumerable<Entity> AllEntities
         {
             get
@@ -41,6 +44,8 @@ namespace Platformer.Game
                 foreach (var b in Blocks)
                     yield return b;
                 foreach (var d in Decorations)
+                    yield return d;
+                foreach (var d in Particles)
                     yield return d;
             }
         }
@@ -88,7 +93,7 @@ namespace Platformer.Game
 
         public Entity CreateSolidEntity(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox));
+            var body = _physics.CreateBody(new BoxCollider(hitBox), false, true);
             var entity = new Entity(this, body);
             Blocks.Add(entity);
             return entity;
@@ -96,7 +101,7 @@ namespace Platformer.Game
 
         public Entity CreateDecoration(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox));
+            var body = _physics.CreateBody(new BoxCollider(hitBox), false, false);
             var entity = new Entity(this, body);
             Decorations.Add(entity);
             return entity;
@@ -104,15 +109,23 @@ namespace Platformer.Game
 
         public Monster CreateMonster(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox), true, true);
             var entity = new Monster(this, body);
             Enemies.Add(entity);
+            return entity;
+        }
+
+        public Particle CreateParticle(IRectangle hitBox)
+        {
+            var body = _physics.CreateBody(new BoxCollider(hitBox), true, false);
+            var entity = new Particle(this, body);
+            Particles.Add(entity);
             return entity;
         }
         
         public Player CreatePlayer(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox), true, true);
             var entity = new Player(this, body);
             Player = entity;
             return entity;
@@ -125,7 +138,7 @@ namespace Platformer.Game
 
         public IBody CreateMonsterBody(IRectangle hitBox)
         {
-            return _physics.CreateBody(new BoxCollider(hitBox), true);
+            return _physics.CreateBody(new BoxCollider(hitBox), true, true);
         }
 
         public void RemoveEntity(Entity entity)
@@ -136,7 +149,24 @@ namespace Platformer.Game
                 Enemies.Remove(monster);
             if (Blocks.Contains(entity))
                 Blocks.Remove(entity);
+            if (Particles.Contains(entity))
+                Particles.Remove(entity as Particle);
             Decorations.Remove(entity);
+        }
+
+        public void RemoveMonstor(Entity entity)
+        {
+            int count = 5;
+            Random rnd = new Random();
+            Vector size = new Vector { x = entity.Hitbox.Width / count, y = entity.Hitbox.Height / count };
+            for (int i = 0; i < count; i++)
+                for (int j = 0; j < count; j++)
+                {
+                    var p = CreateParticle(new HitBox(entity.Hitbox.X + size.x * i, entity.Hitbox.Y + size.y * j, size.x, size.y));
+                    p.Texture = "Resources/TextureAssets/slime.texture";
+                    p.Pull(new Vector {x = (i - count / 2) * 1000 / count + rnd.Next(-100, 100), y = (j / count) * 1000 / count + rnd.Next(-100, 100) });
+                }
+            RemoveEntity(entity);
         }
 
         public void Tick(double deltaTime)
@@ -148,8 +178,11 @@ namespace Platformer.Game
 
             _physics.Tick(deltaTime);
 
-            List<Actor> buf = Enemies.Where(e => e.Health <= 0).ToList();
-            foreach (var e in buf)
+            var buf1 = Enemies.Where(e => e.Health <= 0).ToList();
+            foreach (var e in buf1)
+                RemoveMonstor(e);
+            var buf2 = Particles.Where(e => e.Lifetime <= 0).ToList();
+            foreach (var e in buf2)
                 RemoveEntity(e);
         }
     }

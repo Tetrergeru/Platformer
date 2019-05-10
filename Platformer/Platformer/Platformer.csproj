@@ -53,6 +53,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Particle.cs" />
     <Compile Include="Game\ITimer.cs" />
     <Compile Include="Game\Timer.cs" />
     <Compile Include="Entities\Actor.cs" />

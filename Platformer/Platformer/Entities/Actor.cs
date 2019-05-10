@@ -100,7 +100,7 @@ namespace Platformer.Entities
                 _body.Accelerate(new Vector { x = 0, y = -jumpHeight });
                 jumpEntity._body.Accelerate(new Vector { x = 0, y = jumpHeight });
                 if (jumpEntity is Actor actor)
-                    actor.Health -= 30;
+                    actor.Health -= 100;
             }
             canJump = false;
         }

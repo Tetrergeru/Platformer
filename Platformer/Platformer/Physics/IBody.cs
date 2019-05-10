@@ -11,7 +11,12 @@ namespace Platformer.Physics
         /// <summary>
         /// Определяет, упрявляется ли перемещение данного тела физическим движком
         /// </summary>
-        bool Movable { get; set; }
+        bool MovementRecipient { get; set; }
+
+        /// <summary>
+        /// Определяет, влияет ли физика на перемещение данного объекта
+        /// </summary>
+        bool MovementEmitter { get; set; }
 
         /// <summary>
         /// Тэг для передачи параметром в событии

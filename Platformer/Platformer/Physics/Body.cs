@@ -15,20 +15,21 @@ namespace Platformer.Physics
         Vector velocity = Vector.Zero();
         double slowdown;
         private double density = 100;
-        public bool Movable { get; set; }
+        
 
-        Action<object, Direction> CollisionEvents = (o, d) => { };
-
-        public Body(ICollider collider, bool movable = false)
-        {
-            this.collider = collider;
-            Movable = movable;
-        }
+        public object Tag { get; set; }
+        public bool MovementRecipient { get; set; }
+        public bool MovementEmitter { get; set; }
 
         public double Mass
         { get { return collider.Volume() * density; } }
 
-        public object Tag { get; set; }
+        Action<object, Direction> CollisionEvents = (o, d) => { };
+
+        public Body(ICollider collider)
+        {
+            this.collider = collider;
+        }
 
         public void Pull(Vector vector)
         {
@@ -57,7 +58,9 @@ namespace Platformer.Physics
 
         public void CollisionWith(Body target)
         {
-            if (!Movable && !target.Movable)
+            if (!MovementRecipient && !target.MovementRecipient)
+                return;
+            if (!MovementEmitter && !target.MovementEmitter)
                 return;
             ICollider collision = collider.CollisionWith(target.collider);
             if (collision is BoxCollider box)
@@ -100,14 +103,23 @@ namespace Platformer.Physics
                     }
                     force = dist * new Vector { x = box.Width, y = 0 } * 1000000000;
                 }
-                slowdown += box.Volume() / collider.Volume();
-                target.slowdown += box.Volume() / target.collider.Volume();
 
-                CollisionEvents(target.Tag, myDirection);
-                target.CollisionEvents(Tag, targetDirection);
+                if (MovementRecipient && target.MovementEmitter)
+                {
+                    slowdown += box.Volume() / collider.Volume();
+                    CollisionEvents(target.Tag, myDirection);
+                    slowdown += box.Volume() / collider.Volume();
+                    Pull(force);
+                }
 
-                Pull(force);
-                target.Pull(force * -1);
+                if (target.MovementRecipient && MovementEmitter)
+                {
+                    target.slowdown += box.Volume() / target.collider.Volume();
+                    target.slowdown += box.Volume() / target.collider.Volume();
+                    target.CollisionEvents(Tag, targetDirection);
+                    target.Pull(force * -1);
+                }
+
             }
             else
                 throw new NotImplementedException("Неизвестный коллайдер " + collider.GetType().ToString());
@@ -127,7 +139,7 @@ namespace Platformer.Physics
 
         public void Tick(double deltaTime)
         {
-            if (!Movable)
+            if (!MovementRecipient)
             {
                 slowdown = 0;
                 force = Vector.Zero();
