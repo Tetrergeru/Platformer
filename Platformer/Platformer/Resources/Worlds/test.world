@@ -5,19 +5,19 @@ grass_name = res + 'grass_block_0.entity'
 blocks = []
 
 //adding some grass
-blocks += [[grass_name, 0, 400]]
-blocks += [[grass_name, 700, 400]]
-blocks += [[grass_name, 280, 350]]
-blocks += [[res + 'stone_1.entity', 450, 430]]
+blocks += [[grass_name, 0, 4]]
+blocks += [[grass_name, 7, 4]]
+blocks += [[grass_name, 2.8, 3.5]]
+blocks += [[res + 'stone_1.entity', 4.5, 4.3]]
 
 i = 0
 while i < 50:
-    blocks += [[res + '/grass_block_' + str(random(0, 2)) + '.entity', random(0-5000, 5000), random(0-1000, 1000)]]
+    blocks += [[res + '/grass_block_' + str(random(0, 2)) + '.entity', random(0-50, 50), random(0-10, 10)]]
     i += 1
 
-blocks += [[res + 'bedrock_0.entity', 0-5000, 1000]]
+blocks += [[res + 'bedrock_0.entity', 0-50, 10]]
 
 
 decorations = []
 //and some tree
-decorations += [[res + 'tree_0.entity', 350, 50]]
+decorations += [[res + 'tree_0.entity', 3.5, 0.5]]

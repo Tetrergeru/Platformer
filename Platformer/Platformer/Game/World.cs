@@ -74,7 +74,7 @@ namespace Platformer.Game
             for (int i = 0; i < 20; i++)
                 for (int j = 0; j < 1; j++)
                 {
-                    var m = CreateMonster(new HitBox(i * 100 + 1000, j * 52 + 100, 55, 50));
+                    var m = CreateMonster(new HitBox(i + 10, j * 0.52 + 1, 0.55, 0.5));
                     m.Texture = "Resources/TextureAssets/slime.texture";
                 }
         }
@@ -125,7 +125,7 @@ namespace Platformer.Game
         
         public Player CreatePlayer(IRectangle hitBox)
         {
-            var body = _physics.CreateBody(new BoxCollider(hitBox), true, true);
+            var body = _physics.CreateBody(new BoxCollider(hitBox), false, true);
             var entity = new Player(this, body);
             Player = entity;
             return entity;

@@ -36,7 +36,7 @@ namespace Platformer.Game
 
             World = WorldFile.GetWorld("Resources/Worlds/test.world");
             
-            Player = World.CreatePlayer(new HitBox(0, 0, 30, 50));
+            Player = World.CreatePlayer(new HitBox(0, -10, 0.25, 0.5));
             
             Player.Texture = "Resources/TextureAssets/player.texture";
             Player.DrawPriority = 10;

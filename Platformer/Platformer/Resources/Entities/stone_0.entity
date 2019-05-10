@@ -1,6 +1,6 @@
 ﻿type = 'Entity'
 
-width = 200
-height = 100
+width = 2
+height = 1
 
 texture = 'Resources/TextureAssets/stone_0.texture'
