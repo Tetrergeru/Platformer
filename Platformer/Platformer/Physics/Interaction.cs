@@ -3,9 +3,18 @@ using static System.Math;
 
 namespace Platformer.Physics
 {
-    internal static class Collision
+    internal class Interaction : IInteraction
     {
-        public static void Interaction(Body body1, Body body2, double deltaTime)
+        private double _gravity;
+        private double _airResistance;
+
+        public Interaction(double gravity = 9.8, double airResistance = 0.0003)
+        {
+            _gravity = gravity;
+            _airResistance = airResistance;
+        }
+
+        public void Collision(Body body1, Body body2, double deltaTime)
         {
             if (!body1.MovementRecipient && !body2.MovementRecipient)
                 return;
@@ -30,10 +39,10 @@ namespace Platformer.Physics
                     direction = dist.x > 0 ? Direction.Left : Direction.Right;
 
                 if (body1.MovementRecipient && body2.MovementEmitter)
-                    InteractionWith(body1, body2, box, direction, deltaVelocity, deltaTime);
+                    CollisionWith(body1, body2, box, direction, deltaVelocity, deltaTime);
 
                 if (body2.MovementRecipient && body1.MovementEmitter)
-                    InteractionWith(body2, body1, box, direction.Reverse(), deltaVelocity * -1, deltaTime);
+                    CollisionWith(body2, body1, box, direction.Reverse(), deltaVelocity * -1, deltaTime);
             }
             else
             {
@@ -41,31 +50,31 @@ namespace Platformer.Physics
             }
         }
 
-        public static void InteractionWith(Body body, Body target, ICollider collision, Direction direction,
+        private static void CollisionWith(Body body, Body target, ICollider collision, Direction direction,
             Vector deltaVelocity, double deltaTime)
         {
-            var directionVector = direction.Reverse().ToVector();
             double k1 = body.material.Restoring;
             double k2 = target.material.Restoring;
-            var force = 
+            Vector directionVector = direction.Reverse().ToVector();
+            Vector force = 
                 directionVector 
                 * collision.Area 
                 * Pow(body.Mass, 1 / 3.0) 
                 * Pow(100000000, 2 * (k1 * k2) / (k1 + k2));
 
-            var absDirection = new Vector { x = Abs(directionVector.x), y = Abs(directionVector.y) };
-            var absDirectionRotate = new Vector { x = absDirection.y, y = absDirection.x };
             body.Pull(force);
 
-            var Absorption =
+            Vector absDirection = new Vector { x = Abs(directionVector.x), y = Abs(directionVector.y) };
+            Vector Absorption =
                 absDirection
                 * deltaVelocity
                 * body.Mass
                 * -Pow(100, Sqrt(body.material.Absorption * target.material.Absorption));
 
             body.Pull(Absorption);
-            
-            var Friction = 
+
+            Vector absDirectionRotate = new Vector { x = absDirection.y, y = absDirection.x };
+            Vector Friction = 
                 absDirectionRotate 
                 * deltaVelocity
                 * body.Mass
@@ -73,7 +82,7 @@ namespace Platformer.Physics
 
             body.Pull(Friction);
 
-            var Viscosity = 
+            Vector Viscosity = 
                 deltaVelocity 
                 * collision.Area
                 * Pow(body.Mass, 1 / 10.0)
@@ -82,6 +91,12 @@ namespace Platformer.Physics
             body.Pull(Viscosity);
 
             body.CollisionWith(target, direction);
+        }
+
+        public void ConstantInteraction(Body body, double deltaTime)
+        {
+            body.Pull(new Vector { x = 0, y = _gravity } * body.Mass);
+            body.Pull(body.Velocity  * - _airResistance);
         }
     }
 }

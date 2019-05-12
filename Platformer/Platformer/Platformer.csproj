@@ -72,13 +72,15 @@
     <Compile Include="IRectangle.cs" />
     <Compile Include="Physics\Body.cs" />
     <Compile Include="Physics\BoxCollider.cs" />
-    <Compile Include="Physics\Collision.cs" />
+    <Compile Include="Physics\Interaction.cs" />
     <Compile Include="Physics\Direction.cs" />
     <Compile Include="Physics\IBody.cs" />
     <Compile Include="Physics\ICollider.cs" />
+    <Compile Include="Physics\IInteraction.cs" />
     <Compile Include="Physics\IPhysics.cs" />
     <Compile Include="Physics\PhysicalMaterial.cs" />
-    <Compile Include="Physics\Physics.cs" />
+    <Compile Include="Physics\Physics\Physics.cs" />
+    <Compile Include="Physics\Physics\SortedPhysics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\SateSnapshot.cs" />

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
+using System;
 
-namespace Platformer.Physics
+namespace Platformer.Physics.Physics
 {
     internal class Physics : IPhysics
     {
         private readonly List<Body> _bodies = new List<Body>();
+        IInteraction _interaction;
 
-        private readonly double _gravity;
-
-        public Physics(double gravity = 9.8)
+        public Physics(IInteraction interaction)
         {
-            _gravity = gravity;
+            _interaction = interaction;
         }
 
         public void Tick(double deltaTime)
@@ -18,12 +18,12 @@ namespace Platformer.Physics
             for (var i = 0; i < _bodies.Count; i++)
             {
                 for (var j = i + 1; j < _bodies.Count; j++)
-                    Collision.Interaction(_bodies[i], _bodies[j], deltaTime);
-                
+                    _interaction.Collision(_bodies[i], _bodies[j], deltaTime);
+
                 if (_bodies[i].MovementRecipient)
-                    _bodies[i].Pull(new Vector { x = 0, y = _gravity } * _bodies[i].Mass);
+                    _interaction.ConstantInteraction(_bodies[i], deltaTime);
             }
-            //System.Threading.Thread.Sleep(10);
+
             foreach (var body in _bodies)
                 body.Tick(deltaTime);
         }

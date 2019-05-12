@@ -77,8 +77,7 @@ namespace Platformer.Physics
                 Velocity = Vector.Zero();
                 return;
             }
-
-            Pull(Velocity * -0.0003);
+            
             Accelerate(Force * deltaTime / Mass);
             Move(Velocity * deltaTime);
 
