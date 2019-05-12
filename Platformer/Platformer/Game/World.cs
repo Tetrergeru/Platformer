@@ -72,11 +72,14 @@ namespace Platformer.Game
         {
             _physics = physics;
 
-            for (int i = 0; i < 20; i++)
-                for (int j = 0; j < 1; j++)
+            Random rnd = new Random();
+
+            for (int i = -10; i < 20; i++)
+                for (int j = -10; j < 20; j++)
                 {
-                    var m = CreateMonster(new HitBox(i + 10, j * 0.52 + 1, 0.55, 0.5));
-                    m.Texture = "Resources/TextureAssets/slime.texture";
+                    var m = CreateParticle(new HitBox(i * 0.5 + rnd.NextDouble(), j * 0.52 + rnd.NextDouble() - 7, 0.005, 0.005));
+                    m.Lifetime = 65536;
+                    m.Texture = "Resources/TextureAssets/snowflake.texture";
                 }
         }
 
@@ -151,11 +154,11 @@ namespace Platformer.Game
             var body = _physics.CreateBody(new BoxCollider(hitBox),
                 new PhysicalMaterial
                 {
-                    Absorption = 0.1,
-                    Restoring = 0.5,
-                    Viscosity = 0.9,
-                    Density = 1000,
-                    Friction = 0.7,
+                    Absorption = 0.9,
+                    Restoring = 0.8,
+                    Viscosity = 0.0,
+                    Density = 100,
+                    Friction = 0.9,
                     MovementEmitter = false,
                     MovementRecipient = true,
                 });
@@ -163,7 +166,7 @@ namespace Platformer.Game
             Particles.Add(entity);
             return entity;
         }
-        
+
         public Player CreatePlayer(IRectangle hitBox)
         {
             var body = _physics.CreateBody(new BoxCollider(hitBox),

@@ -133,7 +133,7 @@ namespace GUI
                     return;
                 //Console.WriteLine($"Drawn");
                 AdjustBy(snapshot.player.body);
-                Clear(Color.SkyBlue/*snapshot.currentBackgroundColor*/);
+                Clear(Color.FromArgb(255, 15, 15, 30)/*snapshot.currentBackgroundColor*/);
                 Draw(snapshot.entities);
                 Flush();
             }
