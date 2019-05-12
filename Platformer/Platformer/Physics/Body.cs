@@ -78,7 +78,7 @@ namespace Platformer.Physics
                 return;
             }
 
-            Pull(Velocity * -50);
+            Pull(Velocity * -0.0003);
             Accelerate(Force * deltaTime / Mass);
             Move(Velocity * deltaTime);
 
@@ -119,6 +119,11 @@ namespace Platformer.Physics
         public void AddEndCollisionEvent(Action<object, Direction> action)
         {
             EndCollisionEvents += action;
+        }
+
+        public void SetVelocity(Vector vector)
+        {
+            Velocity = vector;
         }
     }
 }

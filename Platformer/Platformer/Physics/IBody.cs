@@ -50,6 +50,12 @@ namespace Platformer.Physics
         void Move(Vector vector);
 
         /// <summary>
+        /// Устанавливает скорость тела в заданную величину (использовате не рекомендуется)
+        /// </summary>
+        /// <param name="vector">значение изменения скорости</param>
+        void SetVelocity(Vector vector);
+
+        /// <summary>
         /// Перемещяет тело в заданную точку
         /// </summary>
         /// <param name="vector">коодината точки</param>

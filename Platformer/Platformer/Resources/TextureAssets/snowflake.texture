@@ -1,0 +1,6 @@
+﻿type = 'Texture'
+
+height = 1
+width = 1
+
+sprite = ['Resources/Textures/snowflake.png', 'Repeat']

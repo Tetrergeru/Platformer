@@ -55,7 +55,7 @@ namespace Platformer.Physics
             return this;
         }
 
-        public double Area => Width * Height;
+        public double Area => Width * Height * (Width + Height) / 2;
 
         Vector ICollider.Center
             => new Vector { x = X + Width / 2, y = Y + Height / 2 };

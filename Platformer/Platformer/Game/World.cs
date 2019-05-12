@@ -71,6 +71,7 @@ namespace Platformer.Game
         public World(IPhysics physics)
         {
             _physics = physics;
+
             for (int i = 0; i < 20; i++)
                 for (int j = 0; j < 1; j++)
                 {
@@ -99,8 +100,8 @@ namespace Platformer.Game
                     Absorption = 0.8,
                     Restoring = 0.8,
                     Viscosity = 0.3,
-                    Density = 2740,
-                    Friction = 0.8,
+                    Density = 770,
+                    Friction = 0.2,
                     MovementEmitter = true,
                     MovementRecipient = false,
                 });
@@ -132,9 +133,9 @@ namespace Platformer.Game
             var body = _physics.CreateBody(new BoxCollider(hitBox),
                 new PhysicalMaterial
                 {
-                    Absorption = 0.9,
-                    Restoring = 0.6,
-                    Viscosity = 0.9,
+                    Absorption = 0.1,
+                    Restoring = 0.5,
+                    Viscosity = 0.7,
                     Density = 1000,
                     Friction = 0.7,
                     MovementEmitter = true,
@@ -150,11 +151,11 @@ namespace Platformer.Game
             var body = _physics.CreateBody(new BoxCollider(hitBox),
                 new PhysicalMaterial
                 {
-                    Absorption = 0.01,
-                    Restoring = 0.01,
-                    Viscosity = 1.0,
+                    Absorption = 0.1,
+                    Restoring = 0.5,
+                    Viscosity = 0.9,
                     Density = 1000,
-                    Friction = 0.2,
+                    Friction = 0.7,
                     MovementEmitter = false,
                     MovementRecipient = true,
                 });
@@ -172,7 +173,7 @@ namespace Platformer.Game
                     Restoring = 0.8,
                     Viscosity = 0.0,
                     Density = 2200,
-                    Friction = 0.6,
+                    Friction = 0.1,
                     MovementEmitter = true,
                     MovementRecipient = true,
                 });
@@ -201,17 +202,20 @@ namespace Platformer.Game
 
         public void RemoveMonstor(Entity entity)
         {
-            int count = 3;
+            int count = 10;
             Random rnd = new Random();
             Vector size = new Vector { x = entity.Hitbox.Width / count, y = entity.Hitbox.Height / count };
-            double vol = size.x * size.y;
-            for (int i = 0; i < count; i++)
-                for (int j = 0; j < count; j++)
-                {
-                    var p = CreateParticle(new HitBox(entity.Hitbox.X + size.x * i, entity.Hitbox.Y + size.y * j, size.x, size.y));
-                    p.Texture = "Resources/TextureAssets/slime.texture";
-                    p.Pull(new Vector {x = ((i - count / 2) * 1000000 / count + rnd.Next(-10000, 10000)) * vol, y = ((j / count) * 1000000 / count + rnd.Next(-10000, 10000)) * vol });
-                }
+            if (size.x > 0.001 && size.y > 0.001)
+            {
+                double vol = size.x * size.y;
+                for (int i = 0; i < count; i++)
+                    for (int j = 0; j < count; j++)
+                    {
+                        var p = CreateParticle(new HitBox(entity.Hitbox.X + size.x * i, entity.Hitbox.Y + size.y * j, size.x, size.y));
+                        p.Texture = "Resources/TextureAssets/slime.texture";
+                        p._body.Accelerate(new Vector { x = ((i - count / 2) * 100 / count + rnd.Next(-100, 100)) * vol, y = ((j / count) * 100 / count + rnd.Next(-100, 100)) * vol });
+                    }
+            }
             RemoveEntity(entity);
         }
 
