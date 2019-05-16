@@ -134,7 +134,7 @@ namespace Platformer.Physics
 
                 Vector vol = body.DefCompression;
                 double surfaceTension = Pow(0.00001, 1 - body.material.SurfaceTension);
-                body.CompressionForce = new Vector { x = vol.x * surfaceTension, y = vol.y * surfaceTension };
+                body.CompressionForce = new Vector { x = vol.y * surfaceTension, y = vol.x * surfaceTension };
             }
         }
     }
