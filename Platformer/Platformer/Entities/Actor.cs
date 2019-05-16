@@ -60,7 +60,7 @@ namespace Platformer.Entities
         /// <summary>
         /// Скорость, с которой актор двигается
         /// </summary>
-        protected double runningSpeed = 2000;
+        protected double runningSpeed = 0.001;
 
         /// <summary>
         /// Сила, с которой актор отталкивается от земли при прыжке
@@ -72,13 +72,17 @@ namespace Platformer.Entities
         /// </summary>
         /// <param name="direction"></param>
         public void RunRight()
-        {
-            _body.Pull(new Vector {x = runningSpeed, y = 0});
+        {/*
+            if(canJump)
+                _body.Accelerate(new Vector { x = runningSpeed * 5, y = 0 });*/
+            _body.Accelerate(new Vector {x = runningSpeed, y = 0});
         }
 
         public void RunLeft()
-        {
-            _body.Pull(new Vector { x = -runningSpeed, y = 0});
+        {/*
+            if (canJump)
+                _body.Accelerate(new Vector { x = -runningSpeed * 5, y = 0 });*/
+            _body.Accelerate(new Vector { x = -runningSpeed, y = 0 });
         }
 
         /// <summary>

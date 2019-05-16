@@ -12,15 +12,19 @@ namespace Platformer.Physics
     {
         public ICollider collider;
 
-        public Vector Force { get; private set; }
-        public Vector Velocity { get; private set; }
+        public Vector CompressionForce { get; set; }
+        public Vector CompressionVelocity { get; set; }
+        public Vector DefCompression { get; set; }
+        public Vector Force { get; set; }
+        public Vector Velocity { get; set; }
+
         public PhysicalMaterial material { get; set; }
         public bool MovementRecipient { get => material.MovementRecipient; }
         public bool MovementEmitter { get => material.MovementEmitter; }
 
         public object Tag { get; set; }
 
-        public double Mass => collider.Area * material.Density;
+        public double Mass => collider.Volume * material.Density;
 
         private Action<object, Direction> CollisionEvents = (o, d) => { };
         private Action<object, Direction> StartCollisionEvents = (o, d) => { };
@@ -29,12 +33,18 @@ namespace Platformer.Physics
         private List<(object tag, Direction direction)> LastCollisionList = new List<(object, Direction)>();
         private List<(object tag, Direction direction)> CollisionList = new List<(object, Direction)>();
 
+
         public Body(ICollider collider, PhysicalMaterial material)
         {
             this.collider = collider;
             Force = Vector.Zero();
             Velocity = Vector.Zero();
+            CompressionForce = Vector.Zero();
+            CompressionVelocity = new Vector { x = 0.1, y = 0.1 };
             this.material = material;
+            
+            IRectangle rectangle = AxisAlignedBoundingBox();
+            DefCompression = new Vector { x = rectangle.Width, y = rectangle.Height };
         }
 
         public void Pull(Vector vector)
@@ -71,22 +81,10 @@ namespace Platformer.Physics
 
         public void Tick(double deltaTime)
         {
-            if (!MovementRecipient)
-            {
-                Force = Vector.Zero();
-                Velocity = Vector.Zero();
-                return;
-            }
-            
-            Accelerate(Force * deltaTime / Mass);
-            Move(Velocity * deltaTime);
-
             foreach (var t in LastCollisionList)
                 EndCollisionEvents(t.tag, t.direction);
             LastCollisionList = CollisionList;
             CollisionList = new List<(object, Direction direction)>();
-
-            Force = Vector.Zero();
         }
         
         public void CollisionWith(IBody body, Direction direction)
@@ -102,6 +100,7 @@ namespace Platformer.Physics
 
         public void Resize(Vector ratio)
         {
+            DefCompression *= ratio;
             collider.Resize(ratio);
         }
 

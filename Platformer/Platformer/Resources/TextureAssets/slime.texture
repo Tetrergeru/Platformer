@@ -6,4 +6,4 @@ height = 20
 delay = 0.1
 delay_after = 0.1
 
-sprites = [['Resources/Textures/slime_0.png', 'Stretch'], ['Resources/Textures/slime_1.png', 'Stretch']]
+sprites = [['Resources/Textures/slime_0.png', 'Stretch']]

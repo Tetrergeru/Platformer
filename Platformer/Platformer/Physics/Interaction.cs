@@ -24,7 +24,7 @@ namespace Platformer.Physics
             var collision = body1.collider.CollisionWith(body2.collider);
             if (collision is BoxCollider box)
             {
-                if (box.Area < 1e-10)
+                if (box.Volume < 1e-10)
                     return;
                 var dist = body1.Center - body2.Center;
                 var deltaVelocity = body1.Velocity - body2.Velocity;
@@ -58,7 +58,7 @@ namespace Platformer.Physics
             Vector directionVector = direction.Reverse().ToVector();
             Vector force = 
                 directionVector 
-                * collision.Area 
+                * collision.Volume 
                 * Pow(body.Mass, 1 / 3.0) 
                 * Pow(100000000, 2 * (k1 * k2) / (k1 + k2));
 
@@ -84,19 +84,58 @@ namespace Platformer.Physics
 
             Vector Viscosity = 
                 deltaVelocity 
-                * collision.Area
+                * collision.Volume
                 * Pow(body.Mass, 1 / 10.0)
                 * -Pow(1000000, Max(body.material.Viscosity, target.material.Viscosity));
 
             body.Pull(Viscosity);
 
+            if(body.material.Fluidity)
+                body.CompressionForce += absDirection * collision.Volume;
+                
             body.CollisionWith(target, direction);
         }
 
         public void ConstantInteraction(Body body, double deltaTime)
         {
+            if (!body.MovementRecipient)
+            {
+                body.Force = Vector.Zero();
+                body.Velocity = Vector.Zero();
+                body.CompressionForce = Vector.Zero();
+                body.CompressionVelocity = Vector.Zero();
+                return;
+            }
+
             body.Pull(new Vector { x = 0, y = _gravity } * body.Mass);
             body.Pull(body.Velocity  * - _airResistance);
+
+            body.Accelerate(body.Force * deltaTime / body.Mass);
+            body.Move(body.Velocity * deltaTime);
+            body.Force = Vector.Zero();
+
+            if (body.material.Fluidity)
+            {
+                body.CompressionVelocity += body.CompressionForce;
+
+                double k = body.CompressionVelocity.x / body.CompressionVelocity.y;
+
+                if (k > 100) k = 100;
+                if (1 / k > 100) k = 1 / 100.0;
+
+                body.collider.VolumetricResize(k);
+
+                body.CompressionVelocity = 
+                    body.CompressionVelocity 
+                    * Pow(0.001, 
+                        deltaTime 
+                        * Pow(10000000, body.material.Ductility) 
+                        / 100000);
+
+                Vector vol = body.DefCompression;
+                double surfaceTension = Pow(0.00001, 1 - body.material.SurfaceTension);
+                body.CompressionForce = new Vector { x = vol.x * surfaceTension, y = vol.y * surfaceTension };
+            }
         }
     }
 }

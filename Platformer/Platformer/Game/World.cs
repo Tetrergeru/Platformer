@@ -71,13 +71,17 @@ namespace Platformer.Game
         public World(IPhysics physics)
         {
             _physics = physics;
-
-            for (int i = 0; i < 20; i++)
+            
+            for (int i = 0; i < 2; i++)
                 for (int j = 0; j < 1; j++)
                 {
                     var m = CreateMonster(new HitBox(i + 10, j * 0.52 + 1, 0.55, 0.5));
                     m.Texture = "Resources/TextureAssets/slime.texture";
                 }
+            
+            var t = CreateWater(new HitBox(3, 2, 1, 1));
+            t.Texture = "Resources/TextureAssets/player.texture";
+
         }
 
         /// <summary>
@@ -116,7 +120,7 @@ namespace Platformer.Game
                 new PhysicalMaterial
                 {
                     Absorption = 0.1,
-                    Restoring = 0.5,
+                    Restoring = 0.6,
                     Viscosity = 0.1,
                     Density = 690,
                     Friction = 0.1,
@@ -134,12 +138,15 @@ namespace Platformer.Game
                 new PhysicalMaterial
                 {
                     Absorption = 0.1,
-                    Restoring = 0.5,
-                    Viscosity = 0.7,
+                    Restoring = 0.6,
+                    Viscosity = 0.6,
                     Density = 1000,
-                    Friction = 0.7,
+                    Friction = 0.9,
                     MovementEmitter = true,
                     MovementRecipient = true,
+                    SurfaceTension = 0.5,
+                    Ductility = 0.8,
+                    Fluidity = true
                 });
             var entity = new Monster(this, body);
             Enemies.Add(entity);
@@ -152,7 +159,7 @@ namespace Platformer.Game
                 new PhysicalMaterial
                 {
                     Absorption = 0.1,
-                    Restoring = 0.5,
+                    Restoring = 0.6,
                     Viscosity = 0.9,
                     Density = 1000,
                     Friction = 0.7,
@@ -163,7 +170,28 @@ namespace Platformer.Game
             Particles.Add(entity);
             return entity;
         }
-        
+
+        public Entity CreateWater(IRectangle hitBox)
+        {
+            var body = _physics.CreateBody(new BoxCollider(hitBox),
+                new PhysicalMaterial
+                {
+                    Absorption = 0.9,
+                    Restoring = 0.7,
+                    Viscosity = 0.4,
+                    Density = 1000,
+                    Friction = 0.1,
+                    MovementEmitter = true,
+                    MovementRecipient = true,
+                    SurfaceTension = 0.3,
+                    Ductility = 0.8,
+                    Fluidity = true
+                });
+            var entity = new Entity(this, body);
+            Blocks.Add(entity);
+            return entity;
+        }
+
         public Player CreatePlayer(IRectangle hitBox)
         {
             var body = _physics.CreateBody(new BoxCollider(hitBox),
@@ -171,7 +199,7 @@ namespace Platformer.Game
                 {
                     Absorption = 0.9,
                     Restoring = 0.8,
-                    Viscosity = 0.0,
+                    Viscosity = 0.1,
                     Density = 2200,
                     Friction = 0.1,
                     MovementEmitter = true,
@@ -214,6 +242,7 @@ namespace Platformer.Game
                         var p = CreateParticle(new HitBox(entity.Hitbox.X + size.x * i, entity.Hitbox.Y + size.y * j, size.x, size.y));
                         p.Texture = "Resources/TextureAssets/slime.texture";
                         p._body.Accelerate(new Vector { x = ((i - count / 2) * 100 / count + rnd.Next(-100, 100)) * vol, y = ((j / count) * 100 / count + rnd.Next(-100, 100)) * vol });
+                        //p.Lifetime = 100;
                     }
             }
             RemoveEntity(entity);

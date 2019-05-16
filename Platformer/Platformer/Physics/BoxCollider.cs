@@ -55,7 +55,7 @@ namespace Platformer.Physics
             return this;
         }
 
-        public double Area => Width * Height * (Width + Height) / 2;
+        public double Volume => Width * Height * (Width + Height) / 2;
 
         Vector ICollider.Center
             => new Vector { x = X + Width / 2, y = Y + Height / 2 };
@@ -74,6 +74,15 @@ namespace Platformer.Physics
             Y -= (newHeight- Height) / 2;
             Height = newHeight;
             Width = newWidth;
+        }
+
+        public void VolumetricResize(double ratio)
+        {
+            double d = Pow(Width * Height * (Width + Height) / ratio / (ratio + 1), 1.0 / 3);
+            double dx = d / Width;
+            double dy = ratio * d / Height;
+
+            Resize(new Vector { x = dx, y = dy });
         }
     }
 }

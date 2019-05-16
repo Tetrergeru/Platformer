@@ -34,6 +34,16 @@ namespace Platformer.Physics
         public double Friction { get; set; }
 
         /// <summary>
+        /// Коэффициент поверхностного натяжения (может принимать значение от 0 до 1) (только для жидкостей)
+        /// </summary>
+        public double SurfaceTension { get; set; }
+
+        /// <summary>
+        /// Коэффициент пластичности (может принимать значение от 0 до 1) (только для жидкостей)
+        /// </summary>
+        public double Ductility { get; set; }
+
+        /// <summary>
         /// Определяет, управляется ли перемещение данного тела физическим движком
         /// </summary>
         public bool MovementRecipient { get; set; }
@@ -42,5 +52,10 @@ namespace Platformer.Physics
         /// Определяет, влияет ли это объект на другие, во время физического взаимодействия
         /// </summary>
         public bool MovementEmitter { get; set; }
+
+        /// <summary>
+        /// Экспериментальная галочка - текучесть
+        /// </summary>
+        public bool Fluidity { get; set; }
     }
 }

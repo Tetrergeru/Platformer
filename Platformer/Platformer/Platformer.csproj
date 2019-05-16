@@ -112,7 +112,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\TextureAssets\slime.texture">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\TextureAssets\snowflake.texture">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -1,5 +1,6 @@
 ﻿using Platformer.Game;
 using Platformer.Physics;
+using System;
 using static System.Math;
 
 namespace Platformer.Entities
@@ -9,6 +10,7 @@ namespace Platformer.Entities
 
         double defHealth = 100;
         IRectangle defRect;
+        static Random rnd = new Random();
 
         /// <inheritdoc />
         /// <summary>
@@ -21,7 +23,8 @@ namespace Platformer.Entities
             MaxHealth = 50000;
             Health = defHealth;
             defRect = new HitBox(Hitbox);
-            jumpHeight = 5;
+            jumpHeight = 2;
+            runningSpeed = 0.0005;
         }
 
         public override void Jump()
@@ -56,11 +59,11 @@ namespace Platformer.Entities
         {
             double rectK = Hitbox.Width / defRect.Width;
             double HealthK = Health / defHealth;
-            if (Abs(rectK - HealthK) > 0.0001)
+           /* if (Abs(rectK - HealthK) > 0.0001)
             {
                 double ratio = (HealthK / rectK - 1) / 10;
                 _body.Resize(new Vector {x = ratio + 1, y = ratio  + 1});
-            }
+            }*/
 
             if (Hitbox.Coordinates.DistanceTo(Context.Player.Hitbox.Coordinates) < 500000)
             {
@@ -69,9 +72,10 @@ namespace Platformer.Entities
                 else
                     RunRight();
 
-                if (Context.Player.Hitbox.Y < Hitbox.Y)
+                //if (Context.Player.Hitbox.Y < Hitbox.Y)
+                if(rnd.Next(1000) == 71)
                     Jump();
-                
+
             }
 
             base.Tick(deltaTime);
