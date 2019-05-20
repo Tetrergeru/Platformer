@@ -59,21 +59,23 @@ namespace Platformer.Entities
         {
             double rectK = Hitbox.Width / defRect.Width;
             double HealthK = Health / defHealth;
-           /* if (Abs(rectK - HealthK) > 0.0001)
-            {
-                double ratio = (HealthK / rectK - 1) / 10;
-                _body.Resize(new Vector {x = ratio + 1, y = ratio  + 1});
-            }*/
+            /* if (Abs(rectK - HealthK) > 0.0001)
+             {
+                 double ratio = (HealthK / rectK - 1) / 10;
+                 _body.Resize(new Vector {x = ratio + 1, y = ratio  + 1});
+             }*/
 
             if (Hitbox.Coordinates.DistanceTo(Context.Player.Hitbox.Coordinates) < 500000)
             {
                 if (Context.Player.Hitbox.X < Hitbox.X)
-                    RunLeft();
-                else
-                    RunRight();
+                    if (!canJump)
+                        RunLeft();
+                    else
+                        if (!canJump)
+                            RunRight();
 
                 //if (Context.Player.Hitbox.Y < Hitbox.Y)
-                if(rnd.Next(1000) == 71)
+                if (rnd.Next(10000) == 71)
                     Jump();
 
             }

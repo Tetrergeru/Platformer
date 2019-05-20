@@ -19,7 +19,7 @@ namespace Platformer.Physics.Physics
         public void Tick(double deltaTime)
         {
             for (int i = 0; i < _bodies.Count - 1; i++)
-                for (int j = i + 1; j > 1 && _bodies[j - 1].AxisAlignedBoundingBox().X > _bodies[j].AxisAlignedBoundingBox().X; j--)
+                for (int j = i + 1; j >= 1 && _bodies[j - 1].AxisAlignedBoundingBox().X > _bodies[j].AxisAlignedBoundingBox().X; j--)
                     SwapBodies(j - 1, j);
 
             for (int i = 0; i < _bodies.Count - 1; i++)

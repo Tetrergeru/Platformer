@@ -9,7 +9,7 @@ namespace Platformer
         {
             if (timer == null)
                 timer = new Timer(10);
-            return new Game.Game(timer, new Physics.Physics.SortedPhysics(new Interaction()));
+            return new Game.Game(timer, new Physics.Physics.HashPhysics(new Interaction()));
         }
     }
 }
